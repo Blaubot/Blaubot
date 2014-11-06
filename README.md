@@ -9,14 +9,14 @@ Android 4.0.3 or higher
 
 General Usage
 =======
-1. Obtain a Blaubot instance from a BlaubotFactory
+1) Obtain a Blaubot instance from a BlaubotFactory
 ```java
 // Generate a UUID that is unique for your application
 // see http://www.famkruithof.net/uuid/uuidgen
 final UUID APP_UUID = UUID.fromString("ec127529-2e9c-4046-a5a5-144feb30465f"); 
 Blaubot blaubot = BlaubotAndroidFactory.createEthernetBlaubot(APP_UUID);
 ```
-2. (optional) Register a ILifecycleListener to the Blaubot instance
+2) (optional) Register a ILifecycleListener to the Blaubot instance
 ```java
 blaubot.addLifecycleListener(new ILifecycleListener() {
 			
@@ -47,20 +47,20 @@ blaubot.addLifecycleListener(new ILifecycleListener() {
 			}
 		});
 ```
-3. Start Blaubot
+3) Start Blaubot
 ```java
     blaubot.startBlaubot();
 ```
-4. Create a Channel 
+4) Create a Channel 
 ```java
     short channelId = (short) 1;
 		final IChannel channel = blaubot.createChannel(channelId);
 ```
-4.1 Send messages to all subscribers of this channel
+4.1) Send messages to all subscribers of this channel
 ```java
 		channel.post("Hello world!".getBytes(Charset.forName("UTF-8")));
 ```
-4.2 Subscribe to the channel via channel.subsribe(<YourListener>) to receive messages
+4.2) Subscribe to the channel via channel.subsribe(<YourListener>) to receive messages
 ```java
 		channel.subscribe(new IMessageListener() {
 			
