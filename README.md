@@ -3,6 +3,8 @@ Blaubot
 Blaubot is a lightweight framework to form small networks via P2P connections such as Bluetooth-RFCOMM, Adhoc-WiFi or simple socket connections.
 Blaubot takes care of device discovery and connection establishment with the goal to minimize a developer's boilerplate code to set up these small networks.
 
+Tl;dr our main goal is to let a developer call start(); and spare him as much hassle as possible to create ad hoc networks.
+
 Requirements Android
 =======
 Android 4.0.3 or higher
