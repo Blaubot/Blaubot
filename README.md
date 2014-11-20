@@ -86,7 +86,7 @@ Quickstart Java
 2. Create a Blaubot instance using de.hsrm.blaubot.core.BlaubotFactory
 ```java
 // creates a Blaubot instance with a multicast beacon on the first found local interface
-de.hsrm.blaubot.core.BlabotFactory.createEthernetBlaubot(APP_UUID);
+de.hsrm.blaubot.core.BlaubotFactory.createEthernetBlaubot(APP_UUID);
 
 // or create a Blaubot instance without multicast searching for a fixed set of devices by their ip addresses
 de.hsrm.blaubot.core.BlaubotFactory.createEthernetBlaubotWithFixedDevices(...);
