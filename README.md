@@ -9,7 +9,7 @@ Requirements Android
 =======
 Android 4.0.3 or higher
 
-General Usage
+<a name="general_usage"></a>General Usage
 =======
 1) Obtain a Blaubot instance from a BlaubotFactory
 ```java
@@ -99,7 +99,20 @@ If your targeted environment supports multicasts, this should be the easiest opt
 Quickstart Android
 =======
 
-1. Get the Android-JAR and add it to your project's dependencies.
+1. Import the BlaubotAndroidLibrary into your eclipse workspace:
+![1](img/1.png "Right click in the Package view -> Import")
+![1](img/3.png "Choose import existing projects into Workspace")
+![1](img/4.png "Import at least the BlaubotAndroidLibrary project")
+![1](img/5.png "Create your project")
+![1](img/8.png "Right click the newly created project -> Properties")
+![1](img/9.png "In the Android tab click add (bottom right) -> Select BlaubotAndroidLibrary -> Click ok")
+![1](img/10.png "Copy the Blaubot.jar into the libs folder of YOUR project")
+![1](img/11.png "Right click the jar and choose: Build Path -> Add to Build Path")
+![1](img/12.png "Add the permissions to your AndroidManifest.xml (you can copy them from the Blaubot project's AndroidManifest.xml)")
+![1](img/13.png "Attention: Ensure that you compile your project java 1.6 format compatible.")
+![1](img/14.png "Add some blaubot code (see [General Usage](#general_usage))")
+
+
 2. Create a Blaubot instance using de.hsrm.blaubot.android.BlaubotFactory
 ```java
 // you can use the same ethernet based isntances as for java but additionally:
@@ -109,6 +122,7 @@ de.hsrm.blaubot.android.BlaubotFactory.createBluetoothBlaubot(APP_UUID);
 
 ```
 
-On Android you can rely on the standard ethernet-based Blaubot options provided (see Quickstart Java) but you can also use the Bluetooth enabled Blaubot.
+On Android you can rely on the standard ethernet-based Blaubot (see Quickstart Java) but you can also use the Bluetooth-based Blaubot.
 Please note that you have to use a different Factory to create Blaubot instances optimized for the Android platform.
 
+Note that if you use Bluetooth, Blaubot will only find devices that are paired with each other. This means if you want to connect three devices, all of them need to be paired with the others.

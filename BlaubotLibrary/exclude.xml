@@ -1,0 +1,8 @@
+<FindBugsFilter>
+  <Match>
+    <Class name="~.*Test$"/>
+  </Match>
+  <Match>
+    <Package name="~junit\..*"/>
+  </Match>
+</FindBugsFilter>

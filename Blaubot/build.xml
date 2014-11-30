@@ -1,0 +1,17 @@
+<project name="blaubot_android_app" basedir=".">
+    <property name="blaubotandroidlib.jar" value="../BlaubotAndroidLibrary/bin/blaubotandroidlibrary.jar"/>
+    <property name="blaubotlib.jar" value="../BlaubotLibrary/build/jar/Blaubot.jar"/>
+	<property name="libs.dir" value="libs"/>
+    
+	<!-- Most of the available build tooling is an endless pile of crap http://stackoverflow.com/questions/11075105/eclipse-keeps-building-workspace-and-building-workspace-and-building-works -->
+    <!-- Builder now only active for manual build ... -->
+    <target name="copy_jars">
+        <copy file="${blaubotandroidlib.jar}" todir="${libs.dir}" overwrite="true"></copy>
+        <copy file="${blaubotlib.jar}" todir="${libs.dir}" overwrite="true"></copy>
+    </target>
+    
+    <target name="clean" >
+        <delete file="${libs.dir}/Blaubot.jar" />
+        <delete file="${libs.dir}/blaubotandroidlibrary.jar" />
+    </target>
+</project>
