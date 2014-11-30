@@ -99,42 +99,42 @@ If your targeted environment supports multicasts, this should be the easiest opt
 Quickstart Android
 =======
 
-1. Import the BlaubotAndroidLibrary into your eclipse workspace:
-Right click in the Package view -> Import
+1) Import the BlaubotAndroidLibrary into your eclipse workspace:
+1.1) Right click in the Package view -> Import
 ![1](img/1.png "Right click in the Package view -> Import")
 
-Choose import existing projects into Workspace
+1.2) Choose import existing projects into Workspace
 ![1](img/3.png "Choose import existing projects into Workspace")
 
-Import at least the BlaubotAndroidLibrary project
+1.3) Import at least the BlaubotAndroidLibrary project
 ![1](img/4.png "Import at least the BlaubotAndroidLibrary project")
 
-Create your project 
+1.3) Create your project 
 ![1](img/5.png "Create your project")
 
-Right click the newly created project -> Properties
+1.4) Right click the newly created project -> Properties
 ![1](img/8.png "Right click the newly created project -> Properties")
 
-In the Android tab click add (bottom right) -> Select BlaubotAndroidLibrary -> Click ok
+1.5) In the Android tab click add (bottom right) -> Select BlaubotAndroidLibrary -> Click ok
 ![1](img/9.png "In the Android tab click add (bottom right) -> Select BlaubotAndroidLibrary -> Click ok")
 
-Copy the Blaubot.jar into the libs folder of YOUR project
+1.6) Copy the Blaubot.jar into the libs folder of YOUR project
 ![1](img/10.png "Copy the Blaubot.jar into the libs folder of YOUR project")
 
-Right click the jar and choose: Build Path -> Add to Build Path
+1.7) Right click the jar and choose: Build Path -> Add to Build Path
 ![1](img/11.png "Right click the jar and choose: Build Path -> Add to Build Path")
 
-Add the permissions to your AndroidManifest.xml (you can copy them from the Blaubot project's AndroidManifest.xml)
+1.8) Add the permissions to your AndroidManifest.xml (you can copy them from the Blaubot project's AndroidManifest.xml)
 ![1](img/12.png "Add the permissions to your AndroidManifest.xml (you can copy them from the Blaubot project's AndroidManifest.xml)")
 
-Attention: Ensure that you compile your project java 1.6 format compatible.
+1.9) Attention: Ensure that you compile your project java 1.6 format compatible.
 ![1](img/13.png "Attention: Ensure that you compile your project java 1.6 format compatible.")
 
-Add some blaubot code (see [General Usage](#general_usage))
+1.10) Add some blaubot code (see [General Usage](#general_usage))
 ![1](img/14.png "Add some blaubot code (see [General Usage](#general_usage))")
 
 
-2. Create a Blaubot instance using de.hsrm.blaubot.android.BlaubotFactory
+2) Create a Blaubot instance using de.hsrm.blaubot.android.BlaubotFactory
 ```java
 // you can use the same ethernet based isntances as for java but additionally:
 
@@ -142,7 +142,7 @@ Add some blaubot code (see [General Usage](#general_usage))
 de.hsrm.blaubot.android.BlaubotFactory.createBluetoothBlaubot(APP_UUID);
 ```
 
-3. You are now ready to use Blaubot. Check the [General Usage](#general_usage) section how to use it.
+3) You are now ready to use Blaubot. Check the [General Usage](#general_usage) section how to use it.
 
 On Android you can rely on the standard ethernet-based Blaubot (see Quickstart Java) but you can also use the Bluetooth-based Blaubot.
 Please note that you have to use a different Factory to create Blaubot instances optimized for the Android platform.
