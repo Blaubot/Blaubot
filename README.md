@@ -5,6 +5,8 @@ Blaubot takes care of device discovery and connection establishment with the goa
 
 Tl;dr our main goal is to let a developer call start(); and spare him as much hassle as possible to create ad hoc networks.
 
+<iframe width="560" height="315" src="//www.youtube.com/embed/LAUcoxldGIE" frameborder="0" allowfullscreen></iframe>
+
 Requirements Android
 =======
 Android 4.0.3 or higher
