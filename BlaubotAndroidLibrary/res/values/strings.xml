@@ -1,6 +1,0 @@
-<resources>
-
-    <string name="app_name">BlaubotAndroidLibrary</string>
-    <string name="blaubot_status_view_connected_devices_count">%1$s connected devices.</string>
-
-</resources>

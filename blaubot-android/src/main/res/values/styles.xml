@@ -1,0 +1,14 @@
+<resources>
+    <style name="HeadlineLabels">
+        <item name="android:textColor">@color/DarkGray</item>
+        <item name="android:textStyle">italic</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceSmall</item>
+        <item name="android:paddingTop">15dp</item>
+        <item name="android:paddingBottom">5dp</item>
+    </style>
+
+    <style name="HeadlineLabels.NoPaddings" parent="HeadlineLabels">
+        <item name="android:paddingTop">0dp</item>
+        <item name="android:paddingBottom">0dp</item>
+    </style>
+</resources>

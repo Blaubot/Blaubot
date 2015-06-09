@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-
-    <declare-styleable name="de.hsrm.blaubot.android.views.ConnectionView">
-        <attr name="url" format="string" />
-        <attr name="fetchAutomatically" format="boolean" />
-    </declare-styleable>
-
-</resources>

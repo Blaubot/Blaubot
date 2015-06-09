@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="5dp"
+    android:background="@drawable/layout_bg_blaubot_blue"
+    android:layout_marginBottom="2dp">
+
+    <TextView
+        android:id="@+id/blaubot_device_list_item_name"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Small text"
+        android:textColor="@color/White"
+        android:ellipsize="middle"
+        android:maxLines="1"
+        android:singleLine="true"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <TextView
+        android:id="@+id/blaubot_device_list_item_id"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Small Text"
+        android:textColor="@color/LightGrey"
+        android:ellipsize="middle"
+        android:maxLines="1"
+        android:singleLine="true"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <TextView
+        android:id="@+id/blaubot_device_list_connection_class"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="5dp"
+        android:text="Small Text"
+        android:textColor="@color/LightGrey"
+        android:ellipsize="middle"
+        android:maxLines="1"
+        android:singleLine="true"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+</LinearLayout>

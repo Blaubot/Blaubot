@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="@dimen/activity_horizontal_margin"
+    android:layout_marginRight="@dimen/activity_horizontal_margin"
+    android:layout_marginTop="@dimen/activity_vertical_margin"
+    android:layout_marginBottom="@dimen/activity_vertical_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:orientation="vertical">
+
+
+    <TextView
+        style="@style/HeadlineLabels"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hostname or IP:" />
+
+    <EditText
+        android:id="@+id/hostnameOrIpEditText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="i.e. example.com, 85.214.151.221, ..."
+        android:inputType="text" />
+
+    <TextView
+        style="@style/HeadlineLabels"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Port:" />
+
+    <EditText
+        android:id="@+id/port"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="i.e. 8080, 80, ..."
+        android:inputType="number" />
+
+    <TextView
+        style="@style/HeadlineLabels"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hostname or IP:" />
+
+    <EditText
+        android:id="@+id/path"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="i.e. /blaubot, /yourUri, /, ..."
+        android:inputType="text" />
+
+    <TextView
+        style="@style/HeadlineLabels"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Server unique device id:" />
+
+    <EditText
+        android:id="@+id/serverUniqueDeviceId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="i.e. Server1, MyServer - has to match your server settings!"
+        android:inputType="text" />
+
+</LinearLayout>

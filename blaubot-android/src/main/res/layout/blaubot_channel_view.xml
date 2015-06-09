@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    >
+
+    <ToggleButton
+        android:paddingTop="0dp"
+        android:id="@+id/channelInfoSubscribeButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textOff="Not subscribed"
+        android:textOn="Subscribed" />
+
+    <Button
+        android:id="@+id/editChannelConfigButton"
+        android:layout_toRightOf="@id/channelInfoSubscribeButton"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:drawableLeft="@android:drawable/ic_menu_edit"
+        android:text="edit"/>
+
+</RelativeLayout>

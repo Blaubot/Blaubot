@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- For text based debug views where max lines should be limited-->
+    <attr name="maxLines" format="integer" />
+    <attr name="maxEvents" format="integer" />
+
+    <declare-styleable name="PingView">
+        <attr name="vibrateOnPing" format="boolean"></attr>
+    </declare-styleable>
+
+    <declare-styleable name="StateView">
+        <attr name="showOwnUniqueId" format="boolean"></attr>
+    </declare-styleable>
+
+    <declare-styleable name="ConnectionView">
+        <attr name="showId" format="boolean"></attr>
+    </declare-styleable>
+    <declare-styleable name="AdminMessageView">
+        <attr name="maxMessages" format="integer" />
+        <attr name="showRelayMessages" format="boolean"></attr>
+    </declare-styleable>
+
+    <declare-styleable name="LifeCycleView">
+        <attr name="maxEvents"></attr>
+    </declare-styleable>
+
+    <declare-styleable name="BeaconView">
+        <attr name="maxEvents"></attr>
+    </declare-styleable>
+
+    <declare-styleable name="ChannelView">
+        <attr name="showEditButton" format="boolean"></attr>
+    </declare-styleable>
+
+</resources>
