@@ -1,0 +1,15 @@
+# Site settings
+title: blaubot
+description: > # this means to ignore newlines until "baseurl:"
+  An easy to use publish/subscribe middleware to create and communicate through dynamically created adhoc networks.
+baseurl: "" # the subpath of your site, e.g. /blog/
+url: "http://blaubot.hgross.eu" # the base hostname & protocol for your site
+twitter_username: h_gross
+github_username:  hgross
+
+# Build settings
+exclude: [build.gradle, website.iml]
+markdown: kramdown
+markdown: KramdownPygments
+kramdown:
+  default_lang: java

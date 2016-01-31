@@ -1,0 +1,68 @@
+---
+layout: post
+title:  "Blaubot 2.0.0.alpha.4"
+date:   2015-06-22
+categories: release
+---
+<style>
+    img[alt=example-pic] { 
+        max-width: 250px;
+    }
+</style>
+The fourth alpha is now available from jCenter and MavenCentral.
+It contains some fixes and a new option for the `BlaubotChannelConfig`.
+You can now enable or disable the transmission of messages through the network published by a `IBlaubotChannel` you are also subscribed to.
+With this option, you can reduce the network traffic in these situations.
+Furthermore channel messages will not be send anymore if there are no subscribers.
+Apart from that, the beacon mechanism was slightly improved to fasten network discovery.
+
+You can use the new options like shown below.
+
+~~~java
+ 
+IBlaubotChannel channel = // ...
+// reduce network traffic for some cases where we publish to 
+// a channel to which we are subscribed.
+channel.getChannelConfig().setTransmitReflexiveMessages(false); 
+
+// always publish messages, even if we call publish() on a 
+// channel without any subscribers
+channel.getChannelConfig().setTransmitIfNoSubscribers(true);
+~~~
+
+Additionally the DebugViews got some updates.
+You can now expand the StateHistoryView by clicking on it and a long click on the Ping-Button (PingView) will trigger a PingMeasurement.
+
+![example-pic](/assets/images/screen_pingmeasurement.png "PingMeasurementResult from the PingView" ) ![example-pic](/assets/images/screen_statehistoryview.png "StateHistoryView")
+
+
+The `BlaubotKingdom`s now have a method to get the current connected devices:
+
+
+~~~java
+   
+blaubotServer.addServerLifeCycleListener(new IBlaubotServerLifeCycleListener() {
+    @Override
+    public void onKingdomConnected(final BlaubotKingdom kingdom) {
+        // contains all currently connected devices
+        Set<IBlaubotDevice> devices = kingdom.getKingdomCensusLifecycleListener().getDevices();
+    }
+    
+    @Override
+    public void onKingdomDisconnected(BlaubotKingdom kingdom) {
+       // ...
+    }    
+ });
+~~~
+
+Note that you can also attach the `KingdomCensusLifecycleListener` to a Blaubot instance to always have an accessible Set of connected devices:
+
+~~~java
+   
+IBlaubotDevice ownDevice = blaubot.getOwnDevice();
+KingdomCensusLifecycleListener censusListener = new KingdomCensusLifecycleListener(ownDevice);
+blaubot.addLifecycleListener(censusListener);
+
+// contains all currently connected devices
+Set<IBlaubotDevice> devices = censusListener.getDevices();
+~~~

@@ -1,0 +1,72 @@
+apply plugin: 'java'
+
+def exportedProjects= [
+        ':blaubot',
+        ':blaubot-websockets',
+        ':blaubot-jsr82',
+        ':blaubot-android'
+]
+
+/**
+ * Creates JavaDoc for all submodules
+ */
+task alljavadoc(type: Javadoc) {
+    title "Blaubot JavaDoc"
+    failOnError = false // avoid build errors caused by missing android dependencies
+    source exportedProjects.collect {
+        if (project(it).hasProperty("android")) {
+            project(it).android.sourceSets.main.java.srcDirs
+        } else {
+            project(it).sourceSets.main.allJava
+        }
+    }
+    classpath = files(exportedProjects.collect {
+        if (project(it).hasProperty("android")) {
+            project(it).files(project(it).android.getBootClasspath().join(File.pathSeparator))
+            project(it).configurations.compile
+        } else {
+            project(it).sourceSets.main.compileClasspath
+        }
+    })
+    destinationDir = file("${buildDir}/docs/javadoc")
+}
+
+/**
+ * Copies JavaDoc for all submodules to the website's javadoc dir
+ */
+task copyDocsToWebsite(dependsOn: "alljavadoc", type: Copy) {
+    from file("${buildDir}/docs/javadoc")
+    into 'javadoc'
+}
+
+configurations {
+    ftpAntTask
+}
+
+dependencies {
+    ftpAntTask("org.apache.ant:ant-commons-net:1.9.4") {
+        module("commons-net:commons-net:1.4.1") {
+            dependencies "oro:oro:2.0.8:jar"
+        }
+    }
+}
+
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
+// https://docs.gradle.org/current/userguide/organizing_build_logic.html
+task uploadWebsite (dependsOn: "copyDocsToWebsite") <<  {
+    description = "Uploads the webcontent inside the _site directory to the public website. Note that you have to build the _site directory using jekyll first."
+    ant {
+        taskdef(name: 'antFtp',
+                classname: 'org.apache.tools.ant.taskdefs.optional.net.FTP',
+                classpath: configurations.ftpAntTask.asPath)
+
+        // then upload
+        antFtp(server: properties.getProperty("website.ftp.host"), 
+                 userid: properties.getProperty("website.ftp.user"), 
+                 password: properties.getProperty("website.ftp.password")) { 
+            fileset(dir: "_site")
+        }
+    }
+}

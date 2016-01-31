@@ -1,0 +1,94 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context=".BluetoothNFCActivity">
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+        android:padding="0dp">
+
+
+        <eu.hgross.blaubot.android.views.DebugView
+            android:id="@+id/blaubotDebugView"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+        <LinearLayout
+            android:layout_marginTop="10dp"
+            android:id="@+id/bluetoothSpecificButtons"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/blaubotDebugView"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/discoverButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Discover devices" />
+
+            <Button
+                android:id="@+id/makeDiscoverableButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Make discoverable" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/bluetoothSpecificButtons"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Discovered Devices:"
+                    style="@style/HeadlineLabels" />
+
+                <ListView
+                    android:id="@+id/bluetoothDevicesListView"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:isScrollContainer="false"></ListView>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/HeadlineLabels"
+                    android:text="ACL:"
+                     />
+
+                <eu.hgross.blaubot.android.bluetooth.views.ACLListView
+                    android:id="@+id/aclListView"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:isScrollContainer="false" />
+            </LinearLayout>
+        </LinearLayout>
+    </RelativeLayout>
+</ScrollView>

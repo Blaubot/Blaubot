@@ -2,7 +2,9 @@ package eu.hgross.blaubot.ethernet;
 
 import java.io.IOException;
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 import java.util.Arrays;
 import java.util.List;
@@ -79,7 +81,7 @@ public class BlaubotEthernetConnector implements IBlaubotConnector {
         EthernetConnectionMetaDataDTO ethernetConnectionMetaData = new EthernetConnectionMetaDataDTO(supportedAcceptors.get(0));
         if (Log.logDebugMessages()) {
             Log.d(LOG_TAG, "Chosen acceptor to connect to: " + ethernetConnectionMetaData);
-            Log.d(LOG_TAG, beaconStore.getLastDiscoveryEvent(uniqueDeviceID)+"");
+            Log.d(LOG_TAG, "Last DiscoveryEvent for this deviceId: "+beaconStore.getLastDiscoveryEvent(uniqueDeviceID));
         }
 
         return connectToBlaubotDevice(blaubotDevice, ethernetConnectionMetaData);
@@ -100,10 +102,13 @@ public class BlaubotEthernetConnector implements IBlaubotConnector {
 
         // connect - other side is EthernetAcceptor, see there
         Socket remoteSocket = null;
+        final int connectionTimeout = adapter.getBlaubotAdapterConfig().getConnectionTimeout();
+        long start = System.currentTimeMillis();
         try {
             try {
                 InetAddress remoteAddress = InetAddress.getByName(ipAddress);
-                remoteSocket = new Socket(remoteAddress, remoteAcceptorPort) ;
+                remoteSocket = new Socket();
+                remoteSocket.connect(new InetSocketAddress(remoteAddress, remoteAcceptorPort), connectionTimeout);
 
                 BlaubotEthernetUtils.sendOwnUniqueIdThroughSocket(ownDevice, remoteSocket);
 
@@ -113,15 +118,24 @@ public class BlaubotEthernetConnector implements IBlaubotConnector {
                 final BeaconMessage currentBeaconMessage = adapter.getBlaubot().getConnectionStateMachine().getBeaconService().getCurrentBeaconMessage();
                 connection.write(currentBeaconMessage.toBytes());
 
-                if(incomingConnectionListener != null) {
+                if (Log.logDebugMessages()) {
+                    long diff = System.currentTimeMillis() - start;
+                    Log.d(LOG_TAG, "Connection successful, took " + diff + " ms");
+                }
+
+                if (incomingConnectionListener != null) {
                     incomingConnectionListener.onConnectionEstablished(connection);
                 }
                 return connection;
             } catch (UnknownHostException e) {
-                if(Log.logErrorMessages()) {
+                if (Log.logErrorMessages()) {
                     Log.e(LOG_TAG, "Could not extract InetAddress from: " + ipAddress);
                 }
                 throw e;
+            } catch (SocketTimeoutException e) {
+                if (Log.logErrorMessages()) {
+                    Log.e(LOG_TAG, "Timeout: Could not connect socket to remote device (after " + connectionTimeout + " ms)");
+                }
             }
         } catch (IOException e) {
             if(Log.logWarningMessages()) {
@@ -135,7 +149,8 @@ public class BlaubotEthernetConnector implements IBlaubotConnector {
             }
         }
         if(Log.logWarningMessages()) {
-            Log.w(LOG_TAG, "Failed to connect to " + ipAddress + ":" + remoteAcceptorPort );
+            long diff = System.currentTimeMillis() - start;
+            Log.w(LOG_TAG, "Failed to connect to " + ipAddress + ":" + remoteAcceptorPort + " after " + diff + " ms");
         }
         return null;
     }

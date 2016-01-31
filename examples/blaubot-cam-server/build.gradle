@@ -1,0 +1,14 @@
+apply plugin: 'java'
+apply plugin: 'application'
+
+// build with gradle distZip
+// there will be a startscript in the bin-folder
+mainClassName = "eu.hgross.blaubot.blaubotcam.server.BlaubotCamServer"
+dependencies {
+    compile project(':blaubot')
+    compile project(':blaubot-websockets')
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile 'org.glassfish.grizzly:grizzly-http-server:2.3.20'
+    compile 'commons-cli:commons-cli:1.3'
+    compile 'com.github.sarxos:webcam-capture:0.3.10'
+}

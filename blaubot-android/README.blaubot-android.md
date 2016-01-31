@@ -1,3 +1,8 @@
+[ ![Download](https://api.bintray.com/packages/hgross/maven/blaubot-android/images/download.svg) ](https://bintray.com/hgross/maven/blaubot-android/_latestVersion)
+[ ![Maven Central](https://maven-badges.herokuapp.com/maven-central/eu.hgross/blaubot-android/badge.svg)](https://maven-badges.herokuapp.com/maven-central/eu.hgross/blaubot-android)
+[ ![javadoc.io](https://javadocio-badges.herokuapp.com/eu.hgross/blaubot-android/badge.svg)](http://www.javadoc.io/doc/eu.hgross/blaubot-android/)
+[ ![Join the chat at https://gitter.im/Blaubot/Blaubot](https://badges.gitter.im/Blaubot/Blaubot.svg)](https://gitter.im/Blaubot/Blaubot?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 # Blaubot
 Blaubot is a middleware to create small adhoc networks via P2P connections such as Bluetooth-RFCOMM, Adhoc-WiFi or simple socket connections. Blaubot takes care of device discovery and connection establishment with the goal to minimize a developer's boilerplate code to set up these small networks.
 

@@ -1,0 +1,9 @@
+apply plugin: 'java'
+apply plugin: 'application'
+
+mainClassName = "eu.hgross.blaubot.fingertracking.FingerTrackingMain"
+dependencies {
+    compile project(':blaubot')
+    compile 'com.google.code.gson:gson:2.3'
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+}

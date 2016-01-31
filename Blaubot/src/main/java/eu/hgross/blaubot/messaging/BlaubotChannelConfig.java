@@ -46,6 +46,17 @@ public class BlaubotChannelConfig extends Observable {
     private int queueCapacity;
 
     /**
+     * If set to true, reflexive messages (messages that are posted to a channel to which we are 
+     * subscribed) are not send to the master device but directly posted to the registered listeners. 
+     */
+    private volatile boolean transmitReflexiveMessages = false;
+
+    /**
+     * If set to true, messages are sent even if there are no (yet known) subscribers to this channel.
+     */
+    private volatile boolean transmitIfNoSubscribers = false;
+    
+    /**
      * Constructs a channel config for a channel id using the default
      * MessagePickerStrategy (PROCESS_ALL).
      * To change the MessagePickerStrategy, @see {BlaubotChannelConfig#setMessagePickerStrategy}.
@@ -58,6 +69,8 @@ public class BlaubotChannelConfig extends Observable {
         _setMessagePickerStrategy(MessagePickerStrategy.PROCESS_ALL);
         _setPriority(BlaubotMessage.Priority.NORMAL);
         _setQueueCapacity(DEFAULT_QUEUE_CAPACITY);
+        _setTransmitIfNoSubscribers(false);
+        _setTransmitReflexiveMessages(false);
     }
 
     /**
@@ -203,8 +216,73 @@ public class BlaubotChannelConfig extends Observable {
      * @return minimun delay between two messages as configured by the user
      */
     public int getMinMessageRateDelay() {
-        return MESSAGE_RATE_NO_LIMIT == minMessageRateDelay ? 1 : minMessageRateDelay;
+        return minMessageRateDelay;
     }
+
+    /**
+     * Check if reflexive messages to this channel are sent through the network or directly
+     * posted to your listeners instead.
+     * 
+     * This means the messages published by a sending device which is also subscribed to this channel
+     * will not have to send and receive the message to receive it on it's handlers. Of course, all ohter
+     * devices have to receive this message.
+     * 
+     * @return true, if reflexive messages will be sent through the network. Otherwise these message will not cause unnecessary traffic on the sending device.
+     */
+    public boolean isTransmitReflexiveMessages() {
+        return transmitReflexiveMessages;
+    }
+
+    /**
+     * If set to true, reflexive messages (messages that are posted to a channel to which we are 
+     * subscribed) are not send to the master device but directly posted to the registered listeners.
+     * 
+     * This means the messages published by a sending device which is also subscribed to this channel
+     * will not have to send and receive the message to receive it on it's handlers. Of course, all ohter
+     * devices have to receive this message.
+     * 
+     * @param transmitReflexiveMessages true to reduce traffic in these cases on the sending device
+     */
+    public void setTransmitReflexiveMessages(boolean transmitReflexiveMessages) {
+        _setTransmitReflexiveMessages(transmitReflexiveMessages);
+        setChanged();
+        notifyObservers(Boolean.FALSE);
+    }
+
+    /**
+     * Sets the transmitReflexiveMessages option without notifying observers.
+     * @param transmitReflexiveMessages true to reduce traffic in reflexive message cases.
+     */
+    private void _setTransmitReflexiveMessages(boolean transmitReflexiveMessages) {
+        this.transmitReflexiveMessages = transmitReflexiveMessages;
+    }
+
+    /**
+     * Check whether mesages are sent even if there are no known subscribers to this channel.
+     * @return true, if messages are sent even if there are no subscribers to this channel
+     */
+    public boolean isTransmitIfNoSubscribers() {
+        return transmitIfNoSubscribers;
+    }
+
+    /**
+     * Sets a flag to avoid sending messages, if there are no known subscribers yet.
+     * @param transmitIfNoSubscribers If set to true, messages published to this channel are always send 
+     */
+    public void setTransmitIfNoSubscribers(boolean transmitIfNoSubscribers) {
+        _setTransmitIfNoSubscribers(transmitIfNoSubscribers);
+        setChanged();
+        notifyObservers(Boolean.FALSE);
+    }
+
+    /**
+     * Sets the transmitIfNoSubscribers option without notifying observes.
+     * @param transmitIfNoSubscribers see setTransmitIfNoSubscribers
+     */
+    private void _setTransmitIfNoSubscribers(boolean transmitIfNoSubscribers) {
+        this.transmitIfNoSubscribers = transmitIfNoSubscribers;
+    }
+
 
     /**
      * Unique identifier for PickingStrategy-Implementations.

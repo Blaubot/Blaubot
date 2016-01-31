@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Blaubot</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="bluetooth_activity_title">Bluetooth (BluetoothBeacon)</string>
+    <string name="wifip2p_activity_title">Bluetooth (WifiDirectBeacon)</string>
+    <string name="ethernet_activity_title">Ethernet (MulticastBeacon)</string>
+    <string name="bluetooth_with_multicast_activity_title">Bluetooth (MulticastBeacon)</string>
+    <string name="ethernet_nfc_activity_title">Ethernet (NFCBeacon)</string>
+    <string name="ethernet_bonjour_activity_title">Ethernet (BonjourBeacon)</string>
+    <string name="bluetooth_with_nfc_activity_title">Bluetooth (NFCBeacon)</string>
+    <string name="wifiAp_activity_title">WifiAp (NFCBeacon)</string>
+    <string name="configurator_activity_title">Blaubot instance configurator</string>
+</resources>

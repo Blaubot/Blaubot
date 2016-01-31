@@ -1,5 +1,6 @@
 package eu.hgross.blaubot.core.acceptor.discovery;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -58,6 +59,12 @@ public class BlaubotBeaconStore implements IBlaubotBeaconStore, IBlaubotDiscover
         this.lastConnectiontMetaData.put(uniqueDeviceId, connectionMetaDataList);
     }
 
+    public void putConnectionMetaData(String uniqueDeviceId, ConnectionMetaDataDTO connectionMetaData) {
+        final ArrayList<ConnectionMetaDataDTO> dtos = new ArrayList<>();
+        dtos.add(connectionMetaData);
+        this.lastConnectiontMetaData.put(uniqueDeviceId, dtos);
+    }
+    
     @Override
     public void onDeviceDiscoveryEvent(AbstractBlaubotDeviceDiscoveryEvent discoveryEvent) {
         final String uniqueDeviceID = discoveryEvent.getRemoteDevice().getUniqueDeviceID();

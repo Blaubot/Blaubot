@@ -46,6 +46,10 @@ public class ServerConnectionManager extends LifecycleListenerAdapter {
      * (master mode only).
      */
     private static final long CONNECTION_SELECT_INTERVAL = 1500;
+    /**
+     * Milliseconds to await termination of the connect scheduler
+     */
+    private static final long SHUTDOWN_TERMINATION_TIMEOUT = 2500;
 
     /**
      * The main blaubot channel manager
@@ -478,8 +482,17 @@ public class ServerConnectionManager extends LifecycleListenerAdapter {
                     if (Log.logDebugMessages()) {
                         Log.d(LOG_TAG, "Shutting down the executor service ...");
                     }
-                    this.connectionSelectionExecutorService.shutdown();
-                    this.connectionSelectionExecutorService = null;
+                    this.connectionSelectionExecutorService.shutdownNow();
+                    try {
+                        final boolean timedOut = !this.connectionSelectionExecutorService.awaitTermination(SHUTDOWN_TERMINATION_TIMEOUT, TimeUnit.MILLISECONDS);
+                        if (timedOut && Log.logErrorMessages()) {
+                            Log.e(LOG_TAG, "ExecutorService termination timeout");
+                        }
+                    } catch (InterruptedException e) {
+                                            
+                    } finally {
+                        this.connectionSelectionExecutorService = null;
+                    }
                 }
 
                 if (Log.logDebugMessages()) {

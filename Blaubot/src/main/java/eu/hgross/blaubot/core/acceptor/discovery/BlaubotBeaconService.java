@@ -173,6 +173,7 @@ public class BlaubotBeaconService {
 
 	/**
 	 * A Task that handles the conversation with beacon clients.
+	 * It is the counterpart of the {@link ExchangeStatesTask}.
 	 * 
 	 * @author Henning Gross <mail.to@henning-gross.de>
 	 * 

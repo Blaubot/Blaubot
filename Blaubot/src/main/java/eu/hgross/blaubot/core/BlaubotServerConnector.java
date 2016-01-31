@@ -25,6 +25,7 @@ public class BlaubotServerConnector  {
      * Min Interval between timer task executions that check the server status
      */
     private static final long CHECK_CONNECTIVITY_INTERVAL = 1000;
+    private static final long SHUTDOWN_TERMINATION_TIMEOUT = 6000;
     /**
      * Connectors to be used to connect to the server
      */
@@ -247,8 +248,18 @@ public class BlaubotServerConnector  {
     public void deactivateServerConnector() {
         Log.d(LOG_TAG, "Deactivating server connector");
         if (this.scheduledExecutorService != null) {
-            this.scheduledExecutorService.shutdown();
-            this.scheduledExecutorService = null;
+            this.scheduledExecutorService.shutdownNow();
+            final boolean timedOut;
+            try {
+                timedOut = !this.scheduledExecutorService.awaitTermination(SHUTDOWN_TERMINATION_TIMEOUT, TimeUnit.MILLISECONDS);
+                if (timedOut && Log.logErrorMessages()) {
+                    Log.e(LOG_TAG, "ExecutorService termination timeout");
+                }
+            } catch (InterruptedException e) {
+                
+            } finally {
+                this.scheduledExecutorService = null;
+            }
         }
     }
 

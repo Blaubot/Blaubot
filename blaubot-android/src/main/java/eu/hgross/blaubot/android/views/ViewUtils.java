@@ -147,4 +147,18 @@ public class ViewUtils {
     public static boolean isValidIpAddress(String ip) {
         return validHostnameRegex.matcher(ip).matches();
     }
+
+    /**
+     * Converts a byte size into a human readable sting
+     * @param bytes the number of bytes
+     * @param si if true, the output will be in si units
+     * @return the human readable string
+     */
+    public static String humanReadableByteCount(final long bytes, final boolean si) {
+        final int unit = si ? 1000 : 1024;
+        if (bytes < unit) return bytes + " B";
+        final int exp = (int) (Math.log(bytes) / Math.log(unit));
+        final String pre = (si ? "kMGTPE" : "KMGTPE").charAt(exp-1) + (si ? "" : "i");
+        return String.format("%.1f %sB", bytes / Math.pow(unit, exp), pre);
+    }
 }

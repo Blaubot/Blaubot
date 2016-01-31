@@ -61,12 +61,22 @@ public class BlaubotMessageReceiver {
     }
 
     /**
+     * The blaubot connection used to receive messages.
+     * @return the connection object used to receive messages
+     */
+    public IBlaubotConnection getBlaubotConnection() {
+        return blaubotConnection;
+    }
+
+    /**
      * Activates the message receiver (reading from the connection)
      */
     public void activate() {
         MessageReceivingThread mrt = new MessageReceivingThread();
         mrt.setName("msg-receiver-" + blaubotConnection.getRemoteDevice().getUniqueDeviceID());
-        messageReceivingThread = mrt;
+        synchronized (deactivateLock) {
+            messageReceivingThread = mrt;
+        }
         mrt.start();
     }
 
@@ -76,8 +86,11 @@ public class BlaubotMessageReceiver {
      * @param actionListener callback to be informed when the receiver was closed (thread finished), can be null
      */
     public void deactivate(final IActionListener actionListener) {
-        MessageReceivingThread mrt = messageReceivingThread;
-        messageReceivingThread = null;
+        MessageReceivingThread mrt;
+        synchronized (deactivateLock) {
+            mrt = messageReceivingThread;
+            messageReceivingThread = null;
+        }
         if (mrt != null) {
             // the thread will call the listener
             mrt.attachFinishListener(actionListener);
@@ -98,6 +111,7 @@ public class BlaubotMessageReceiver {
             receivedLastChunkMapping.clear();
         }
     }
+    private Object deactivateLock = new Object();
 
 
     /**

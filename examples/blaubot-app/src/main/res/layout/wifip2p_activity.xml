@@ -1,0 +1,64 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context=".WifiP2PActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/wifip2p_discoverButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="StartWIFIDirectDiscovery" />
+
+            <Button
+                android:id="@+id/wifip2p_print_arp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="PrintArpToLog" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/wifip2p_log_ifaces"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="LogInterfaces" />
+
+        <Button
+            android:id="@+id/wifip2p_addLocalServiceButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="AddLocalService" />
+
+        <Button
+            android:id="@+id/wifip2p_clearLocalServicesButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ClearLocalService" />
+
+        <Button
+            android:id="@+id/wifip2p_searchLocalServicesButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="SearchForServices" />
+
+        <eu.hgross.blaubot.android.views.DebugView
+            android:id="@+id/wifip2pDebugView"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" />
+
+    </LinearLayout>
+</ScrollView>

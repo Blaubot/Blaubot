@@ -1,63 +1,97 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_marginBottom="@dimen/activity_vertical_margin"
     android:layout_marginLeft="@dimen/activity_horizontal_margin"
     android:layout_marginRight="@dimen/activity_horizontal_margin"
     android:layout_marginTop="@dimen/activity_vertical_margin"
-    android:layout_marginBottom="@dimen/activity_vertical_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:orientation="vertical">
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:layout_height="wrap_content"
+    android:layout_width="fill_parent">
 
-
-    <TextView
-        style="@style/HeadlineLabels"
+    <LinearLayout 
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="MessageRate (min delay):" />
+        
+        android:orientation="vertical"
+        >
 
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <SeekBar
-            android:id="@+id/messageRateSeekBar"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1" />
 
         <TextView
-            android:id="@+id/messageRateSeekBarValueTextView"
+            style="@style/HeadlineLabels"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="MessageRate (min delay):" />
+
+        <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="5" />
+            android:orientation="horizontal">
+
+            <SeekBar
+                android:id="@+id/messageRateSeekBar"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <TextView
+                android:id="@+id/messageRateSeekBarValueTextView"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="5" />
+        </LinearLayout>
+
+        <TextView
+            style="@style/HeadlineLabels"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Message picking strategy:" />
+
+        <Spinner
+            android:id="@+id/pickingStrategySpinner"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            style="@style/HeadlineLabels"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Message queue capacity:" />
+
+        <EditText
+            android:id="@+id/messageQueueCapacityEditText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="Message queue capacity"
+            android:inputType="number" />
+
+        <TextView
+            style="@style/HeadlineLabels"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Reflexive channel message transmission:" />
+
+        <ToggleButton
+            android:id="@+id/transmitReflexivChannelMessagesToggleButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textOff="Reflexive transmission deactivated"
+            android:textOn="Always transmitting" />
+
+        <TextView
+            style="@style/HeadlineLabels"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Send without subscribers:" />
+
+        <ToggleButton
+            android:id="@+id/transmitIfNoSubscribersToggleButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textOff="Not transmitting without subscribers"
+            android:textOn="Always transmitting" />
+
     </LinearLayout>
-
-    <TextView
-        style="@style/HeadlineLabels"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Message picking strategy:" />
-
-    <Spinner
-        android:id="@+id/pickingStrategySpinner"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        />
-
-    <TextView
-        style="@style/HeadlineLabels"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Message queue capacity:" />
-
-    <EditText
-        android:id="@+id/messageQueueCapacityEditText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:hint="Message queue capacity"
-        android:inputType="number" />
-
-</LinearLayout>
+</ScrollView>

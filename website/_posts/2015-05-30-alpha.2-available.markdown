@@ -1,0 +1,10 @@
+---
+layout: post
+title:  "Blaubot 2.0.0.alpha.2"
+date:   2015-05-30
+categories: release
+---
+The second alpha is now available from jCenter and MavenCentral.
+It includes some bugfixes and is restructured into 2 additional sub-projects.
+There are now blaubot, blaubot-android, blaubot-websockets and blaubot-jsr82.
+Check the [documentation page](/documentation) for a more comprehensive description.

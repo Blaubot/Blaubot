@@ -1,0 +1,28 @@
+The blaubot as well as the blaubot-android modules are configured to be published to
+the jCenter Maven-Repository (https://bintray.com/bintray/jcenter).
+
+Requirements:
+- there has to be a file local.properties (not in VCS) in the root folder containing the following entries:
+    bintray.user=...
+    bintray.apikey=...
+    bintray.gpg.password=...
+    bintray.oss.user=<sonatype user>
+    bintray.oss.password<sonatype pw>
+
+How to publish (don't forget to change default LOG_LEVEL):
+- cd into root project directory
+- ./gradlew clean bintrayUpload
+
+Notes:
+- There is an option "dryRun" in the build.gradle file of each module, which allows us to actually build
+  the distribution without publishing it. We use it to manually define, what we are going to publish to
+  bintray. We can then see the created pom.xml and binaries in the build folder.
+- the groupId name is eu.hgross
+- artifacts:
+    - blaubot
+    - blaubot-android
+    - blaubot-websockets
+    - blaubot-jsr82
+
+See also:
+- https://github.com/danielemaddaluno/gradle-jcenter-publish

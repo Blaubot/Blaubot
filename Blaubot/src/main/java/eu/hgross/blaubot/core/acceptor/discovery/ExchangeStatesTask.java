@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import eu.hgross.blaubot.core.BlaubotDevice;
 import eu.hgross.blaubot.core.IBlaubotConnection;
 import eu.hgross.blaubot.core.IBlaubotDevice;
 import eu.hgross.blaubot.core.State;
@@ -17,7 +18,7 @@ import eu.hgross.blaubot.util.Log;
 /**
  * A task that utilizes a given (and connected) {@link IBlaubotConnection} to exchange the given {@link State} with the
  * remote endpoint.
- * The remote endpoint is the BlaubotBeaconService's BeaconConnectionHandler runnable.
+ * The remote endpoint is the BlaubotBeaconService's {@link eu.hgross.blaubot.core.acceptor.discovery.BlaubotBeaconService.BeaconConnectionHandler} runnable.
  * This task does the whole beacon exchange heavy lifting and can be reused in other beacon implementations.
  * 
  * If the exchange is successful, the {@link IBlaubotDiscoveryEventListener} is informed about the discovered state of
@@ -32,7 +33,7 @@ import eu.hgross.blaubot.util.Log;
 public class ExchangeStatesTask implements Runnable {
 	private static final ExecutorService executorService = Executors.newCachedThreadPool();
 	private static final String LOG_TAG = "ExchangeStatesTask";
-	private static final boolean LOGGING_ACTIVE = false;
+	private static final boolean LOGGING_ACTIVE = true;
 	protected volatile IBlaubotDiscoveryEventListener eventListener;
 	protected IBlaubotState ourState; 
 	protected IBlaubotConnection connection;
@@ -131,7 +132,15 @@ public class ExchangeStatesTask implements Runnable {
 
         // dispatch THEIR state and connection info to the listener
 		handleDiscoveredBlaubotDevice(connection.getRemoteDevice(), beaconMessage.getCurrentState(), beaconMessage.getOwnConnectionMetaDataList());
-	}
+		// if they have a king, dispatch this informations as well.
+        if (beaconMessage.getCurrentState().equals(State.Prince) || beaconMessage.getCurrentState().equals(State.Peasant)) {
+            final String remoteDeviceKingUniqueDeviceId = beaconMessage.getKingDeviceUniqueId();
+            final List<ConnectionMetaDataDTO> remoteDeviceKingConnectionMetaDataList = beaconMessage.getKingsConnectionMetaDataList();
+            if (remoteDeviceKingUniqueDeviceId != null && !remoteDeviceKingUniqueDeviceId.isEmpty() && remoteDeviceKingConnectionMetaDataList != null) {
+                handleDiscoveredBlaubotDevice(new BlaubotDevice(remoteDeviceKingUniqueDeviceId), State.King, remoteDeviceKingConnectionMetaDataList);
+            }
+        }
+    }
 
 	private void handleDiscoveredBlaubotDevice(final IBlaubotDevice device, final State state, final List<ConnectionMetaDataDTO> myConnectionMetaDataList) {
 		if (eventListener != null) {

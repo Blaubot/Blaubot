@@ -15,6 +15,8 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import eu.hgross.blaubot.admin.AbstractAdminMessage;
+import eu.hgross.blaubot.admin.CensusMessage;
 import eu.hgross.blaubot.android.R;
 import eu.hgross.blaubot.core.Blaubot;
 import eu.hgross.blaubot.core.IBlaubotConnection;
@@ -22,8 +24,6 @@ import eu.hgross.blaubot.core.State;
 import eu.hgross.blaubot.core.acceptor.IBlaubotConnectionManagerListener;
 import eu.hgross.blaubot.core.statemachine.IBlaubotConnectionStateMachineListener;
 import eu.hgross.blaubot.core.statemachine.states.IBlaubotState;
-import eu.hgross.blaubot.admin.AbstractAdminMessage;
-import eu.hgross.blaubot.admin.CensusMessage;
 import eu.hgross.blaubot.messaging.IBlaubotAdminMessageListener;
 import eu.hgross.blaubot.ui.IBlaubotDebugView;
 
@@ -105,7 +105,6 @@ public class KingdomView extends LinearLayout implements IBlaubotDebugView {
 		stateTextView.setText(state.toString());
 		return item;
 	}
-
 
 
 	private IBlaubotConnectionManagerListener mConnectionManagerListener = new IBlaubotConnectionManagerListener() {

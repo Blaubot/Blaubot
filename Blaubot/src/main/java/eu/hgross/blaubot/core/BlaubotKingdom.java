@@ -7,7 +7,6 @@ import eu.hgross.blaubot.util.KingdomCensusLifecycleListener;
 /**
  * The root object for all BlaubotKingdoms connected to the BlaubotServer.
  * It holds the ChannelManager and all connections to this kingdom in a ConnectionManager.
- * TODO: mechanism to get to know when the kindom was disconnected for outsiders (listner)
  */
 public class BlaubotKingdom {
     private static final String LOG_TAG = "BlaubotKingdom";
@@ -43,7 +42,7 @@ public class BlaubotKingdom {
 
 
     /**
-     * @param ownDevice the own device
+     * @param ownDevice  the own device
      * @param kingDevice the device object for the kingdom's king device
      */
     public BlaubotKingdom(IBlaubotDevice ownDevice, IBlaubotDevice kingDevice) {
@@ -69,24 +68,35 @@ public class BlaubotKingdom {
 
     /**
      * Choses the connection to the kingDevice and starts the kingdom management.
-     * If a connection was present dddddd
+     *
+     * @throws IllegalStateException if manageConncetion was called before
      */
     protected void manageConnection(BlaubotKingdomConnection connection) {
+        if (this.managedConnection != null) {
+            throw new IllegalStateException("There was already a connection.");
+        }
         this.channelManager.setMaster(false);
         this.channelManager.activate();
         // if the connection dies, we stop the channel manager
         connection.addConnectionListener(new IBlaubotConnectionListener() {
             @Override
             public void onConnectionClosed(IBlaubotConnection connection) {
+                // onConncected/onDisconnected has to be triggered by the LifeCycleEventDispatcher on disconnect of the managed connection
+                if (managedConnection != null) {
+                    final String kingUniqueDeviceID = getKingDevice().getUniqueDeviceID();
+                    lifeCycleEventDispatcher.notifyDisconnectedFromNetwork(kingUniqueDeviceID);
+                }
                 disconnectKingdom();
             }
         });
         this.managedConnection = connection;
         this.channelManager.addConnection(connection);
+        this.lifeCycleEventDispatcher.notifyConnectedToNetwork();
     }
 
     /**
      * Adds a listener that gets invoked, if this kingdom disconnected
+     *
      * @param disconnectListener the listener
      */
     public void addDisconnectListener(IBlaubotConnectionListener disconnectListener) {
@@ -99,7 +109,7 @@ public class BlaubotKingdom {
      * Closes all connections and releases resources regarding this kingdom.
      */
     public void disconnectKingdom() {
-        if(this.managedConnection != null) {
+        if (this.managedConnection != null) {
             this.managedConnection.disconnect();
         }
         this.channelManager.reset();
@@ -108,6 +118,7 @@ public class BlaubotKingdom {
 
     /**
      * Adds a listener to this kingdom's life cycle events
+     *
      * @param lifecycleListener
      */
     public void addLifecycleListener(ILifecycleListener lifecycleListener) {
@@ -116,6 +127,7 @@ public class BlaubotKingdom {
 
     /**
      * Removes a listener to this kingdom's life cycle events
+     *
      * @param lifecycleListener
      */
     public void removeLifecycleListener(ILifecycleListener lifecycleListener) {
@@ -124,6 +136,7 @@ public class BlaubotKingdom {
 
     /**
      * The channel manage to manage channels.
+     *
      * @return channel manager
      */
     public BlaubotChannelManager getChannelManager() {
@@ -132,6 +145,7 @@ public class BlaubotKingdom {
 
     /**
      * Returns the king device, which is the discriminator for a kingdom.
+     *
      * @return king device
      */
     public IBlaubotDevice getKingDevice() {
@@ -140,10 +154,20 @@ public class BlaubotKingdom {
 
     /**
      * our own device
+     *
      * @return device
      */
     public IBlaubotDevice getOwnDevice() {
         return ownDevice;
+    }
+
+    /**
+     * A KingdomCensusLifecycleListener keeping track of the connected devices.
+     * You can poll the devices, current prince, ... from here.
+     * @return the census listener
+     */
+    public KingdomCensusLifecycleListener getKingdomCensusLifecycleListener() {
+        return kingdomCensusLifecycleListener;
     }
 
     @Override

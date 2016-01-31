@@ -1,0 +1,15 @@
+include ':blaubot'
+include ':blaubot-android'
+include ':blaubot-websockets'
+include ':blaubot-jsr82'
+include ':blaubot-test'
+include ':website'
+
+
+// examples
+include 'examples:blaubot-app'
+include 'examples:blaubot-chat'
+include 'examples:blaubot-fingertracking'
+include 'examples:blaubot-cam'
+include 'examples:blaubot-cam-server'
+include 'examples:blaubot-fingertracking-swing'

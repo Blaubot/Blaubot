@@ -1,5 +1,7 @@
 package eu.hgross.blaubot.ui;
 
+import com.google.gson.Gson;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Date;
@@ -33,9 +35,11 @@ public class PingPanel extends JPanel implements IBlaubotDebugView, IBlaubotKing
     private Date mLastReceivedPingDate;
     private IBlaubotChannel mPingChannel;
     private JLabel mLastReceivedLabel;
+    private Gson gson;
 
     public PingPanel() {
         super();
+        gson = new Gson();
         this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 
         this.mPingButton = new JButton("Send ping");
@@ -43,7 +47,12 @@ public class PingPanel extends JPanel implements IBlaubotDebugView, IBlaubotKing
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (mPingChannel != null) {
-                    String msg = "Ping!";
+                    String ownDeviceUnqiqueDeviceId = mBlaubot != null ? mBlaubot.getOwnDevice().getUniqueDeviceID() : (mBlaubotKingdom != null ? mBlaubotKingdom.getOwnDevice().getUniqueDeviceID() : null);
+                    PingMessage pingMessage = new PingMessage();
+                    pingMessage.setTimestamp(System.currentTimeMillis());
+                    pingMessage.setSenderUniqueDeviceId(ownDeviceUnqiqueDeviceId);
+
+                    String msg = gson.toJson(pingMessage);
                     byte[] bytes = msg.getBytes(BlaubotConstants.STRING_CHARSET);
                     mPingChannel.publish(bytes);
                 }
@@ -88,13 +97,17 @@ public class PingPanel extends JPanel implements IBlaubotDebugView, IBlaubotKing
             mPingChannel.subscribe(new IBlaubotMessageListener() {
                 @Override
                 public void onMessage(BlaubotMessage blaubotMessage) {
+                    long receivedTimeStamp = System.currentTimeMillis();
+                    Date receivedDate = new Date();
                     final String msg = new String(blaubotMessage.getPayload(), BlaubotConstants.STRING_CHARSET);
                     if (Log.logDebugMessages()) {
                         Log.d(LOG_TAG, "Got a message on the ping channel: " + msg);
                     }
                     // got ping
-                    Date date = new Date();
-                    mLastReceivedPingDate = date;
+                    PingMessage pingMessage = gson.fromJson(msg, PingMessage.class);
+                    long rtt = receivedTimeStamp - pingMessage.getTimestamp();
+                    // TODO display round trip time 
+                    mLastReceivedPingDate = receivedDate;
                     updateViews();
                 }
             });

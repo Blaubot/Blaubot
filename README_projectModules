@@ -1,0 +1,13 @@
+We have several project modules:
+
+- blaubot                         The main Blaubot library (Plain Java)
+- blaubot-android                 The Android Blaubot library.
+- blaubot-websockets              WebSocket Adapter for blaubot.
+- blaubot-jsr82                   JSR82 Adapter for blaubot (not blaubot-android)
+- blaubot-app                     Example-App for Android to mess around with the many Acceptor/Beacon combinations
+- blaubot-fingertracking          Example-App for Android using the blaubot-android
+- blaubot-fingertracking-swing    Example-App compatible to the blaubot-fingertracking Android app but plain Java (blaubot) with Swing-UI. Execute eu.hgross.blaubot.fingertracking.FingerTrackingMain
+- blaubot-cam                     Example-App for Android using the ServerConnector
+- blaubot-cam-server              Example-App compatible with the blaubotCam Android App acting as a Server-Endpoint for the ServerConnectors.
+- blaubot-test                    Test-Module for the blaubotLibrary testing core functionalities of blaubot with JUnit (start AllSuite)
+- blaubot-website                 A jekyll app containing the static Blaubot website

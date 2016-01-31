@@ -1,17 +1,22 @@
 package eu.hgross.blaubot.core.statemachine;
 
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeoutException;
 
+import eu.hgross.blaubot.admin.AbstractAdminMessage;
+import eu.hgross.blaubot.admin.RelayAdminMessage;
 import eu.hgross.blaubot.core.Blaubot;
+import eu.hgross.blaubot.core.BlaubotConnectionManager;
 import eu.hgross.blaubot.core.IBlaubotAdapter;
 import eu.hgross.blaubot.core.IBlaubotConnection;
 import eu.hgross.blaubot.core.IBlaubotDevice;
 import eu.hgross.blaubot.core.ServerConnectionManager;
 import eu.hgross.blaubot.core.State;
-import eu.hgross.blaubot.core.BlaubotConnectionManager;
 import eu.hgross.blaubot.core.acceptor.IBlaubotConnectionAcceptor;
 import eu.hgross.blaubot.core.acceptor.IBlaubotConnectionManagerListener;
 import eu.hgross.blaubot.core.acceptor.discovery.BlaubotBeaconService;
@@ -27,8 +32,6 @@ import eu.hgross.blaubot.core.statemachine.events.StopStateMachineEvent;
 import eu.hgross.blaubot.core.statemachine.states.FreeState;
 import eu.hgross.blaubot.core.statemachine.states.IBlaubotState;
 import eu.hgross.blaubot.core.statemachine.states.StoppedState;
-import eu.hgross.blaubot.admin.AbstractAdminMessage;
-import eu.hgross.blaubot.admin.RelayAdminMessage;
 import eu.hgross.blaubot.messaging.IBlaubotAdminMessageListener;
 import eu.hgross.blaubot.util.Log;
 
@@ -298,17 +301,52 @@ public class ConnectionStateMachine {
 	 * Dispatches events from the eventQueue to the current state. (UI-Thread alike)
 	 *
 	 * @author Henning Gross <mail.to@henning-gross.de>
-	 *
+	 * 
 	 */
 	class StateMachineEventDispatcher extends Thread {
 		private static final String LOG_TAG = "StateMachineEventDispatcher";
+		/**
+		 * Max time the processing of an event may take. If it takes longer,
+		 * an exception will be thrown.
+		 */
+		private static final int MAX_EVENT_PROCESSING_TIME = 60000; // ms
+		private Timer processingTimeoutTimer;
 
 		public StateMachineEventDispatcher() {
 			setName("csm-event-dispatcher");
 		}
-
 		private void handleState(IBlaubotState state) {
 			changeState(state);
+		}
+
+		/**
+		 * Starts a timer that will log warnings, if the ConnectionStateMachine takes too long 
+		 * to process an event.
+         * @param event the event that took too long to be processed
+		 */
+		private void startTimer(final AbstractBlaubotStateMachineEvent event) {
+			processingTimeoutTimer = new Timer();
+			final TimerTask timerTask = new TimerTask() {
+				@Override
+				public void run() {
+                    final String message = " [curState: " + currentState + "] The processing of " + event + " took longer than " + MAX_EVENT_PROCESSING_TIME + " ms";
+                    if (Log.logWarningMessages()) {
+                        Log.e(LOG_TAG, message);
+                    }
+//                    throw new RuntimeException(new TimeoutException(message));
+				}
+			};
+			processingTimeoutTimer.schedule(timerTask, MAX_EVENT_PROCESSING_TIME);
+		}
+
+		/**
+		 * cancels the timer
+		 */
+		private void cancelTimer() {
+			if (processingTimeoutTimer != null) {
+				processingTimeoutTimer.cancel();
+				processingTimeoutTimer = null;
+			}
 		}
 
 		@Override
@@ -322,6 +360,10 @@ public class ConnectionStateMachine {
 					if(Log.logDebugMessages()) {
 						Log.d(LOG_TAG, "[curState: "+ currentState +"] CSM EventQueue (size=" + stateMachineEventQueue.size() + ") took: " + event);
 					}
+                    // start the timeout timer
+                    startTimer(event);
+                    
+                    // we measure the processing time
                     long startTime = System.currentTimeMillis();
 					if(event instanceof AdminMessageStateMachineEvent) {
 						AbstractAdminMessage aam = ((AdminMessageStateMachineEvent)event).getAdminMessage();
@@ -349,6 +391,9 @@ public class ConnectionStateMachine {
 					} else {
 						throw new RuntimeException("Unknown event in event queue!");
 					}
+                    // stop timeout timer
+                    cancelTimer();
+                    
                     if(Log.logDebugMessages()) {
                         Log.d(LOG_TAG, "Event processing took " + (System.currentTimeMillis() - startTime) + " ms");
                     }
@@ -356,6 +401,7 @@ public class ConnectionStateMachine {
 					break;
 				}
 			}
+            cancelTimer();
             if(Log.logDebugMessages()) {
                 Log.d(LOG_TAG, "StateMachineEventDispatcher stopped.");
             }
@@ -374,9 +420,4 @@ public class ConnectionStateMachine {
 			// ignore
 		}
 	}
-
-	public StateMachineSession getStateMachineSession() {
-		return stateMachineSession;
-	}
-
 }

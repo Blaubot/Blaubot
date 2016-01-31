@@ -46,6 +46,11 @@ public class BlaubotConstants {
     public static final String BLAUBOT_BEACON_BONJOUR_SERVICE_NAME = "_blaubot._tcp.local.";
 
     /**
+     * Max value of an unsigned short
+     */
+    public static final int USHORT_MAX_VALUE = 0xffff;
+    
+    /**
      * Maximum payload size for BlaubotMessages in bytes.
      * == (max unsigned short value) - full blaubot message header length.
      *
@@ -58,7 +63,7 @@ public class BlaubotConstants {
      *
      * Additionally we need to subtract the AdminMessage header length which is one byte.
      */
-    public static final int MAX_PAYLOAD_SIZE = 0xffff - BlaubotMessage.FULL_HEADER_LENGTH - AbstractAdminMessage.HEADER_LENGTH;
+    public static final int MAX_PAYLOAD_SIZE = USHORT_MAX_VALUE - BlaubotMessage.FULL_HEADER_LENGTH - AbstractAdminMessage.HEADER_LENGTH;
 
     /*
         Acceptor classifiers

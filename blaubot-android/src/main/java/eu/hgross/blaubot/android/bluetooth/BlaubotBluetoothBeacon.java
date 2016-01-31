@@ -191,7 +191,6 @@ public class BlaubotBluetoothBeacon implements IBlaubotBeacon {
 	 * connections, wraps them into the generalized {@link IBlaubotConnection} interface and hand them to the
 	 * {@link IBlaubotIncomingConnectionListener} for further handling of the state information exchange.
 	 *
-	 * TODO: close serversocket!
 	 *
 	 * @author Henning Gross <mail.to@henning-gross.de>
 	 *
@@ -220,8 +219,9 @@ public class BlaubotBluetoothBeacon implements IBlaubotBeacon {
 					bluetoothSocket = serverSocket.accept();
 				} catch (IOException e) {
 					if(Log.logWarningMessages()) {
-						Log.w(LOG_TAG, "Beacon communication failed with I/O Exception", e);
+						Log.w(LOG_TAG, "Beacon communication failed with I/O Exception ", e);
 					}
+					// TODO: in cases where the bluetooth adapter fails (not unlikely on android) we will end up in an endless loop
 					continue;
 				}
 				if(Log.logDebugMessages()) {

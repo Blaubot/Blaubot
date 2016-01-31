@@ -28,7 +28,7 @@ public class Log {
 	public static LogLevel LOG_LEVEL;
 	
 	static {
-		LOG_LEVEL = LogLevel.DEBUG;
+		LOG_LEVEL = LogLevel.ERRORS;
 //		LOG_LEVEL = LogLevel.WARNINGS;
 		Package androidUtil = Package.getPackage("android.util");
 		Class<?> aLog = null;
@@ -177,7 +177,7 @@ public class Log {
 		try {
 			if(androidLog != null) {
 				Method m = androidLog.getMethod("w", String.class, Throwable.class);
-				m.invoke(androidLog, tag + formatMessage(""), t);
+				m.invoke(androidLog, tag, t);
 			} else {
 				logger.log(Level.WARNING, formatLog(" ", tag));
 			}
@@ -190,7 +190,7 @@ public class Log {
 		try {
 			if(androidLog != null) {
 				Method m = androidLog.getMethod("e", String.class, String.class);
-				m.invoke(androidLog, tag + formatMessage(message), message);
+				m.invoke(androidLog, tag, formatMessage(message));
 			} else {
 				logger.log(Level.SEVERE, formatLog(message, tag));
 			}
@@ -243,7 +243,7 @@ public class Log {
 		try {
 			if(androidLog != null) {
 				Method m = androidLog.getMethod("wtf", String.class, Throwable.class);
-				m.invoke(androidLog, tag + formatMessage(""), t);
+				m.invoke(androidLog, tag, t);
 			} else {
 				logger.log(Level.SEVERE, formatLog(" ", tag));
 			}

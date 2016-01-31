@@ -106,7 +106,7 @@ public class PrinceState implements IBlaubotState, IBlaubotSubordinatedState {
 				session.getChannelManager().broadcastAdminMessage(ackMsg.toBlaubotMessage());
 			} else {
 				if (Log.logDebugMessages()) {
-					Log.d(LOG_TAG, "We are not prince anymore - changing to peasant state.");
+					Log.d(LOG_TAG, "We are not prince anymore - changing to peasant state. ");
 				}
 				return new PeasantState(kingConnection, ConnectionAccomplishmentType.DEGRADATION);
 			}
@@ -124,7 +124,7 @@ public class PrinceState implements IBlaubotState, IBlaubotSubordinatedState {
 					Log.d(LOG_TAG, "Connection to new king successful. Changing to peasant state.");
 				}
 
-				return new PeasantState(kingConnection, ConnectionAccomplishmentType.BOWED_DOWN);
+				return new PeasantState(conn, ConnectionAccomplishmentType.BOWED_DOWN);
 			} else {
 				if (Log.logDebugMessages()) {
 					Log.w(LOG_TAG, "Connection to new king failed! Oh my, now we are an outlaw :-(. Changing to FreeState to find a new king.");

@@ -22,22 +22,19 @@ import java.util.concurrent.TimeUnit;
 
 import eu.hgross.blaubot.android.R;
 import eu.hgross.blaubot.core.Blaubot;
-import eu.hgross.blaubot.core.ILifecycleListener;
-import eu.hgross.blaubot.core.LifecycleListenerAdapter;
+import eu.hgross.blaubot.messaging.BlaubotMessage;
 import eu.hgross.blaubot.messaging.IBlaubotChannel;
 import eu.hgross.blaubot.messaging.IBlaubotMessageListener;
-import eu.hgross.blaubot.messaging.BlaubotMessage;
 import eu.hgross.blaubot.ui.BlaubotDebugViewConstants;
 import eu.hgross.blaubot.ui.IBlaubotDebugView;
 import eu.hgross.blaubot.util.Log;
 
 /**
  * Android view to send and receive many bytes in an endless loop through a blaubot channel
- * 
+ * <p/>
  * Add this view to a blaubot instance like this: throughputview.registerBlaubotInstance(blaubot);
- * 
+ *
  * @author Henning Gross <mail.to@henning-gross.de>
- * 
  */
 public class ThroughputView extends FrameLayout implements IBlaubotDebugView {
     private static final short CHANNEL_ID = BlaubotDebugViewConstants.THROUGHPUT_VIEW_CHANNEL_ID;
@@ -78,11 +75,13 @@ public class ThroughputView extends FrameLayout implements IBlaubotDebugView {
 
         interface StartStopListener {
             void onStart();
+
             void onStop();
         }
 
         class SendTask implements Runnable {
             private final Random random = new Random();
+
             @Override
             public void run() {
                 startStopListener.onStart();
@@ -101,13 +100,15 @@ public class ThroughputView extends FrameLayout implements IBlaubotDebugView {
                 }
                 startStopListener.onStop();
             }
-        };
+        }
+
+        ;
 
         public ThroughputTester(IBlaubotChannel channel, StartStopListener startStopListener) {
             this.startStopListener = startStopListener;
             this.channel = channel;
             this.lastRecMessages = new CircularFifoQueue<>(20);
-            this.lastSendMessages= new CircularFifoQueue<>(20);
+            this.lastSendMessages = new CircularFifoQueue<>(20);
             channel.addMessageListener(new IBlaubotMessageListener() {
                 @Override
                 public void onMessage(BlaubotMessage blaubotMessage) {
@@ -150,14 +151,15 @@ public class ThroughputView extends FrameLayout implements IBlaubotDebugView {
 
         /**
          * The send throughput
+         *
          * @return bytes / ms
          */
         public float getSendThroughput() {
-            if(lastSendMessages.isEmpty()) {
+            if (lastSendMessages.isEmpty()) {
                 return 0;
             }
 
-            final ArrayList<Pair<Long,Integer>> data;
+            final ArrayList<Pair<Long, Integer>> data;
             synchronized (sendLock) {
                 data = new ArrayList<>(lastSendMessages);
             }
@@ -165,32 +167,33 @@ public class ThroughputView extends FrameLayout implements IBlaubotDebugView {
             final long minTimestamp = now - MEASURE_PERIOD;
             long startTime = 0;
             int byteSum = 0;
-            for(Pair pair : data) {
+            for (Pair pair : data) {
                 final Long time = (Long) pair.first;
-                if(time < minTimestamp) {
+                if (time < minTimestamp) {
                     continue;
-                } else if(startTime == 0) {
+                } else if (startTime == 0) {
                     startTime = time;
                 }
                 final Integer bytes = (Integer) pair.second;
                 byteSum += bytes;
             }
             final float timespan = (now - startTime);
-            if(timespan == 0)
+            if (timespan == 0)
                 return 0;
-            return ((float)byteSum)/timespan;
+            return ((float) byteSum) / timespan;
         }
 
         /**
          * The receive throughput
+         *
          * @return bytes / ms
          */
         public float getReceiveThroughput() {
-            if(lastRecMessages.isEmpty()) {
+            if (lastRecMessages.isEmpty()) {
                 return 0;
             }
 
-            final ArrayList<Pair<Long,Integer>> data;
+            final ArrayList<Pair<Long, Integer>> data;
             synchronized (receiveLock) {
                 data = new ArrayList<>(lastRecMessages);
             }
@@ -198,27 +201,28 @@ public class ThroughputView extends FrameLayout implements IBlaubotDebugView {
             final long minTimestamp = now - MEASURE_PERIOD;
             long startTime = 0;
             int byteSum = 0;
-            for(Pair pair : data) {
+            for (Pair pair : data) {
                 final Long time = (Long) pair.first;
-                if(time < minTimestamp) {
+                if (time < minTimestamp) {
                     continue;
-                } else if(startTime == 0) {
+                } else if (startTime == 0) {
                     startTime = time;
                 }
                 final Integer bytes = (Integer) pair.second;
                 byteSum += bytes;
             }
             final float timespan = (now - startTime);
-            if(timespan == 0)
+            if (timespan == 0)
                 return 0;
-            return ((float)byteSum)/timespan;
+            return ((float) byteSum) / timespan;
         }
 
         public long getAvgBytesPerReceivedMessage() {
-            return receivedMessages/receivedBytes;
+            return receivedMessages / receivedBytes;
         }
+
         public long getAvgBytesPerSentMessage() {
-            return sentMessages/sentBytes;
+            return sentMessages / sentBytes;
         }
 
         public synchronized void start() {
@@ -230,7 +234,7 @@ public class ThroughputView extends FrameLayout implements IBlaubotDebugView {
 
         public synchronized void stop() {
             this.sendRunnable = null;
-            if(this.executorService != null) {
+            if (this.executorService != null) {
                 this.executorService.shutdown();
                 try {
                     this.executorService.awaitTermination(10, TimeUnit.SECONDS);
@@ -247,44 +251,37 @@ public class ThroughputView extends FrameLayout implements IBlaubotDebugView {
     }
 
     public ThroughputView(Context context, AttributeSet attrs) {
-		super(context, attrs);
-		initView(context, attrs);
-	}
+        super(context, attrs);
+        initView(context, attrs);
+    }
 
-	public ThroughputView(Context context, AttributeSet attrs, int defStyle) {
-		super(context, attrs, defStyle);
-		initView(context, attrs);
-	}
+    public ThroughputView(Context context, AttributeSet attrs, int defStyle) {
+        super(context, attrs, defStyle);
+        initView(context, attrs);
+    }
 
-	private void initView(Context context, AttributeSet attrs) {
-		View view = inflate(context, R.layout.blaubot_throughput_view, null);
+    private void initView(Context context, AttributeSet attrs) {
+        View view = inflate(context, R.layout.blaubot_throughput_view, null);
         mUiHandler = new Handler(Looper.getMainLooper());
 
         addView(view);
-		mResultTextView = (TextView) findViewById(R.id.resultTextView);
+        mResultTextView = (TextView) findViewById(R.id.resultTextView);
         mResultTextView.setMaxLines(2);
         mResultTextView.setLines(2);
-		mStartButton = (Button) findViewById(R.id.startButton);
+        mStartButton = (Button) findViewById(R.id.startButton);
         mStartButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-                if(mThroughPutTester.isStarted()) {
+            @Override
+            public void onClick(View v) {
+                if (mThroughPutTester.isStarted()) {
                     mThroughPutTester.stop();
                 } else {
                     mThroughPutTester.start();
                 }
                 mStartButton.setEnabled(false);
-			}
-		});
-	}
+            }
+        });
+    }
 
-
-    private ILifecycleListener mLifecycleListener = new LifecycleListenerAdapter() {
-        @Override
-        public void onConnected() {
-            mChannel.subscribe();
-        }
-    };
 
     /**
      * Listens to the used channel of the throughput tester and updates the ui on new messages
@@ -297,20 +294,19 @@ public class ThroughputView extends FrameLayout implements IBlaubotDebugView {
         }
     };
 
-	/**
-	 * Register this view with the given blaubot instance
-	 * 
-	 * @param blaubot
-	 *            the blaubot instance to connect with
-	 */
-	public void registerBlaubotInstance(Blaubot blaubot) {
-		if (mBlaubot != null) {
-			unregisterBlaubotInstance();
-		}
-		this.mBlaubot = blaubot;
+    /**
+     * Register this view with the given blaubot instance
+     *
+     * @param blaubot the blaubot instance to connect with
+     */
+    public void registerBlaubotInstance(Blaubot blaubot) {
+        if (mBlaubot != null) {
+            unregisterBlaubotInstance();
+        }
+        this.mBlaubot = blaubot;
         this.mChannel = this.mBlaubot.createChannel(CHANNEL_ID);
         this.mChannel.getChannelConfig().setPriority(BlaubotMessage.Priority.LOW);
-		this.mBlaubot.addLifecycleListener(mLifecycleListener);
+        this.mChannel.subscribe();
         this.mThroughPutTester = new ThroughputTester(mChannel, new ThroughputTester.StartStopListener() {
             @Override
             public void onStart() {
@@ -344,8 +340,8 @@ public class ThroughputView extends FrameLayout implements IBlaubotDebugView {
                 mUiHandler.post(new Runnable() {
                     @Override
                     public void run() {
-                        final String humanReadbaleRx = humanReadableByteCount((int)receiveThroughput, false);
-                        final String humanReadbaleTx = humanReadableByteCount((int)sendThroughput, false);
+                        final String humanReadbaleRx = ViewUtils.humanReadableByteCount((int) receiveThroughput, false);
+                        final String humanReadbaleTx = ViewUtils.humanReadableByteCount((int) sendThroughput, false);
                         StringBuilder sb = new StringBuilder("Rx: ");
                         sb.append(humanReadbaleRx);
                         sb.append("/s\n");
@@ -359,32 +355,20 @@ public class ThroughputView extends FrameLayout implements IBlaubotDebugView {
         };
         this.mUpdateTimer = new Timer();
         this.mUpdateTimer.scheduleAtFixedRate(timerTask, 0, UPDATE_INTERVAL);
-	}
+    }
 
     @Override
     public void unregisterBlaubotInstance() {
-        if(mBlaubot != null) {
-            this.mBlaubot.removeLifecycleListener(mLifecycleListener);
+        if (mBlaubot != null) {
+            this.mChannel.unsubscribe();
+            this.mChannel.removeMessageListener(mMessageListener);
             this.mBlaubot = null;
         }
-        if(mUpdateTimer != null) {
+        if (mUpdateTimer != null) {
             mUpdateTimer.cancel();
             mUpdateTimer = null;
         }
     }
 
-    /**
-     * Converts a byte size into a human readable sting
-     * @param bytes the number of bytes
-     * @param si if true, the output will be in si units
-     * @return the human readable string
-     */
-    public static String humanReadableByteCount(final long bytes, final boolean si) {
-        final int unit = si ? 1000 : 1024;
-        if (bytes < unit) return bytes + " B";
-        final int exp = (int) (Math.log(bytes) / Math.log(unit));
-        final String pre = (si ? "kMGTPE" : "KMGTPE").charAt(exp-1) + (si ? "" : "i");
-        return String.format("%.1f %sB", bytes / Math.pow(unit, exp), pre);
-    }
 
 }

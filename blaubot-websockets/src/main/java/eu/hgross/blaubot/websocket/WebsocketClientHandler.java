@@ -7,6 +7,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import eu.hgross.blaubot.core.BlaubotDevice;
 import eu.hgross.blaubot.core.acceptor.IBlaubotIncomingConnectionListener;
+import eu.hgross.blaubot.util.Log;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
@@ -30,7 +31,7 @@ import io.netty.util.CharsetUtil;
  * After .connect() via the bootstrapper, call getConncetion().
  */
 public class WebsocketClientHandler extends SimpleChannelInboundHandler<Object> {
-
+    private static final String LOG_TAG = "WebsocketClientHandler";
     private final WebSocketClientHandshaker handshaker;
     private final String remoteDeviceUniqueDeviceId;
     private final AtomicReference<IBlaubotIncomingConnectionListener> incomingConnectionListenerReference;
@@ -38,8 +39,7 @@ public class WebsocketClientHandler extends SimpleChannelInboundHandler<Object> 
     private BlaubotWebsocketConnection connection;
 
     /**
-     *
-     * @param uri The uri to connect with
+     * @param uri                  The uri to connect with
      * @param remoteUniqueDeviceId the unique device id of the device we are connecting to
      */
     public WebsocketClientHandler(URI uri, String remoteUniqueDeviceId, AtomicReference<IBlaubotIncomingConnectionListener> listenerReference) {
@@ -61,7 +61,10 @@ public class WebsocketClientHandler extends SimpleChannelInboundHandler<Object> 
                 Channel channel = future.channel();
                 BlaubotDevice remoteDevice = new BlaubotDevice(remoteDeviceUniqueDeviceId);
                 connection = new BlaubotWebsocketConnection(remoteDevice, channel);
-                incomingConnectionListenerReference.get().onConnectionEstablished(connection);
+                final IBlaubotIncomingConnectionListener connectionListener = incomingConnectionListenerReference.get();
+                if (connectionListener != null) {
+                    connectionListener.onConnectionEstablished(connection);
+                }
             }
         });
     }
@@ -73,7 +76,9 @@ public class WebsocketClientHandler extends SimpleChannelInboundHandler<Object> 
 
     @Override
     public void channelInactive(ChannelHandlerContext ctx) {
-        System.out.println("WebSocket Client disconnected!");
+        if (Log.logDebugMessages()) {
+            Log.d(LOG_TAG, "WebSocket Client disconnected!");
+        }
     }
 
     @Override
@@ -81,7 +86,9 @@ public class WebsocketClientHandler extends SimpleChannelInboundHandler<Object> 
         Channel ch = ctx.channel();
         if (!handshaker.isHandshakeComplete()) {
             handshaker.finishHandshake(ch, (FullHttpResponse) msg);
-            System.out.println("WebSocket Client connected!");
+            if (Log.logDebugMessages()) {
+                Log.d(LOG_TAG, "WebSocket Client connected!");
+            }
             handshakeFuture.setSuccess();
             return;
         }
@@ -94,18 +101,24 @@ public class WebsocketClientHandler extends SimpleChannelInboundHandler<Object> 
         }
 
         WebSocketFrame frame = (WebSocketFrame) msg;
-        if(frame instanceof BinaryWebSocketFrame) {
+        if (frame instanceof BinaryWebSocketFrame) {
             BinaryWebSocketFrame binaryWebSocketFrame = (BinaryWebSocketFrame) frame;
             ByteBuf content = binaryWebSocketFrame.content();
             // write to the connection
             connection.writeMockDataToInputStream(content);
         } else if (frame instanceof TextWebSocketFrame) {
             TextWebSocketFrame textFrame = (TextWebSocketFrame) frame;
-            System.out.println("WebSocket Client received message: " + textFrame.text());
+            if (Log.logDebugMessages()) {
+                Log.d(LOG_TAG, "WebSocket Client received message: " + textFrame.text());
+            }
         } else if (frame instanceof PongWebSocketFrame) {
-            System.out.println("WebSocket Client received pong");
+            if (Log.logDebugMessages()) {
+                Log.d(LOG_TAG, "WebSocket Client received pong");
+            }
         } else if (frame instanceof CloseWebSocketFrame) {
-            System.out.println("WebSocket Client received closing");
+            if (Log.logDebugMessages()) {
+                Log.d(LOG_TAG, "WebSocket Client received closing");
+            }
             ch.close();
         }
     }
@@ -122,11 +135,12 @@ public class WebsocketClientHandler extends SimpleChannelInboundHandler<Object> 
     /**
      * Blocks until the handshake is done.
      * If done, the blaubot connection is returned
+     *
      * @return the blaubot connection if the connection was successful or null, if not
      * @throws InterruptedException
      */
     public synchronized BlaubotWebsocketConnection getConnection() throws InterruptedException {
-        if(this.connection != null) {
+        if (this.connection != null) {
             return connection;
         }
         final CountDownLatch latch = new CountDownLatch(1);

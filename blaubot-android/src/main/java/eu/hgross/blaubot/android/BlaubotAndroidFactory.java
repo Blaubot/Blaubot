@@ -4,10 +4,10 @@ import android.bluetooth.BluetoothAdapter;
 import android.net.ConnectivityManager;
 import android.net.wifi.WifiManager;
 import android.net.wifi.p2p.WifiP2pManager;
-import android.net.wifi.p2p.WifiP2pManager.Channel;
 
 import java.net.InetAddress;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -22,99 +22,114 @@ import eu.hgross.blaubot.core.BlaubotUUIDSet;
 import eu.hgross.blaubot.core.IBlaubotAdapter;
 import eu.hgross.blaubot.core.IBlaubotDevice;
 import eu.hgross.blaubot.core.acceptor.discovery.IBlaubotBeacon;
+import eu.hgross.blaubot.ethernet.BlaubotBonjourBeacon;
 import eu.hgross.blaubot.ethernet.BlaubotEthernetAdapter;
 import eu.hgross.blaubot.ethernet.BlaubotEthernetMulticastBeacon;
 
 /**
  * Factory to create {@link Blaubot} instances for Android.
- * 
- * @author Henning Gross <mail.to@henning-gross.de>
  *
+ * @author Henning Gross <mail.to@henning-gross.de>
  */
 public class BlaubotAndroidFactory extends eu.hgross.blaubot.core.BlaubotFactory {
-
+    // TODO: override the geolocationbeacon methods with an android specific implementation!
     /**
      * Creates a blaubot instance using ethernet adapter and the NFC beacon.
-     *
+     * <p/>
      * Note that you have to call some lifecycle methods onResume and onPause.
      * See BlaubotAndroid.
      *
-     * @param appUUID the app's uuid
-     * @param acceptorPort the port of the connector's accepting socket
+     * @param appUUID        the app's uuid
+     * @param acceptorPort   the port of the connector's accepting socket
      * @param ownInetAddress the own {@link InetAddress} of the network to act on
      * @return the blaubot instance
      */
-    public static BlaubotAndroid createEthernetBlaubotWithNFCBeacon (UUID appUUID, int acceptorPort, InetAddress ownInetAddress) {
-        if(ownInetAddress == null || appUUID == null)
+    public static BlaubotAndroid createEthernetBlaubotWithNFCBeacon(UUID appUUID, int acceptorPort, InetAddress ownInetAddress) {
+        if (ownInetAddress == null || appUUID == null)
             throw new NullPointerException();
         IBlaubotDevice ownDevice = new BlaubotDevice(UUID.randomUUID().toString());
-        BlaubotUUIDSet uuidSet = new BlaubotUUIDSet(appUUID);
-        BlaubotEthernetAdapter ethernetAdapter = new BlaubotEthernetAdapter(ownDevice, uuidSet, acceptorPort, ownInetAddress);
+        BlaubotEthernetAdapter ethernetAdapter = new BlaubotEthernetAdapter(ownDevice, acceptorPort, ownInetAddress);
         BlaubotNFCBeacon nfcBeacon = new BlaubotNFCBeacon();
 
-        List<IBlaubotAdapter> adapters = new ArrayList<>();
-        List<IBlaubotBeacon> beacons = new ArrayList<>();
-        adapters.add(ethernetAdapter);
-        beacons.add(nfcBeacon);
+        return (BlaubotAndroid) createBlaubot(appUUID, ownDevice, ethernetAdapter, nfcBeacon);
+    }
 
-        BlaubotAndroid blaubotInstance = new BlaubotAndroid(ownDevice, uuidSet, adapters, beacons);
-        System.out.println("Created Ethernet-Blaubot instance (NFCBeacon): " + blaubotInstance);
+    /**
+     * Creates a blaubot instance using the bluetooth beacon and sockets to communicate.
+     * Note: requires broadcast capable network
+     *
+     * @param appUUID        the app's uuid
+     * @param acceptorPort   the port of the connector's accepting socket
+     * @param ownInetAddress the own {@link InetAddress} of the network to act on
+     * @return
+     */
+    public static BlaubotAndroid createEthernetBlaubotWithBluetoothBeacon(UUID appUUID, int acceptorPort, InetAddress ownInetAddress) {
+        if (ownInetAddress == null || appUUID == null) {
+            throw new NullPointerException("InetAddress or appUUID was null.");
+        }
+        IBlaubotDevice ownDevice = new BlaubotDevice(UUID.randomUUID().toString());
+        BlaubotEthernetAdapter ethernetAdapter = new BlaubotEthernetAdapter(ownDevice, acceptorPort, ownInetAddress);
+        BlaubotBluetoothBeacon bluetoothBeacon = new BlaubotBluetoothBeacon();
+        return createBlaubot(appUUID, ownDevice, ethernetAdapter, bluetoothBeacon);
+    }
+
+    /**
+     * Creates a Blaubot instance from a given adapter and multiple beacons.
+     *
+     * @param appUuid   the app's unique uuid
+     * @param ownDevice the own device containing this device's unique identifier
+     * @param adapter   the adapter to be used (Sockets, WebSockets, Bluetooth, ...)
+     * @param beacons   the becaons to be used (Bluetooth, NFC, Multicast, Bonjour, ...)
+     * @return the blaubot instance
+     */
+    public static BlaubotAndroid createBlaubot(UUID appUuid, IBlaubotDevice ownDevice, IBlaubotAdapter adapter, IBlaubotBeacon... beacons) {
+        BlaubotUUIDSet uuidSet = new BlaubotUUIDSet(appUuid);
+        List<IBlaubotAdapter> adapters = new ArrayList<>();
+        adapters.add(adapter);
+        BlaubotAndroid blaubotInstance = new BlaubotAndroid(ownDevice, uuidSet, adapters, Arrays.asList(beacons));
         return blaubotInstance;
     }
 
     /**
-	 * Sets up a default {@link Blaubot} instance using only the bluetooth adapter.
-	 * @param appUUID the app's unique uuid
-	 * @return blaubot instance
-	 */
-	public static BlaubotAndroid createBluetoothBlaubotWithMulticastBeacon(UUID appUUID, int acceptorPort, int beaconPort, int beaconBroadcastPort) {
+     * Sets up a default {@link Blaubot} instance using only the bluetooth adapter.
+     *
+     * @param appUUID the app's unique uuid
+     * @return blaubot instance
+     */
+    public static BlaubotAndroid createBluetoothBlaubotWithMulticastBeacon(UUID appUUID, int beaconPort, int beaconBroadcastPort) {
         IBlaubotDevice ownDevice = new BlaubotDevice(UUID.randomUUID().toString());
         final InetAddress ownInetAddress = getLocalIpAddress();
-        if(ownInetAddress == null || appUUID == null)
+        if (ownInetAddress == null || appUUID == null)
             throw new NullPointerException();
 
         final BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
-        if(adapter == null) {
+        if (adapter == null) {
             throw new RuntimeException("Bluetooth is not supported by this device: No bluetooth default adapter found.");
         }
         BlaubotUUIDSet uuidSet = new BlaubotUUIDSet(appUUID);
-		BlaubotBluetoothAdapter bluetoothAdapter = new BlaubotBluetoothAdapter(uuidSet, ownDevice);
-//        BlaubotBluetoothBeacon blaubotBluetoothBeacon = new BlaubotBluetoothBeacon(uuidSet, ownDevice);
+        BlaubotBluetoothAdapter bluetoothAdapter = new BlaubotBluetoothAdapter(uuidSet, ownDevice);
         BlaubotEthernetMulticastBeacon multicastBeacon = new BlaubotEthernetMulticastBeacon(beaconPort, beaconBroadcastPort);
 
-        List<IBlaubotAdapter> adapters = new ArrayList<>();
-		List<IBlaubotBeacon> beacons = new ArrayList<>();
-        adapters.add(bluetoothAdapter);
-//        beacons.add(blaubotBluetoothBeacon);
-        beacons.add(multicastBeacon);
-
-        BlaubotAndroid blaubotInstance = new BlaubotAndroid(ownDevice, uuidSet, adapters, beacons);
-        System.out.println("Created Bluetooth Blaubot instance (multicast beacon): " + blaubotInstance);
-        return blaubotInstance;
-	}
+        return (BlaubotAndroid) createBlaubot(appUUID, ownDevice, bluetoothAdapter, multicastBeacon);
+    }
 
     /**
      * Sets up a default {@link Blaubot} instance using only bluetooth for discovery and network connections.
+     *
      * @param appUUID the app's unique uuid
      * @return blaubot instance
      */
     public static BlaubotAndroid createBluetoothBlaubot(UUID appUUID) {
         final BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
-        if(adapter == null) {
-            throw new RuntimeException("Bluetooth is not supported by this device: No bluetooth default adapter found.");
+        if (adapter == null) {
+            throw new RuntimeException("Bluetooth is not supported by this device: No bluetooth default adapter found. ");
         }
         IBlaubotDevice ownDevice = new BlaubotDevice(UUID.randomUUID().toString());
         BlaubotUUIDSet uuidSet = new BlaubotUUIDSet(appUUID);
         BlaubotBluetoothAdapter bluetoothAdapter = new BlaubotBluetoothAdapter(uuidSet, ownDevice);
         BlaubotBluetoothBeacon blaubotBluetoothBeacon = new BlaubotBluetoothBeacon();
 
-        List<IBlaubotAdapter> adapters = new ArrayList<IBlaubotAdapter>();
-        List<IBlaubotBeacon> beacons = new ArrayList<>();
-        adapters.add(bluetoothAdapter);
-        beacons.add(blaubotBluetoothBeacon);
-
-        BlaubotAndroid blaubotInstance = new BlaubotAndroid(ownDevice, uuidSet, adapters, beacons);
-        return blaubotInstance;
+        return (BlaubotAndroid) createBlaubot(appUUID, ownDevice, bluetoothAdapter, blaubotBluetoothBeacon);
     }
 
     /**
@@ -127,7 +142,7 @@ public class BlaubotAndroidFactory extends eu.hgross.blaubot.core.BlaubotFactory
      */
     public static BlaubotAndroid createBluetoothBlaubotWithNFCBeacon(UUID appUuid) {
         final BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
-        if(adapter == null) {
+        if (adapter == null) {
             throw new RuntimeException("Bluetooth is not supported by this device: No bluetooth default adapter found.");
         }
 
@@ -136,26 +151,45 @@ public class BlaubotAndroidFactory extends eu.hgross.blaubot.core.BlaubotFactory
         BlaubotBluetoothAdapter bluetoothAdapter = new BlaubotBluetoothAdapter(uuidSet, ownDevice);
         BlaubotNFCBeacon nfcBeacon = new BlaubotNFCBeacon();
 
-        List<IBlaubotAdapter> adapters = new ArrayList<IBlaubotAdapter>();
-        List<IBlaubotBeacon> beacons = new ArrayList<>();
-        adapters.add(bluetoothAdapter);
-        beacons.add(nfcBeacon);
-
-        BlaubotAndroid blaubotInstance = new BlaubotAndroid(ownDevice, uuidSet, adapters, beacons);
-        return blaubotInstance;
+        return (BlaubotAndroid) createBlaubot(appUuid, ownDevice, bluetoothAdapter, nfcBeacon);
     }
 
-	/**
-	 * Sets up a default {@link Blaubot} instance using only the WIFIDirect adapter.
+    /**
+     * Creates a bluetooth driven blaubot intance using NFC and Bluetooth as beacons.
+     * Please ensure, that you delegate the android lifecycle events to the blaubot instance
+     * as described in {@link BlaubotAndroid}.
      *
-	 * @param appUUID the app's unique uuid
-	 * @param wifiManager
-	 * @param beaconChannel 
-	 * @param acceptorChannel 
-	 * @return blaubot instance
-	 */
-	public static BlaubotAndroid createWifiP2PBlaubot(UUID appUUID, WifiP2pManager p2pWifiManager, WifiManager wifiManager, Channel beaconChannel, Channel acceptorChannel) {
-		BlaubotUUIDSet uuidSet = new BlaubotUUIDSet(appUUID);
+     * @param appUuid the app's uuid
+     * @return the android blaubot instance
+     */
+    public static BlaubotAndroid createBluetoothBlaubotWithBluetoothAndNFCBeacon(UUID appUuid) {
+        final BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
+        if (adapter == null) {
+            throw new RuntimeException("Bluetooth is not supported by this device: No bluetooth default adapter found.");
+        }
+
+        IBlaubotDevice ownDevice = new BlaubotDevice(UUID.randomUUID().toString());
+        BlaubotUUIDSet uuidSet = new BlaubotUUIDSet(appUuid);
+        BlaubotBluetoothAdapter bluetoothAdapter = new BlaubotBluetoothAdapter(uuidSet, ownDevice);
+        BlaubotBluetoothBeacon bluetoothBeacon = new BlaubotBluetoothBeacon();
+        BlaubotNFCBeacon nfcBeacon = new BlaubotNFCBeacon();
+
+        return (BlaubotAndroid) createBlaubot(appUuid, ownDevice, bluetoothAdapter, bluetoothBeacon, nfcBeacon);
+    }
+
+
+    /**
+     * Sets up a default {@link Blaubot} instance using only the WIFIDirect adapter.
+     * WARNING: This experimental and not recommended in production environments.
+     *
+     * @param appUUID         the app's unique uuid
+     * @param wifiManager
+     * @param beaconChannel
+     * @param acceptorChannel
+     * @return blaubot instance
+     */
+    public static BlaubotAndroid createWifiP2PBlaubot(UUID appUUID, WifiP2pManager p2pWifiManager, WifiManager wifiManager, WifiP2pManager.Channel beaconChannel, WifiP2pManager.Channel acceptorChannel) {
+        BlaubotUUIDSet uuidSet = new BlaubotUUIDSet(appUUID);
         IBlaubotDevice ownDevice = new BlaubotDevice(UUID.randomUUID().toString());
         //BlaubotWifiP2PAdapter adapter = new BlaubotWifiP2PAdapter(uuidSet, p2pWifiManager, wifiManager, acceptorChannel);
         BlaubotBluetoothAdapter bluetoothAdapter = new BlaubotBluetoothAdapter(uuidSet, ownDevice);
@@ -163,38 +197,53 @@ public class BlaubotAndroidFactory extends eu.hgross.blaubot.core.BlaubotFactory
 
         List<IBlaubotAdapter> adapters = new ArrayList<IBlaubotAdapter>();
         List<IBlaubotBeacon> beacons = new ArrayList<>();
-		adapters.add(bluetoothAdapter);
-		beacons.add(blaubotWifiP2PBeacon);
-
-        BlaubotAndroid blaubotInstance = new BlaubotAndroid(ownDevice, uuidSet, adapters, beacons);
-		return blaubotInstance;
-	}
-
-
-    /**
-     * Sets up a default {@link Blaubot} instance using Wifi by creating wifi access points and socket
-     * connections.
-     *
-     * @param appUUID the app's unique uuid
-     * @param connectivityManager the connectivity system service
-     * @param wifiManager the android wifi manager
-     * @param acceptorPort the port to accept connections on
-     * @return blaubot instance
-     */
-    public static BlaubotAndroid createWifiApBlaubot(UUID appUUID, ConnectivityManager connectivityManager, WifiManager wifiManager, int acceptorPort) {
-        BlaubotUUIDSet uuidSet = new BlaubotUUIDSet(appUUID);
-        IBlaubotDevice ownDevice = new BlaubotDevice(UUID.randomUUID().toString());
-
-        BlaubotWifiAdapter blaubotWifiAdapter= new BlaubotWifiAdapter(ownDevice, uuidSet, acceptorPort, wifiManager, connectivityManager);
-        BlaubotNFCBeacon nfcBeacon = new BlaubotNFCBeacon();
-
-        List<IBlaubotAdapter> adapters = new ArrayList<IBlaubotAdapter>();
-        List<IBlaubotBeacon> beacons = new ArrayList<>();
-        adapters.add(blaubotWifiAdapter);
-        beacons.add(nfcBeacon);
+        adapters.add(bluetoothAdapter);
+        beacons.add(blaubotWifiP2PBeacon);
 
         BlaubotAndroid blaubotInstance = new BlaubotAndroid(ownDevice, uuidSet, adapters, beacons);
         return blaubotInstance;
     }
 
+
+    /**
+     * Sets up a default {@link Blaubot} instance using Wifi by creating wifi access points and socket
+     * connections. Discovery is done by the NFC beacon.
+     * WARNING: This experimental and not recommended in production environments.
+     *
+     * @param appUUID             the app's unique uuid
+     * @param connectivityManager the connectivity system service
+     * @param wifiManager         the android wifi manager
+     * @param acceptorPort        the port to accept connections on
+     * @return blaubot instance
+     */
+    public static BlaubotAndroid createWifiApWithNfcBeaconBlaubot(UUID appUUID, ConnectivityManager connectivityManager, WifiManager wifiManager, int acceptorPort) {
+        BlaubotUUIDSet uuidSet = new BlaubotUUIDSet(appUUID);
+        IBlaubotDevice ownDevice = new BlaubotDevice(UUID.randomUUID().toString());
+
+        BlaubotWifiAdapter blaubotWifiAdapter = new BlaubotWifiAdapter(ownDevice, uuidSet, acceptorPort, wifiManager, connectivityManager);
+        BlaubotNFCBeacon nfcBeacon = new BlaubotNFCBeacon();
+
+        return (BlaubotAndroid) createBlaubot(appUUID, ownDevice, blaubotWifiAdapter, nfcBeacon);
+    }
+
+    /**
+     * Sets up a default {@link Blaubot} instance using Wifi by creating wifi access points and socket
+     * connections. Discovery is done by the Bluetooth beacon.
+     * WARNING: This experimental and not recommended in production environments.
+     *
+     * @param appUUID             the app's unique uuid
+     * @param connectivityManager the connectivity system service
+     * @param wifiManager         the android wifi manager
+     * @param acceptorPort        the port to accept connections on
+     * @return blaubot instance
+     */
+    public static BlaubotAndroid createWifiApWithBluetoothBeaconBlaubot(UUID appUUID, ConnectivityManager connectivityManager, WifiManager wifiManager, int acceptorPort) {
+        BlaubotUUIDSet uuidSet = new BlaubotUUIDSet(appUUID);
+        IBlaubotDevice ownDevice = new BlaubotDevice(UUID.randomUUID().toString());
+
+        BlaubotWifiAdapter blaubotWifiAdapter = new BlaubotWifiAdapter(ownDevice, uuidSet, acceptorPort, wifiManager, connectivityManager);
+        BlaubotBluetoothBeacon bluetoothBeacon = new BlaubotBluetoothBeacon();
+
+        return (BlaubotAndroid) createBlaubot(appUUID, ownDevice, blaubotWifiAdapter, bluetoothBeacon);
+    }
 }

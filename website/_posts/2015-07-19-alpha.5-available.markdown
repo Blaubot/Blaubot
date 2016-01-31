@@ -1,0 +1,9 @@
+---
+layout: post
+title:  "Blaubot 2.0.0.alpha.5"
+date:   2015-07-19
+categories: release
+---
+
+The fifth alpha is now available from jCenter and MavenCentral.
+It contains some fixes and stability improvements as well as a couple of new DebugView options.

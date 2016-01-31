@@ -1,0 +1,34 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+buildscript {
+    repositories {
+        jcenter()
+    }
+    repositories {
+        maven {
+            url 'http://www.pyx4me.com/maven2-snapshot' // bluecove snapshots
+        }
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:1.5.0'
+
+        // next two are for the bintray publish https://github.com/danielemaddaluno/gradle-jcenter-publish
+        classpath 'com.github.dcendents:android-maven-gradle-plugin:1.3'
+        classpath "com.jfrog.bintray.gradle:gradle-bintray-plugin:1.2"
+    }
+}
+
+allprojects {
+    repositories {
+        jcenter()
+    }
+}
+
+/*
+    Global Variables (external properties)
+ */
+// global variable to set the version for the blaubot submodules (blaubot, blaubot-android, blaubot-websockets, blaubot-jsr82, ...)
+project.ext.blaubot_version = "2.0.0-beta.1"
+// if true, the bintrayUpload tasks will not upload to bintray but just create the artifacts locally
+project.ext.dryRun = true
+// if version should be auto published after an upload
+project.ext.autoPublish = true

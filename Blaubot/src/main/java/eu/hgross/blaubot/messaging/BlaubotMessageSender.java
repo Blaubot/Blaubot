@@ -7,6 +7,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.PriorityBlockingQueue;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 
 import eu.hgross.blaubot.core.BlaubotConstants;
 import eu.hgross.blaubot.core.IActionListener;
@@ -16,10 +17,10 @@ import eu.hgross.blaubot.util.Log;
 /**
  * The message sender simply queues messages that are going to be sent over the IBlaubotConnection
  * for which this message sender was created for.
- *
+ * <p/>
  * The sender can be activated/deactivated, meaning stopping and starting a queue consuming thread
  * that serializes and sends the queued messages (if any) over the given IBlaubotConnection.
- *
+ * <p/>
  * TODO: handle failing connections
  */
 public class BlaubotMessageSender {
@@ -57,6 +58,7 @@ public class BlaubotMessageSender {
     private AtomicInteger sequenceNumberGenerator;
     private long sentMessages = 0;
     private long sentPayloadBytes = 0;
+    private volatile AtomicLong queuedBytes = new AtomicLong(0);
 
     /**
      * Comparator for the priority queue.
@@ -67,15 +69,15 @@ public class BlaubotMessageSender {
         public int compare(BlaubotMessage o1, BlaubotMessage o2) {
             final byte o1Val = o1.getPriority().value;
             final byte o2Val = o2.getPriority().value;
-            if(o1Val < o2Val) {
+            if (o1Val < o2Val) {
                 return -1;
-            } else if(o1Val > o2Val) {
+            } else if (o1Val > o2Val) {
                 return 1;
             } else {
                 // equal priority, the smaller sequence number wins
-                if(o1.sequenceNumber < o2.sequenceNumber) {
+                if (o1.sequenceNumber < o2.sequenceNumber) {
                     return -1;
-                } else if(o1.sequenceNumber > o2.sequenceNumber) {
+                } else if (o1.sequenceNumber > o2.sequenceNumber) {
                     return 1;
                 } else {
                     return 0;
@@ -89,9 +91,10 @@ public class BlaubotMessageSender {
      * (could happen on fast activate/deactivate calls)
      */
     private final Object senderMonitor = new Object();
+
     public BlaubotMessageSender(IBlaubotConnection blaubotConnection) {
         this.sequenceNumberGenerator = new AtomicInteger(0);
-        this.chunkIdGenerator = new AtomicShort((short)0);
+        this.chunkIdGenerator = new AtomicShort((short) 0);
         this.blaubotConnection = blaubotConnection;
         this.queuedMessages = new PriorityBlockingQueue<>(50, priorityComparator);
         this.chunkIdMapping = new ConcurrentHashMap<>();
@@ -132,6 +135,7 @@ public class BlaubotMessageSender {
         // apply a sequence number and add to queue
         message.sequenceNumber = sequenceNumberGenerator.incrementAndGet();
         queuedMessages.add(message);
+        queuedBytes.addAndGet(message.getPayload().length);
     }
 
     /**
@@ -147,6 +151,7 @@ public class BlaubotMessageSender {
 
     /**
      * Deactivates the message sender (completes current message readings, if any and then shuts down).
+     *
      * @param actionListener callback to be informed when the sender was closed (thread finished), can be null
      */
     public void deactivate(IActionListener actionListener) {
@@ -171,6 +176,7 @@ public class BlaubotMessageSender {
 
     /**
      * sent messages
+     *
      * @return sent messages so far
      */
     public long getSentMessages() {
@@ -191,6 +197,7 @@ public class BlaubotMessageSender {
          * Meaning the run() method finished once.
          * If attached after it already finished, the listener is called
          * immediately.
+         *
          * @param listener the listener
          */
         public void attachFinishListener(IActionListener listener) {
@@ -205,11 +212,11 @@ public class BlaubotMessageSender {
         @Override
         public void run() {
             synchronized (senderMonitor) {
-                if(Log.logDebugMessages()) {
+                if (Log.logDebugMessages()) {
                     Log.d(LOG_TAG, "Started sender for connection " + blaubotConnection);
                 }
                 while (messageSendingThread == this && !isInterrupted()) {
-                    BlaubotMessage messageToSend = null;
+                    BlaubotMessage messageToSend;
                     try {
                         messageToSend = queuedMessages.poll(POLL_TIMEOUT, TimeUnit.MILLISECONDS);
                     } catch (InterruptedException interruptedException) {
@@ -230,6 +237,7 @@ public class BlaubotMessageSender {
                         // maintain stats
                         sentMessages += 1;
                         sentPayloadBytes += bytes.length;
+                        queuedBytes.addAndGet(-messageToSend.getPayload().length);
                     } catch (IOException e) {
                         // back to queue on fail
                         queuedMessages.add(messageToSend);
@@ -248,7 +256,7 @@ public class BlaubotMessageSender {
                         finishedListener.onFinished();
                     }
                 }
-                if(Log.logDebugMessages()) {
+                if (Log.logDebugMessages()) {
                     Log.d(LOG_TAG, "Stopped sender for connection " + blaubotConnection);
                 }
             }
@@ -257,6 +265,7 @@ public class BlaubotMessageSender {
 
     /**
      * The connection that is managed by this message sender.
+     *
      * @return the managed connection
      */
     protected IBlaubotConnection getBlaubotConnection() {
@@ -265,10 +274,20 @@ public class BlaubotMessageSender {
 
     /**
      * The current amount of messages in the queue
+     *
      * @return current amount of messages in the queue
      */
     protected int getQueueSize() {
         return queuedMessages.size();
+    }
+
+    /**
+     * The current number of bytes in this MessageSender's queue.
+     *
+     * @return number of bytes
+     */
+    protected long getQueuedBytes() {
+        return queuedBytes.get();
     }
 
     @Override

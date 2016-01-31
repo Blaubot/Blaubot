@@ -19,6 +19,9 @@ public class KingdomCensusLifecycleListener extends Observable implements ILifec
     private IBlaubotDevice ownDevice;
     private IBlaubotDevice currentKing;
 
+    /**
+     * @param ownDevice the own device
+     */
     public KingdomCensusLifecycleListener(IBlaubotDevice ownDevice) {
         this.devices = new CopyOnWriteArraySet<>();
         this.ownDevice = ownDevice;

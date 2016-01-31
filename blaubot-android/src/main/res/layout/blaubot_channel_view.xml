@@ -19,5 +19,13 @@
         android:layout_height="match_parent"
         android:drawableLeft="@android:drawable/ic_menu_edit"
         android:text="edit"/>
+    <Button
+        android:id="@+id/showSubscribersButton"
+        android:layout_below="@id/editChannelConfigButton"
+        android:layout_toRightOf="@id/channelInfoSubscribeButton"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:drawableLeft="@android:drawable/ic_dialog_info"
+        android:text="info"/>
 
 </RelativeLayout>

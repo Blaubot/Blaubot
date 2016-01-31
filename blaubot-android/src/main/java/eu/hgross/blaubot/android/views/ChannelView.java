@@ -48,6 +48,7 @@ public class ChannelView extends FrameLayout {
     private ToggleButton mSubscribeButton;
     private Button mEditChannelConfigButton;
     private boolean mShowEditButton = true;
+    private Button mShowSubscriberButton;
 
     public ChannelView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -91,6 +92,7 @@ public class ChannelView extends FrameLayout {
                 setEnabled(false);
             }
         });
+        this.mShowSubscriberButton = (Button) this.mMainView.findViewById(R.id.showSubscribersButton);
 
         this.mEditChannelConfigButton.setOnClickListener(new OnClickListener() {
             @Override
@@ -128,7 +130,7 @@ public class ChannelView extends FrameLayout {
                 final String htmlStr = "<br><b>Channel #" + channelId + "</b><br>" +
                         "<span style=\"width:100px\">MessageQueue:</span> " + queueSize + "/" + queueCapacity + "<br>" +
                         "Subscriptions: \t" + subscriptions.size() + "<br>" +
-                        "Rx/Tx bytes: \t" + ThroughputView.humanReadableByteCount(receivedBytes, false) + "/" + ThroughputView.humanReadableByteCount(sentBytes, false) + "<br>" +
+                        "Rx/Tx bytes: \t" + ViewUtils.humanReadableByteCount(receivedBytes, false) + "/" + ViewUtils.humanReadableByteCount(sentBytes, false) + "<br>" +
                         "Rx/Tx messages: \t" + receivedMessages + "/" + sentMessages + "<br>" +
                         "";
                 final Spanned html = Html.fromHtml(htmlStr);
@@ -137,6 +139,28 @@ public class ChannelView extends FrameLayout {
                 mSubscribeButton.setTextOn(html);
                 mSubscribeButton.setChecked(subscriberToChannel);
                 mSubscribeButton.setEnabled(true);
+                mShowSubscriberButton.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        // custom view
+                        SubscribersView subscribersView = new SubscribersView(getContext());
+                        subscribersView.setPingMeasureResult(mChannelInfo.getSubscriptions());
+
+                        // show dialog
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                        builder.setView(subscribersView);
+                        builder.setTitle("Subscribers of channel #" + channelId);
+                        builder.setPositiveButton("close", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        });
+                        final AlertDialog alertDialog = builder.create();
+
+                        alertDialog.show();
+                    }
+                });
                 mEditChannelConfigButton.setVisibility(mShowEditButton ? VISIBLE : GONE);
             }
         });
@@ -159,6 +183,9 @@ public class ChannelView extends FrameLayout {
      * @return the dialog
      */
     public static Dialog createChannelEditDialog(Context context, final IBlaubotChannel blaubotChannel) {
+        /*
+        TODO: NTH: put this stuff into a own view and use the observer functionality of BlaubotChannelConfig to update on external changes
+         */
         final int MAX_MESSAGE_RATE = 10000;
 
         final View view = inflate(context, R.layout.blaubot_channel_config_edit_view, null);
@@ -166,7 +193,10 @@ public class ChannelView extends FrameLayout {
         final TextView messageRateSeekBarValueTextView = (TextView) view.findViewById(R.id.messageRateSeekBarValueTextView);
         final Spinner pickingStrategySpinner = (Spinner) view.findViewById(R.id.pickingStrategySpinner);
         final EditText messageQueueCapacityEditText = (EditText) view.findViewById(R.id.messageQueueCapacityEditText);
-
+        final ToggleButton transmitReflexiveMessagesToggleButton = (ToggleButton) view.findViewById(R.id.transmitReflexivChannelMessagesToggleButton);
+        final ToggleButton transmitIfNoSubscribersToggleButton = (ToggleButton) view.findViewById(R.id.transmitIfNoSubscribersToggleButton);
+        
+        
         /*
             SeekBar stuff
          */
@@ -177,9 +207,6 @@ public class ChannelView extends FrameLayout {
 
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                if (progress <= 0) {
-                    progress = 1;
-                }
                 this.progress = progress;
                 updateMessageRateSeekbarTextView(progress);
             }
@@ -258,6 +285,25 @@ public class ChannelView extends FrameLayout {
 
                 // set
                 blaubotChannel.getChannelConfig().setQueueCapacity(number);
+            }
+        });
+
+        // reflexive message transmission
+        transmitReflexiveMessagesToggleButton.setChecked(blaubotChannel.getChannelConfig().isTransmitReflexiveMessages());
+        transmitReflexiveMessagesToggleButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final boolean currentState = blaubotChannel.getChannelConfig().isTransmitReflexiveMessages();
+                blaubotChannel.getChannelConfig().setTransmitReflexiveMessages(!currentState);
+            }
+        });
+
+        transmitIfNoSubscribersToggleButton.setChecked(blaubotChannel.getChannelConfig().isTransmitIfNoSubscribers());
+        transmitIfNoSubscribersToggleButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final boolean transmitIfNoSubscribers = blaubotChannel.getChannelConfig().isTransmitIfNoSubscribers();
+                blaubotChannel.getChannelConfig().setTransmitIfNoSubscribers(!transmitIfNoSubscribers);
             }
         });
 

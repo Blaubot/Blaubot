@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.net.InterfaceAddress;
 import java.net.NetworkInterface;
 import java.net.Socket;
@@ -459,7 +460,8 @@ public class BlaubotEthernetMulticastBeacon implements IBlaubotBeacon, IEthernet
 	 *
 	 */
 	class EthernetBeaconScanner extends Thread {
-        private String LOG_TAG = "EthernetBeaconScanner";
+		private static final int BEACON_SCANNER_CONNECT_TIMEOUT = 10000;
+		private String LOG_TAG = "EthernetBeaconScanner";
 
 		private List<IBlaubotDevice> getAliveDevices() {
 			ArrayList<IBlaubotDevice> devices = new ArrayList<IBlaubotDevice>(knownActiveDevices.getItems());
@@ -484,36 +486,38 @@ public class BlaubotEthernetMulticastBeacon implements IBlaubotBeacon, IEthernet
 					continue;
 				}
 				for(IBlaubotDevice d : getAliveDevices()) {
-					if(isDiscoveryDisabled())
-						break;
-					MulticastBeaconBlaubotDevice device = (MulticastBeaconBlaubotDevice) d;
-					InetAddress remoteDeviceAddr = device.getInetAddress();
+                    if (isDiscoveryDisabled()) {
+                        break;
+                    }
+                    MulticastBeaconBlaubotDevice device = (MulticastBeaconBlaubotDevice) d;
+                    InetAddress remoteDeviceAddr = device.getInetAddress();
                     int remoteBeaconPort = device.getBeaconPort();
-					// -- we know that remoteDeviceAddr had a running beacon in the recent past as it is in the knownActiveDevices TimeoutList
-					// try to connect, then exchange states via tcp/ip
-					Socket clientSocket;
-					try {
-						clientSocket = new Socket(remoteDeviceAddr, remoteBeaconPort);
+                    // -- we know that remoteDeviceAddr had a running beacon in the recent past as it is in the knownActiveDevices TimeoutList
+                    // try to connect, then exchange states via tcp/ip
+                    Socket clientSocket;
+                    try {
+                        clientSocket = new Socket();
+                        clientSocket.connect(new InetSocketAddress(remoteDeviceAddr, remoteBeaconPort), BEACON_SCANNER_CONNECT_TIMEOUT);
                         BlaubotEthernetUtils.sendOwnUniqueIdThroughSocket(ownDevice, clientSocket);
-						BlaubotEthernetConnection connection = new BlaubotEthernetConnection(device, clientSocket);
+                        BlaubotEthernetConnection connection = new BlaubotEthernetConnection(device, clientSocket);
                         final List<ConnectionMetaDataDTO> ownAcceptorsMetaDataList = BlaubotAdapterHelper.getConnectionMetaDataList(BlaubotAdapterHelper.getConnectionAcceptors(blaubot.getAdapters()));
-						ExchangeStatesTask exchangeStatesTask = new ExchangeStatesTask(ownDevice, connection, currentState, ownAcceptorsMetaDataList, beaconStore, discoveryEventListener);
-						exchangeStatesTask.run();
-					} catch (IOException e) {
-						if (Log.logWarningMessages()) {
-							Log.w(LOG_TAG, "Connection to " + device + "'s beacon (" + remoteDeviceAddr + ":" + remoteBeaconPort + ") failed: " + e.getMessage());
-						}
-					}
-					try {
-						// if we are in free state, be a little more decent with the interval
-						final long sleepTime = currentState != null && !(currentState instanceof FreeState) ? BEACON_PROBE_INTERVAL_DECENT : BEACON_PROBE_INTERVAL_AGGRESSIVE;
-						Thread.sleep(sleepTime);
-					} catch (InterruptedException e) {
-						exit = true;
-						break;
-					}
-				}
-			}
+                        ExchangeStatesTask exchangeStatesTask = new ExchangeStatesTask(ownDevice, connection, currentState, ownAcceptorsMetaDataList, beaconStore, discoveryEventListener);
+                        exchangeStatesTask.run();
+                    } catch (IOException e) {
+                        if (Log.logWarningMessages()) {
+                            Log.w(LOG_TAG, "Connection to " + device + "'s beacon (" + remoteDeviceAddr + ":" + remoteBeaconPort + ") failed: " + e.getMessage());
+                        }
+                    }
+                    try {
+                        // if we are in free state, be a little more decent with the interval
+                        final long sleepTime = currentState != null && !(currentState instanceof FreeState) ? BEACON_PROBE_INTERVAL_DECENT : BEACON_PROBE_INTERVAL_AGGRESSIVE;
+                        Thread.sleep(sleepTime);
+                    } catch (InterruptedException e) {
+                        exit = true;
+                        break;
+                    }
+                }
+            }
 		}
 
 		/**

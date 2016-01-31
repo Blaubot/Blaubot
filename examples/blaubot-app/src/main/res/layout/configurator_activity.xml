@@ -1,0 +1,122 @@
+<TabHost xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/tabHost"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    tools:context=".BlaubotConfiguratorActivity">
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical">
+
+        <TabWidget
+            android:id="@android:id/tabs"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" />
+
+
+        <FrameLayout
+            android:id="@android:id/tabcontent"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:paddingBottom="@dimen/activity_vertical_margin"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin">
+
+
+            <ScrollView
+                android:id="@+id/configuratorContainer"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:paddingTop="@dimen/activity_vertical_margin">
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:text="First select an adapter, which defines the technology to use to actually create the network with. Then choose at least one Beacon, which are then used to find nearby devices. Note that once you have created an instance, changes here will not modify your perviously created instance. If you wish to change the configuration, change it and create a new instance (button)." />
+
+                    <TextView
+                        style="@style/HeadlineLabels"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Select Adapter:" />
+
+                    <Spinner
+                        android:id="@+id/adapterSpinner"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        style="@style/HeadlineLabels"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Select Beacons:" />
+
+                    <eu.hgross.blaubot.android.views.ExpandableHeightListView
+                        android:id="@+id/beaconsList"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:fadingEdge="none"
+                        android:focusable="false"
+                        android:scrollbars="none"/>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <Button
+                            android:id="@+id/createBlaubotInstanceButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:drawableLeft="@android:drawable/ic_menu_add"
+                            android:text="Create" />
+
+                        <Button
+                            android:id="@+id/destroyBlaubotInstanceButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:drawableLeft="@android:drawable/ic_menu_delete"
+                            android:text="Stop and destroy" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+            </ScrollView>
+
+            <ScrollView
+                android:id="@+id/debugViewContainer"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:paddingTop="@dimen/activity_vertical_margin">
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/debugViewDisabledMessage"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:maxLines="20"
+                        android:text="The DebugView is not available. Please create a Blaubot instance from the config tab first." />
+
+                    <eu.hgross.blaubot.android.views.DebugView
+                        android:id="@+id/debugView"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent" />
+                </LinearLayout>
+
+            </ScrollView>
+        </FrameLayout>
+    </LinearLayout>
+
+</TabHost>
+

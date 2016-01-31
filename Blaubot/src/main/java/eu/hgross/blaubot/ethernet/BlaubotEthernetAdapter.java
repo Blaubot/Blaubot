@@ -4,7 +4,6 @@ import java.net.InetAddress;
 
 import eu.hgross.blaubot.core.Blaubot;
 import eu.hgross.blaubot.core.BlaubotAdapterConfig;
-import eu.hgross.blaubot.core.BlaubotUUIDSet;
 import eu.hgross.blaubot.core.ConnectionStateMachineConfig;
 import eu.hgross.blaubot.core.IBlaubotAdapter;
 import eu.hgross.blaubot.core.IBlaubotDevice;
@@ -22,7 +21,6 @@ public class BlaubotEthernetAdapter implements IBlaubotAdapter {
 	private static final int CROWNING_PREPARATION_TIME_FACTOR = 3;
 	private final BlaubotEthernetConnector connector;
 	private final BlaubotEthernetAcceptor acceptor;
-	private final BlaubotUUIDSet uuidSet;
 	private final int acceptorPort;
 	private InetAddress ownInetAddress;
 	private Blaubot blaubot;
@@ -32,14 +30,12 @@ public class BlaubotEthernetAdapter implements IBlaubotAdapter {
 	
 	/**
 	 * Sets up the Adapter.
-	 * TODO remove InetAddress dependency.
      *
-	 * @param uuidSet
 	 * @param acceptorPort
 	 * @param ownInetAddr
 	 */
-	public BlaubotEthernetAdapter(IBlaubotDevice ownDevice, BlaubotUUIDSet uuidSet, int acceptorPort, InetAddress ownInetAddr) {
-		this.uuidSet = uuidSet;
+	public BlaubotEthernetAdapter(IBlaubotDevice ownDevice, int acceptorPort, InetAddress ownInetAddr) {
+		// TODO remove InetAddress dependency.
 		this.acceptorPort = acceptorPort;
 		this.ownInetAddress = ownInetAddr;
 		this.connector = new BlaubotEthernetConnector(this, ownDevice);
@@ -80,41 +76,26 @@ public class BlaubotEthernetAdapter implements IBlaubotAdapter {
 		return connectionStateMachineConfig;
 	}
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + acceptorPort;
-		result = prime * result + ((ownInetAddress == null) ? 0 : ownInetAddress.hashCode());
-		result = prime * result + ((uuidSet == null) ? 0 : uuidSet.hashCode());
-		return result;
-	}
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		BlaubotEthernetAdapter other = (BlaubotEthernetAdapter) obj;
-		if (acceptorPort != other.acceptorPort)
-			return false;
-		if (ownInetAddress == null) {
-			if (other.ownInetAddress != null)
-				return false;
-		} else if (!ownInetAddress.equals(other.ownInetAddress))
-			return false;
-		if (uuidSet == null) {
-			if (other.uuidSet != null)
-				return false;
-		} else if (!uuidSet.equals(other.uuidSet))
-			return false;
-		return true;
-	}
+        BlaubotEthernetAdapter that = (BlaubotEthernetAdapter) o;
 
-	@Override
+        if (acceptorPort != that.acceptorPort) return false;
+        return !(ownInetAddress != null ? !ownInetAddress.equals(that.ownInetAddress) : that.ownInetAddress != null);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = acceptorPort;
+        result = 31 * result + (ownInetAddress != null ? ownInetAddress.hashCode() : 0);
+        return result;
+    }
+
+    @Override
 	public BlaubotAdapterConfig getBlaubotAdapterConfig() {
 		return adapterConfig;
 	}

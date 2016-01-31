@@ -362,11 +362,11 @@ public class Blaubot implements Closeable {
      * {@link eu.hgross.blaubot.messaging.BlaubotChannelManager}'s state.
      */
     private IBlaubotConnectionStateMachineListener lifeCycleChannelManager = new IBlaubotConnectionStateMachineListener() {
-        private static final String LOG_TAG = "CsmToPmLifecycleConnector";
+        private static final String LOG_TAG = "ChannelManagerGlue";
 
         @Override
         public void onStateMachineStopped() {
-            // protocolManager must be put into a defined state and be stopped
+            // channelManager must be put into a defined state and be stopped
             // after ConnectionStateMachineStop
             if (Log.logDebugMessages()) {
                 Log.d(LOG_TAG, "Setting PM CLIENT mode, resetting and deactivating (CSM stopped)");
@@ -379,13 +379,13 @@ public class Blaubot implements Closeable {
 
         @Override
         public void onStateMachineStarted() {
-            // protocolManager must have been started before
+            // channelmanager must have been started before
             // ConnectionStateMachineStart (in BlaubotStart)
         }
 
         /**
          * Sets up the {@link eu.hgross.blaubot.messaging.BlaubotChannelManager} as master including the listener
-         * wiring to inform the protocol manager of new
+         * wiring to inform the channel manager of new
          * {@link IBlaubotConnection}s.
          *
          * @param oldState
@@ -403,13 +403,13 @@ public class Blaubot implements Closeable {
 
             // We are king and await incoming connections from peasants
             // We register a listener to the KingState to inform the
-            // ProtocolManager about new Peasant connections
+            // ChannellManager about new Peasant connections
             KingState kingState = (KingState) newState;
             kingState.setPeasantConnectionsListener(new IBlaubotIncomingConnectionListener() {
                 @Override
                 public void onConnectionEstablished(IBlaubotConnection connection) {
                     if (Log.logDebugMessages()) {
-                        Log.d(LOG_TAG, "Got new connection as King -> ProtocolManager.addConnection()");
+                        Log.d(LOG_TAG, "Got new connection as King -> ChannelManager.addConnection()");
                     }
                     channelManager.addConnection(connection);
                 }
@@ -484,7 +484,7 @@ public class Blaubot implements Closeable {
                 // -- the new state is a subordinate state and the
                 // KingConnection has changed
                 if (Log.logDebugMessages()) {
-                    Log.d(LOG_TAG, "Adding king connection to ProtocolManager.");
+                    Log.d(LOG_TAG, "Adding king connection to ChannelManager.");
                 }
                 channelManager.addConnection(kingConnection);
             }
@@ -520,7 +520,7 @@ public class Blaubot implements Closeable {
     /**
      * Just for hashcode and equals
      */
-    private UUID guid = UUID.randomUUID(); // TODO: implement proper equals and hashcode
+    private UUID guid = UUID.randomUUID(); 
 
     @Override
     public int hashCode() {

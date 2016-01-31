@@ -1,0 +1,16 @@
+apply plugin: 'java'
+
+sourceSets {
+    main.java.srcDirs = ['src/main/java']
+}
+repositories {
+    maven {
+        url 'http://www.pyx4me.com/maven2-snapshot' // bluecove snapshots
+    }
+}
+dependencies {
+    compile 'junit:junit:4.11'
+    compile project(':blaubot')
+    compile project(':blaubot-websockets')
+    compile project(':blaubot-jsr82')
+}

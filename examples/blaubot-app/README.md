@@ -1,0 +1,1 @@
+This is an example application to play around with the [Blaubot project](http://blaubot.hgross.eu).

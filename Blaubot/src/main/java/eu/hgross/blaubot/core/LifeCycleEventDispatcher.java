@@ -24,11 +24,10 @@ import eu.hgross.blaubot.util.Util;
 /**
  * Listens for {@link eu.hgross.blaubot.admin.CensusMessage}s, calculates the diff (left or joined
  * devices and prince changes) and communicates them through the {@link eu.hgross.blaubot.core.ILifecycleListener}s attached to this {@link eu.hgross.blaubot.core.Blaubot} instance.
- *
+ * <p/>
  * If attached to a {@link eu.hgross.blaubot.core.statemachine.ConnectionStateMachine}, dispatches the corresponding
  * events to it's listeners when a kingdom merge takes place, the king dies, the prince takes over and so on.
- *
- * TODO: No CensusMessages will arrive on disconnect from the network but the onPrinceDeviceChanged and onKingDeviceChanged should be triggered to king and prince = null
+ * <p/>
  */
 public class LifeCycleEventDispatcher implements IBlaubotAdminMessageListener, IBlaubotConnectionStateMachineListener {
     public static final String LOG_TAG = "LifeCycleEventDispatchingListener";
@@ -44,6 +43,18 @@ public class LifeCycleEventDispatcher implements IBlaubotAdminMessageListener, I
      */
     private final Map<String, CensusMessage> lastCensusMessages = new ConcurrentHashMap<>();
     private final IBlaubotDevice ownDevice;
+    /**
+     * The last known king's uniqueDeviceId.
+     * ONLY used to trigger onKingDeviceChanged in certain cases (onDisconnected() and if we have no
+     * former census message. Is reset on notifyDisconnectedFromNetwork() calls.
+     */
+    private String lastKnownKingUniqueDeviceId;
+    /**
+     * The last known prince device id.
+     * ONLY used to trigger onPrinceDeviceChanged before onDisconnect() calls - not for any other
+     * processing.
+     */
+    private String lastKnownPrinceUniqueDeviceId;
 
     public LifeCycleEventDispatcher(IBlaubotDevice ownDevice) {
         this.ownDevice = ownDevice;
@@ -54,7 +65,8 @@ public class LifeCycleEventDispatcher implements IBlaubotAdminMessageListener, I
         if (adminMessage instanceof CensusMessage) {
             CensusMessage cm = (CensusMessage) adminMessage;
             String currentNetworkKingUniqueId = cm.extractKingUniqueId();
-            CensusMessage lastCensusMessage = lastCensusMessages.containsKey(currentNetworkKingUniqueId) ? lastCensusMessages.get(currentNetworkKingUniqueId) : new CensusMessage(new HashMap<String, State>());
+            boolean hasFormerCensusMessage = lastCensusMessages.containsKey(currentNetworkKingUniqueId);
+            CensusMessage lastCensusMessage = hasFormerCensusMessage ? lastCensusMessages.get(currentNetworkKingUniqueId) : new CensusMessage(new HashMap<String, State>());
 
             // create a set containing all new uniqueIds in the network
             Set<String> newUniqueIds = new HashSet<>(cm.getDeviceStates().keySet());
@@ -72,6 +84,7 @@ public class LifeCycleEventDispatcher implements IBlaubotAdminMessageListener, I
                     || (!(oldPrince == null && newPrince == null) && !newPrince.equals(oldPrince));
 
             String oldKing = lastCensusMessage.extractKingUniqueId();
+            oldKing = oldKing == null ? lastKnownKingUniqueDeviceId : oldKing;
             String newKing = cm.extractKingUniqueId();
             boolean kingChanged = (oldKing == null && newKing != null) || (newKing == null && oldKing != null)
                     || (!(oldKing == null && newKing == null) && !newKing.equals(oldKing));
@@ -86,13 +99,8 @@ public class LifeCycleEventDispatcher implements IBlaubotAdminMessageListener, I
                     IBlaubotDevice device = new BlaubotDevice(uniqueId);
                     listener.onDeviceJoined(device);
                 }
-                // left devices
-                for (String uniqueId : missingUniqueIds) {
-                    IBlaubotDevice device = new BlaubotDevice(uniqueId);
-                    listener.onDeviceLeft(device);
-                }
                 // king
-                if(kingChanged) {
+                if (kingChanged) {
                     IBlaubotDevice oldKingD = null, newKingD = null;
                     if (oldKing != null) {
                         oldKingD = new BlaubotDevice(oldKing);
@@ -113,8 +121,15 @@ public class LifeCycleEventDispatcher implements IBlaubotAdminMessageListener, I
                     }
                     listener.onPrinceDeviceChanged(oldPrinceD, newPrinceD);
                 }
+                // left devices
+                for (String uniqueId : missingUniqueIds) {
+                    IBlaubotDevice device = new BlaubotDevice(uniqueId);
+                    listener.onDeviceLeft(device);
+                }
             }
             lastCensusMessages.put(currentNetworkKingUniqueId, cm);
+            lastKnownKingUniqueDeviceId = newKing;
+            lastKnownPrinceUniqueDeviceId = newPrince;
         }
     }
 
@@ -135,6 +150,7 @@ public class LifeCycleEventDispatcher implements IBlaubotAdminMessageListener, I
                 }
 
                 CensusMessage oldKingdomMsg = lastCensusMessages.remove(oldKingUniqueId);
+//                lastKnownKingUniqueDeviceId = ps.getKingConnection().getRemoteDevice().getUniqueDeviceID();
                 if (oldKingdomMsg != null) {
                     notfiyOnDeviceLeftForKingdom(oldKingdomMsg);
                 }
@@ -144,26 +160,19 @@ public class LifeCycleEventDispatcher implements IBlaubotAdminMessageListener, I
                 // - clear the last census message from the old kingdom
                 final IBlaubotSubordinatedState _oldState = (IBlaubotSubordinatedState) oldState;
                 CensusMessage oldKingdomMsg = lastCensusMessages.remove(_oldState.getKingUniqueId());
+//                lastKnownKingUniqueDeviceId = ps.getKingConnection().getRemoteDevice().getUniqueDeviceID();
                 if (oldKingdomMsg != null) {
                     lastCensusMessages.put(ps.getKingUniqueId(), oldKingdomMsg);
                 }
                 // the onLeft/onJoined events should follow by the arriving census messages
             } else if (!ps.getConnectionAccomplishmentType().equals(PeasantState.ConnectionAccomplishmentType.DEGRADATION)) {
-                if (Log.logDebugMessages()) {
-                    Log.d(LOG_TAG, "Notifying lifecycle listeners onConnected()");
-                }
                 // if not a change from prince -> peasant inside the same network (degraded), notify that we connected to a new network
-                for (ILifecycleListener listener : lifecycleListeners) {
-                    listener.onConnected();
-                    // the onDeviceJoined will be triggered from the
-                    // CensusMessage
-                    // TODO: the order of events: onConnected() and
-                    // onDeviceJoined() is not guaranteed at the moment! (the
-                    // messaging could be faster)
-                }
-                if (Log.logDebugMessages()) {
-                    Log.d(LOG_TAG, "Finished notifiaction for onConnected()");
-                }
+                notifyConnectedToNetwork();
+                // the onDeviceJoined will be triggered from the
+                // CensusMessage
+                // TODO: the order of events: onConnected() and
+                // onDeviceJoined() is not guaranteed at the moment! (the
+                // messaging could be faster)
             }
         } else if (newState instanceof FreeState) {
             // ignore stopped->free transitions for disconnected events
@@ -176,21 +185,14 @@ public class LifeCycleEventDispatcher implements IBlaubotAdminMessageListener, I
             if (oldState instanceof FreeState) {
                 // -- we changed to KingState from a FreeState (excludes the
                 // case when we change to KingState from PrinceState)
-                if (Log.logDebugMessages()) {
-                    Log.d(LOG_TAG, "Notifying lifecycle listeners onConnected() ...");
-                }
-                for (ILifecycleListener listener : lifecycleListeners) {
-                    listener.onConnected();
-                }
-                if (Log.logDebugMessages()) {
-                    Log.d(LOG_TAG, "Done notifying onConnected()");
-                }
+                notifyConnectedToNetwork();
             } else if (oldState instanceof PrinceState) {
                 // -- we changed to KingState from a prince state -> we took the throne
                 // - treat the old kingdom's census message as the new kingdom's census to let the diff logic for the onJoin/onLeft do their magic on arrival of the next census from this kingdom
                 // - clear the last census message from the old kingdom
                 final IBlaubotSubordinatedState _oldState = (IBlaubotSubordinatedState) oldState;
                 CensusMessage oldKingdomMsg = lastCensusMessages.remove(_oldState.getKingUniqueId());
+//                lastKnownKingUniqueDeviceId = _oldState.getKingUniqueId();
                 if (oldKingdomMsg != null) {
                     lastCensusMessages.put(this.ownDevice.getUniqueDeviceID(), oldKingdomMsg);
                 }
@@ -211,6 +213,21 @@ public class LifeCycleEventDispatcher implements IBlaubotAdminMessageListener, I
 
     }
 
+    /**
+     * Simply calls onConnected() on all registered listeners
+     */
+    public void notifyConnectedToNetwork() {
+        if (Log.logDebugMessages()) {
+            Log.d(LOG_TAG, "Notifying lifecycle listeners onConnected() ...");
+        }
+        for (ILifecycleListener listener : lifecycleListeners) {
+            listener.onConnected();
+        }
+        if (Log.logDebugMessages()) {
+            Log.d(LOG_TAG, "Done notifying onConnected()");
+        }
+    }
+
 
     /**
      * Triggers onDeviceLeft(..) for all of the known devices from the old
@@ -220,8 +237,7 @@ public class LifeCycleEventDispatcher implements IBlaubotAdminMessageListener, I
      *
      * @param oldKingUniqueId the uniqueDeviceId of the former network's king device.
      */
-    private void notifyDisconnectedFromNetwork(String oldKingUniqueId) {
-        // -- we connected to another network due to a merge (bow down)
+    public void notifyDisconnectedFromNetwork(String oldKingUniqueId) {
         // -- the uniqueId of our old king is known as well as the new
         // king's uniqueId
         // as of
@@ -246,8 +262,24 @@ public class LifeCycleEventDispatcher implements IBlaubotAdminMessageListener, I
         if (Log.logDebugMessages()) {
             Log.d(LOG_TAG, "Notifying lifecycle listeners onDisconnected()");
         }
-        // fire the onDisconnected
+
+
+        // fire the princeChanged, kingChangend and onDisconnected 
+        IBlaubotDevice kDevice = new BlaubotDevice(oldKingUniqueId);
+        IBlaubotDevice pDevice;
+        if (oldNetworksLastCensusMessage != null && oldNetworksLastCensusMessage.extractPrinceUniqueId() != null) {
+            pDevice = new BlaubotDevice(oldNetworksLastCensusMessage.extractPrinceUniqueId());
+        } else if (lastKnownPrinceUniqueDeviceId != null) {
+            pDevice = new BlaubotDevice(lastKnownPrinceUniqueDeviceId);
+        } else {
+            pDevice = null;
+        }
         for (ILifecycleListener listener : lifecycleListeners) {
+            // trigger onPrinceDeviceChanged and onKingDeviceChanged with king and prince = null
+            listener.onKingDeviceChanged(kDevice, null);
+            listener.onPrinceDeviceChanged(pDevice, null);
+            lastKnownKingUniqueDeviceId = null;
+            lastKnownPrinceUniqueDeviceId = null;
             listener.onDisconnected();
         }
         if (Log.logDebugMessages()) {

@@ -39,6 +39,7 @@ public class BlaubotEthernetAcceptor implements IBlaubotConnectionAcceptor {
     private IBlaubotBeaconStore beaconStore;
 
     public BlaubotEthernetAcceptor(IBlaubotAdapter adapter, IBlaubotDevice ownDevice, InetAddress ipAddress, int acceptorPort) {
+        // TODO: remove ipAddress dependency here and get it from the ServerSocket
         this.adapter = adapter;
         this.ownDevice = ownDevice;
         this.ipAddress = ipAddress;
@@ -144,8 +145,10 @@ public class BlaubotEthernetAcceptor implements IBlaubotConnectionAcceptor {
                     if (acceptThread != null && this == acceptThread) {
                         notify_listening_started();
                     }
+                    final int connectionTimeout = adapter.getBlaubotAdapterConfig().getConnectionTimeout();
                     while (!isInterrupted() && acceptThread == Thread.currentThread()) {
                         Socket socket = serverSocket.accept();
+                        socket.setSoTimeout(connectionTimeout);
                         if (Log.logDebugMessages()) {
                             Log.d(LOG_TAG, "Got new client connection from " + socket.getInetAddress().toString());
                         }

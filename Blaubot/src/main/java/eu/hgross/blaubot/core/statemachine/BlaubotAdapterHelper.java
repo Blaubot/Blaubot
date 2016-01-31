@@ -45,7 +45,13 @@ public class BlaubotAdapterHelper {
 		return out;
 	}
 
-	private static int startedCount(List<IBlaubotConnectionAcceptor> acceptors, List<IBlaubotBeacon> beacons) {
+	/**
+	 * counts the number of started beacons and acceptors
+	 * @param acceptors null or list of acceptors
+	 * @param beacons null or list of beacons
+	 * @return the sum of started acceptors and beacons
+	 */
+	public static int startedCount(List<IBlaubotConnectionAcceptor> acceptors, List<IBlaubotBeacon> beacons) {
 		int i = 0;
 		if (acceptors != null)
 			for (IBlaubotConnectionAcceptor acc : acceptors)

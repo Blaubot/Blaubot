@@ -1,0 +1,151 @@
+apply plugin: 'com.android.library'
+
+// next two lines are needed for publish to bintray (jcenter repository), see https://github.com/danielemaddaluno/gradle-jcenter-publish
+apply plugin: 'com.github.dcendents.android-maven'
+apply plugin: "com.jfrog.bintray"
+
+
+// This is the library version used when deploying the artifact to jcenter
+version = rootProject.blaubot_version
+
+android {
+    compileSdkVersion 21
+    buildToolsVersion '23.0.1'
+
+    defaultConfig {
+        minSdkVersion 16
+        targetSdkVersion 21
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+        }
+    }
+
+    packagingOptions {
+        pickFirst 'META-INF/LICENSE.txt'
+        pickFirst 'META-INF/NOTICE.txt'
+        pickFirst 'META-INF/INDEX.LIST'
+    }
+
+}
+
+dependencies {
+    compile project(':blaubot')
+    // Apache 2.0
+    compile 'org.apache.commons:commons-collections4:4.0'
+}
+
+/*
+    Maven jCentral deployment from here.
+    The aar library can be used by users like this:
+
+    dependencies {
+        compile 'eu.hgross.blaubot-android:library:+'
+        // or
+        compile 'eu.hgross.blaubot-android:library:2.0.0.beta.1'
+    }
+ */
+
+// now maven adjustments
+def siteUrl = 'http://blaubot.hgross.eu'            // Homepage URL of the library
+def gitUrl = 'https://github.com/Blaubot/Blaubot'   // Git repository URL
+group = "eu.hgross"                                 // Maven Group
+def libraryDescription = 'An easy to use publish/subscribe middleware to create and communicate through dynamically created adhoc networks.'
+
+install {
+    repositories.mavenInstaller {
+        // This generates POM.xml with proper parameters
+        pom {
+            project {
+                artifactId 'blaubot-android'
+                inceptionYear '2014'
+                packaging 'aar'
+
+                // Add your description here
+                name 'Blaubot Android'
+                url siteUrl
+                description = libraryDescription
+
+                // Set your license
+                licenses {
+                    license {
+                        name 'The MIT License (MIT)'
+                        url 'http://opensource.org/licenses/MIT'
+                    }
+                }
+                developers {
+                    developer {
+                        id 'hgross'
+                        name 'Henning Gross'
+                        email 'mail.to@henning-gross.de'
+                    }
+                }
+                scm {
+                    connection gitUrl
+                    developerConnection gitUrl
+                    url siteUrl
+                }
+            }
+        }
+    }
+}
+
+task sourcesJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier = 'sources'
+}
+
+task javadoc(type: Javadoc) {
+    source = android.sourceSets.main.java.srcDirs
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+    classpath += configurations.compile // adds the blaubot library to the classpath for javadoc generation
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+artifacts {
+    archives javadocJar
+    archives sourcesJar
+}
+
+
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
+// https://github.com/bintray/gradle-bintray-plugin
+bintray {
+    user = properties.getProperty("bintray.user")
+    key = properties.getProperty("bintray.apikey")
+
+    configurations = ['archives']
+    pkg {
+        repo = "maven"
+        // it is the name that appears in bintray when logged
+        name = "blaubot-android"
+        desc = libraryDescription
+        websiteUrl = siteUrl
+        vcsUrl = gitUrl
+        issueTrackerUrl = 'https://github.com/Blaubot/Blaubot/issues'
+        licenses = ["MIT"]
+        dryRun = rootProject.dryRun //Whether to run this as dry-run, without deploying
+        publish = rootProject.autoPublish //If version should be auto published after an upload
+        labels = ['aar', 'android', 'blaubot']
+        version {
+            gpg {
+                sign = true //Determines whether to GPG sign the files. The default is false
+                passphrase = properties.getProperty("bintray.gpg.password") //Optional. The passphrase for GPG signing'
+            }
+//            mavenCentralSync {
+//                sync = true //Optional (true by default). Determines whether to sync the version to Maven Central.
+//                user = properties.getProperty("bintray.oss.user") //OSS user token
+//                password = properties.getProperty("bintray.oss.password") //OSS user password
+//                close = '1' //Optional property. By default the staging repository is closed and artifacts are released to Maven Central. You can optionally turn this behaviour off (by puting 0 as value) and release the version manually.
+//            }
+        }
+    }
+}

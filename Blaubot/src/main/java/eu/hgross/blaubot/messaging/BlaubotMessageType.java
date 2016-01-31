@@ -14,6 +14,7 @@ public class BlaubotMessageType {
     private static final int IS_FIRST_HOP = 2; // basically signals, that a message has to pass the master first before reaching it's final destination
     private static final int CONTAINS_PAYLOAD_BIT = 3;
     private static final int IS_CHUNK = 4;
+    private static final int EXCLUDE_SENDER = 5; // if set, a message is not dispatched to the connection, over which the message was received
 
     public BlaubotMessageType() {
         this.bitset = new BitSet(8);
@@ -66,6 +67,10 @@ public class BlaubotMessageType {
     public boolean isChunk() {
         return bitset.get(IS_CHUNK);
     }
+    
+    public boolean isSenderExcluded() {
+        return bitset.get(EXCLUDE_SENDER);
+    }
 
     public BlaubotMessageType setContainsPayload(boolean val) {
         bitset.set(CONTAINS_PAYLOAD_BIT, val);
@@ -89,6 +94,11 @@ public class BlaubotMessageType {
 
     public BlaubotMessageType setIsChunk(boolean val) {
         bitset.set(IS_CHUNK, val);
+        return this;
+    }
+
+    public BlaubotMessageType setExcludeSender(boolean val) {
+        bitset.set(EXCLUDE_SENDER, val);
         return this;
     }
 

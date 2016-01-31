@@ -1,0 +1,78 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context=".MainActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/blaubotConfiguratorButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Configurator" />
+
+        <Button
+            android:id="@+id/BluetoothButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Bluetooth" />
+
+        <Button
+            android:id="@+id/BluetoothWithMulticastBeaconButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Bluetooth with Multicast" />
+
+        <Button
+            android:id="@+id/BluetoothWithNFCBeaconButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Bluetooth with NFC" />
+
+        <Button
+            android:id="@+id/WIFIDirectButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="WifiP2P" />
+
+        <Button
+            android:id="@+id/WifiApWithNfcButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="WifiAP with NFC" />
+
+        <Button
+            android:id="@+id/ethernetButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ethernet with Multicast" />
+
+        <Button
+            android:id="@+id/ethernetWithBonjourButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ethernet with Bonjour" />
+
+        <Button
+            android:id="@+id/ethernetWithNFCButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ethernet with NFC" />
+
+        <Button
+            android:id="@+id/ethernetWithBLEButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ethernet with BLE" />
+
+    </LinearLayout>
+</ScrollView>

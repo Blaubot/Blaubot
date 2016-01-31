@@ -39,6 +39,7 @@ public abstract class AbstractAdminMessage {
     public static final byte CLASSIFIER_CLOSE_SERVER_CONNECTION = 13;
 
     public static final byte CLASSIFIER_DISCOVERED_DEVICE = 14;
+	public static final byte CLASSIFIER_FINISHED_HANDSHAKE = 15;
 
 	private byte classifier;
 

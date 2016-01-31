@@ -1,6 +1,7 @@
-Blaubot/bin
-Blaubot/gen
-BlaubotAndroidLibrary/bin
-BlaubotLibrary/bin
-BlaubotTests/classes
-BlaubotTests/bin
+.gradle
+local.properties
+.idea/workspace.xml
+.idea/libraries
+.DS_Store
+build
+gradle-app.setting

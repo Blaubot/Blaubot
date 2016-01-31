@@ -48,7 +48,7 @@ public class BlaubotMessage {
         }
         final int maxChunkSize = BlaubotConstants.MAX_PAYLOAD_SIZE;
         final int numChunks = (payloadLength + maxChunkSize - 1) / maxChunkSize; // rounded up
-        if (numChunks > 0xffff) { // unsigned short max value
+        if (numChunks > BlaubotConstants.USHORT_MAX_VALUE) { // unsigned short max value
             throw new IllegalArgumentException("The message contains " + payloadLength + "bytes payload which results in " + numChunks + " chunks. The number of chunks exceeds the message header field (short, 2 bytes) and is therefore too big");
         }
         final ByteBuffer byteBuffer = ByteBuffer.wrap(getPayload()).order(BlaubotConstants.BYTE_ORDER);

@@ -9,7 +9,7 @@ public interface IBlaubotMessagePickerStrategy {
     /**
      * The default timeout for polling operations on the blocking queue.
      */
-    long POLL_TIMEOUT = 1000;
+    long POLL_TIMEOUT = 500;
 
     /**
      * Picks a message from the given queue.

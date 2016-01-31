@@ -1,0 +1,138 @@
+apply plugin: 'java'
+apply plugin: 'maven'
+apply plugin: "com.jfrog.bintray"
+
+version = rootProject.blaubot_version
+
+jar {
+    from ("${projectDir}/src/main/java") {
+        include('images/**')
+    }
+    from ("${projectDir}") {
+        include('LICENSE.blaubot.txt')
+        include('README.blaubot.md')
+    }
+}
+
+
+//sourceSets {
+//    main {
+//        java {
+//            include '**/*.png'
+//        }
+//    }
+//}
+
+
+dependencies {
+    //compile 'commons-codec:commons-codec:1.10' <- don't! Collides with the android included lib .. meh. Using a popular public domain Base64 implementation for now  - see util package.
+    compile 'com.google.code.gson:gson:2.3.1'
+    // Apache 2.0
+    compile 'javax.jmdns:jmdns:3.4.1'
+    // Apache 2.0
+}
+
+// we make bluecove optional
+def installer = install.repositories.mavenInstaller
+[installer,]*.pom*.whenConfigured {pom ->
+    //pom.dependencies.find {dep -> dep.groupId == 'net.sf.bluecove' && dep.artifactId == 'bluecove' }.optional = true
+}
+
+// now maven adjustments
+def siteUrl = 'http://blaubot.hgross.eu'            // Homepage URL of the library
+def gitUrl = 'https://github.com/Blaubot/Blaubot'   // Git repository URL
+group = "eu.hgross"                                 // Maven Group
+def libraryDescription = 'An easy to use publish/subscribe middleware to create and communicate through dynamically created adhoc networks.'
+
+install {
+    repositories.mavenInstaller {
+        // This generates POM.xml with proper parameters
+        pom {
+            project {
+                artifactId 'blaubot'
+                inceptionYear '2014'
+                packaging 'jar'
+
+                // Add your description here
+                name 'Blaubot'
+                url siteUrl
+                description = libraryDescription
+
+                // Set your license
+                licenses {
+                    license {
+                        name 'The MIT License (MIT)'
+                        url 'http://opensource.org/licenses/MIT'
+                    }
+                }
+                developers {
+                    developer {
+                        id 'hgross'
+                        name 'Henning Gross'
+                        email 'mail.to@henning-gross.de'
+                    }
+                }
+                scm {
+                    connection gitUrl
+                    developerConnection gitUrl
+                    url siteUrl
+                }
+            }
+        }
+    }
+}
+
+task sourcesJar(type: Jar) {
+    from sourceSets.main.java.srcDirs
+    from ("${projectDir}") {
+        include('LICENSE.blaubot.txt')
+        include('README.blaubot.md')
+    }
+    classifier = 'sources'
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+artifacts {
+    archives javadocJar
+    archives sourcesJar
+}
+
+
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
+// https://github.com/bintray/gradle-bintray-plugin
+bintray {
+    user = properties.getProperty("bintray.user")
+    key = properties.getProperty("bintray.apikey")
+
+    configurations = ['archives']
+    pkg {
+        repo = "maven"
+        // it is the name that appears in bintray when logged
+        name = "blaubot"
+        desc = libraryDescription
+        websiteUrl = siteUrl
+        vcsUrl = gitUrl
+        issueTrackerUrl = 'https://github.com/Blaubot/Blaubot/issues'
+        licenses = ["MIT"]
+        labels = ['blaubot']
+        dryRun = rootProject.dryRun // Whether to run this as dry-run, without deploying
+        publish = rootProject.autoPublish // If version should be auto published after an upload
+        version {
+            gpg {
+                sign = true //Determines whether to GPG sign the files. The default is false
+                passphrase = properties.getProperty("bintray.gpg.password") //Optional. The passphrase for GPG signing'
+            }
+//            mavenCentralSync {
+//                sync = true //Optional (true by default). Determines whether to sync the version to Maven Central.
+//                user = properties.getProperty("bintray.oss.user") //OSS user token
+//                password = properties.getProperty("bintray.oss.password") //OSS user password
+//                close = '1' //Optional property. By default the staging repository is closed and artifacts are released to Maven Central. You can optionally turn this behaviour off (by puting 0 as value) and release the version manually.
+//            }
+        }
+    }
+}

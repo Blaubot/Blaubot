@@ -66,7 +66,7 @@
             android:id="@+id/debug_view_StateHistoryView"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="vertical">
         </eu.hgross.blaubot.android.views.StateHistoryView>
 
         <LinearLayout
@@ -119,12 +119,6 @@
             </LinearLayout>
         </LinearLayout> <!-- /the two vertical listviews -->
 
-
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="Channels:"
-            style="@style/HeadlineLabels" />
 
         <eu.hgross.blaubot.android.views.ChannelManagerView
             android:id="@+id/debug_view_channelManagerView"

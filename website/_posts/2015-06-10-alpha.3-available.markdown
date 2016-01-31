@@ -1,0 +1,11 @@
+---
+layout: post
+title:  "Blaubot 2.0.0.alpha.3"
+date:   2015-06-10
+categories: release
+---
+The third alpha is now available from jCenter and MavenCentral.
+Besides the usual optimizations and bugfixes you are now able to prevent re-distribution of messages to sending devices.
+To do that, use the new `publish()` methods on the `IBlaubotChannel`.  
+Additionally, subscriptions can now be made before any `onConnected()` event happened.
+They will be picked up after an `onConnected()` event automatically.

@@ -1,7 +1,9 @@
 package eu.hgross.blaubot.ui;
 
+import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -302,8 +304,9 @@ public class BlaubotServerPanel extends JPanel {
                 serverPanel.registerBlaubotServerInstance(blaubotServer);
 
                 JFrame frame = new JFrame();
+                frame.getContentPane().setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
                 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                frame.setMinimumSize(new Dimension(1024, 500));
+                frame.setMinimumSize(new Dimension(900, 500));
                 frame.add(serverPanel);
                 frame.pack();
                 frame.setVisible(true);

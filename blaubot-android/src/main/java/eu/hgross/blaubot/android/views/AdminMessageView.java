@@ -25,7 +25,7 @@ import eu.hgross.blaubot.messaging.IBlaubotAdminMessageListener;
 import eu.hgross.blaubot.ui.IBlaubotDebugView;
 
 /**
- * Hooks into the admin messages and shows them (oldest first).
+ * Hooks into the admin messages and shows them (oldest first). 
  */
 public class AdminMessageView extends LinearLayout implements IBlaubotDebugView {
     private static final int MAX_MESSAGES_DEFAULT = 30;

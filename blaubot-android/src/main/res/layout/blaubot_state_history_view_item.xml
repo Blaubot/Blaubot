@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <!-- has to be made invisible for the first item -->
+    <LinearLayout
+        android:id="@+id/preContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="left"
+        >
+
+        <View
+            android:layout_marginLeft="24dp"
+            android:layout_width="2dp"
+            android:layout_height="30dp"
+            android:background="@color/Black" />
+        
+        <TextView
+            android:gravity="center_vertical"
+            android:paddingLeft="10dp"
+            android:id="@+id/timeDifferenceTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="wrap_content"
+        android:gravity="left"
+        android:layout_height="wrap_content"
+        android:paddingBottom="2dp">
+
+        <ImageView
+            
+            android:layout_alignParentLeft="true"
+            android:gravity="center_vertical"
+            android:id="@+id/stateIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginLeft="3dp"
+            android:layout_marginRight="3dp"/>
+        
+
+        <LinearLayout
+            android:layout_toRightOf="@id/stateIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+            <TextView
+                android:id="@+id/text"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Medium Text"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <TextView
+                android:id="@+id/text2"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="middle"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:paddingBottom="5dp"
+                android:text=""
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</LinearLayout>

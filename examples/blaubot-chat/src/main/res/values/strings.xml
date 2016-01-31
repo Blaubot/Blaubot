@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">BlaubotChat</string>
+    <string name="action_change_username">Change username</string>
+    <string name="title_activity_blaubot_chat">BlaubotChat</string>
+    <string name="drawer_open">Menu opened</string>
+    <string name="drawer_close">Menu closed</string>
+    <string name="username_edit_field_label">Nickname:</string>
+    <string name="username_edit_save_button">save</string>
+    <string name="change_nickname_dialog_title">Change nickname</string>
+    <string name="invalid_username">Invalid nickname</string>
+    <string name="username_edit_cancel_button">cancel</string>
+    <string name="name_change_message_changed_name_to">changed nickname to</string>
+    <string name="left_chatroom_message">left the chatroom</string>
+    <string name="connected_to_chatroom">connected to chatroom</string>
+    <string name="merged_with_nearby_chatroom">merged with nearby chatroom</string>
+    <string name="disconnected_from_chatroom">disconnected from chatroom</string>
+    <string name="joined_the_chatroom">joined the chatroom</string>
+    <string name="navigation_item_debugview_title">DebugView</string>
+    <string name="navigation_item_chat_title">Chatroom</string>
+    <string name="searching_chatroom">searching chatroom ...</string>
+    <string name="stopped">stopped - not searching for chatrooms.</string>
+</resources>
