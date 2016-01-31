@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="GradleSettings">
+    <option name="linkedExternalProjectsSettings">
+      <GradleProjectSettings>
+        <option name="distributionType" value="DEFAULT_WRAPPED" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="gradleJvm" value="1.7" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/blaubot" />
+            <option value="$PROJECT_DIR$/blaubot-android" />
+            <option value="$PROJECT_DIR$/blaubot-jsr82" />
+            <option value="$PROJECT_DIR$/blaubot-test" />
+            <option value="$PROJECT_DIR$/blaubot-websockets" />
+            <option value="$PROJECT_DIR$/examples" />
+            <option value="$PROJECT_DIR$/examples/blaubot-app" />
+            <option value="$PROJECT_DIR$/examples/blaubot-cam" />
+            <option value="$PROJECT_DIR$/examples/blaubot-cam-server" />
+            <option value="$PROJECT_DIR$/examples/blaubot-chat" />
+            <option value="$PROJECT_DIR$/examples/blaubot-fingertracking" />
+            <option value="$PROJECT_DIR$/examples/blaubot-fingertracking-swing" />
+            <option value="$PROJECT_DIR$/website" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+    </option>
+  </component>
+</project>
