@@ -1,0 +1,20 @@
+---
+layout: post
+title:  "Blaubot 2.0.0.beta.1"
+date:   2016-01-31
+categories: release
+---
+
+The first beta is now available from jCenter and MavenCentral.
+It contains some fixes and stability improvements and an abstract GeoDataBeacon that can be subclassed and used to utilizes the cell connection as beacon technology.
+
+Check out the following classes to play around with it:
+<ul>
+    <li>eu.hgross.blaubot.geobeacon.GeoBeaconServer (blaubot.jar)</li>
+    <li>eu.hgross.blaubot.geobeacon.GeoLocationBeacon (blaubot.jar)</li>
+    <li>eu.hgross.blaubot.android.geo.GeoLocationBeaconAndroid (blaubot-android.jar)</li>
+</ul>
+
+Apart from that the Blaubot repository is now fully [migrated to GitHub](https://github.com/Blaubot/Blaubot) so you will always find the latest source code there.
+Also make sure to check out the official [gitter-channel](/chat) for Blaubot to get help or keep in touch with other Blaubot users.
+
