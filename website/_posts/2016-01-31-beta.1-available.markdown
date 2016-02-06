@@ -16,5 +16,5 @@ Check out the following classes to play around with it:
 </ul>
 
 Apart from that the Blaubot repository is now fully [migrated to GitHub](https://github.com/Blaubot/Blaubot) so you will always find the latest source code there.
-Also make sure to check out the official [gitter-channel](/chat) for Blaubot to get help or keep in touch with other Blaubot users.
+Also make sure to check out the official [gitter-channel](/chat.html) for Blaubot to get help or keep in touch with other Blaubot users.
 
