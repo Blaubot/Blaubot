@@ -8,8 +8,10 @@ android:
   components:
     - tools
     - build-tools-23.0.2
+    - extra-android-m2repository
+    - extra-google-m2repository
+    - extra-google-support
     - android-23
-    
     
 
 before_install:
