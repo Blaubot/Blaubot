@@ -10,7 +10,7 @@ version = rootProject.blaubot_version
 
 android {
     compileSdkVersion 22
-    buildToolsVersion '23.0.1'
+    buildToolsVersion '23.0.2'
 
     lintOptions {
         abortOnError false // don't fail on missing permissions (is a library)

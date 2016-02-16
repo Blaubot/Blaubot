@@ -6,10 +6,12 @@ env:
 
 android:
   components:
-    - build-tools-23.0.1
+    - android-22
+    - build-tools-23.0.2
+    
 
 before_install:
  - chmod +x gradlew
  - touch local.properties
 
-script: ./gradlew build
+script: ./gradlew clean build
