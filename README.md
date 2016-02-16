@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/Blaubot/Blaubot.svg?branch=master)](https://travis-ci.org/Blaubot/Blaubot)
 [ ![blaubot documentation](https://img.shields.io/badge/blaubot-Documentation-blue.svg)](http://blaubot.hgross.eu/documentation)
 [ ![blaubot-android Quickstart Guide](https://img.shields.io/badge/blaubot--android-Quickstart--guide-blue.svg)](http://blaubot.hgross.eu/quickstart-android/)
 [ ![Join the chat at https://gitter.im/Blaubot/Blaubot](https://badges.gitter.im/Blaubot/Blaubot.svg)](https://gitter.im/Blaubot/Blaubot?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)

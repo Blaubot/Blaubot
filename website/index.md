@@ -6,7 +6,7 @@ noToc: true
 Blaubot is a middleware to create small adhoc networks via P2P connections such as Bluetooth-RFCOMM, Adhoc-WiFi or simple socket connections. Blaubot takes care of device discovery and connection establishment with the goal to minimize a developer's boilerplate code to set up these small networks.
 
 Tl;dr our main goal is to let a developer call `start();` and spare him as much hassle as possible to create ad hoc networks.
-See it in action:xadslöf
+See it in action:
 
 <div class='embed-container'><iframe width="560" height="315" src="https://www.youtube.com/embed/1uBd0v09TOE" frameborder="0" allowfullscreen></iframe></div>
 The source code is hosted on [github](https://github.com/Blaubot/Blaubot). Blaubot is written in Java and has a dedicated version for Android.
