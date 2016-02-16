@@ -6,8 +6,10 @@ env:
 
 android:
   components:
-    - android-22
+    - tools
     - build-tools-23.0.2
+    - android-22
+    
     
 
 before_install:
