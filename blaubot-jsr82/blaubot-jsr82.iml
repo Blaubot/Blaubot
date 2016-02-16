@@ -29,8 +29,5 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="blaubot" exported="" />
     <orderEntry type="library" exported="" name="bluecove-2.1.1-20101024.214840-60" level="project" />
-    <orderEntry type="library" exported="" name="blaubot-jsr82.blaubot-jsr82-2.0.0-beta.1" level="project" />
-    <orderEntry type="library" exported="" name="blaubot-jsr82.blaubot-jsr82-2.0.0-beta.1-javadoc" level="project" />
-    <orderEntry type="library" exported="" name="blaubot-jsr82.blaubot-jsr82-2.0.0-beta.1-sources" level="project" />
   </component>
 </module>

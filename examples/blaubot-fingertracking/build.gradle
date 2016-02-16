@@ -1,7 +1,7 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 21
+    compileSdkVersion 22
     buildToolsVersion '23.0.1'
     lintOptions {
         abortOnError false
@@ -10,7 +10,7 @@ android {
     defaultConfig {
         applicationId "eu.hgross.blaubot.fingertracking"
         minSdkVersion 16
-        targetSdkVersion 21
+        targetSdkVersion 22
     }
 
     // annoying .... commons lang and commons collections both have this files so they need to be excluded completely ... TODO add license elsewhere

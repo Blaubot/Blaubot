@@ -9,7 +9,7 @@ apply plugin: "com.jfrog.bintray"
 version = rootProject.blaubot_version
 
 android {
-    compileSdkVersion 21
+    compileSdkVersion 22
     buildToolsVersion '23.0.1'
 
     lintOptions {
@@ -18,7 +18,7 @@ android {
 
     defaultConfig {
         minSdkVersion 16
-        targetSdkVersion 21
+        targetSdkVersion 22
     }
 
     buildTypes {

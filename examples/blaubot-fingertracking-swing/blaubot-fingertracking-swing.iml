@@ -29,6 +29,5 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="blaubot" exported="" />
     <orderEntry type="library" exported="" name="gson-2.3.1" level="project" />
-    <orderEntry type="library" exported="" name="blaubot-fingertracking-swing.blaubot-fingertracking-swing" level="project" />
   </component>
 </module>
