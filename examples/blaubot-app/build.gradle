@@ -10,7 +10,8 @@ android {
         targetSdkVersion 22
     }
     
-    // don't fail on this demo app
+    // somehow travis ci fails with lint errors that I can't  
+    // reproduce locally?
     lintOptions {
         abortOnError false
     }

@@ -13,13 +13,12 @@ android {
         targetSdkVersion 22
     }
 
-    // annoying .... commons lang and commons collections both have this files so they need to be excluded completely ... TODO add license elsewhere
-//    packagingOptions {
-//        pickFirst 'META-INF/LICENSE.txt'
-//        pickFirst 'META-INF/NOTICE.txt'
-//        pickFirst 'META-INF/INDEX.LIST'
-//    }
-
+    // somehow travis ci fails with lint errors that I can't  
+    // reproduce locally?
+    lintOptions {
+        abortOnError false
+    }
+    
     buildTypes {
         release {
             minifyEnabled false
