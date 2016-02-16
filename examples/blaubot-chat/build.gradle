@@ -1,7 +1,7 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 22
+    compileSdkVersion 23
     buildToolsVersion '23.0.2'
 
     defaultConfig {
@@ -30,9 +30,9 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     // https://android-arsenal.com/details/1/424
     // https://android-arsenal.com/details/1/723 
-    compile 'com.android.support:appcompat-v7:22.2.0'
-    compile 'com.android.support:support-v4:22.2.0'
-    compile 'com.android.support:recyclerview-v7:22.2.0'
+    compile 'com.android.support:appcompat-v7:23.1.1'
+    compile 'com.android.support:support-v4:23.1.1'
+    compile 'com.android.support:recyclerview-v7:23.1.1'
     compile project(':blaubot-android')
     compile 'com.joanzapata.android:android-iconify:1.0.9'
     compile 'com.google.code.gson:gson:2.3.1'

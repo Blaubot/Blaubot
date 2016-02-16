@@ -679,7 +679,7 @@ public class BlaubotCamMainActivity extends Activity {
      * Maintains the indicator color to show if we are connected, stopped or searching.
      */
     private class ConnectionStatusIndicatorUpdater extends ConnectionStateMachineAdapter {
-        private static final int CONNECTED_COLOR = android.support.v7.appcompat.R.color.link_text_material_light;
+        private static final int CONNECTED_COLOR = R.color.Green;
         private static final int STOPPED_COLOR = R.color.Maroon;
         private static final int SEARCHING_COLOR = R.color.DarkGoldenrod;
 
