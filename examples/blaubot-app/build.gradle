@@ -9,6 +9,11 @@ android {
         minSdkVersion 16
         targetSdkVersion 22
     }
+    
+    // don't fail on this demo app
+    lintOptions {
+        abortOnError false
+    }
 
     // annoying .... netty and jmdns both have this files so we need to pick the first
     packagingOptions {
