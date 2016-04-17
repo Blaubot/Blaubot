@@ -32,9 +32,13 @@
     <orderEntry type="library" exported="" name="grizzly-http-server-2.3.20" level="project" />
     <orderEntry type="library" exported="" name="commons-cli-1.3" level="project" />
     <orderEntry type="library" exported="" name="webcam-capture-0.3.10" level="project" />
+    <orderEntry type="library" exported="" name="gson-2.3.1" level="project" />
+    <orderEntry type="library" exported="" name="jmdns-3.4.1" level="project" />
+    <orderEntry type="library" exported="" name="netty-all-4.0.26.Final" level="project" />
     <orderEntry type="library" exported="" name="grizzly-http-2.3.20" level="project" />
     <orderEntry type="library" exported="" name="bridj-0.6.2" level="project" />
     <orderEntry type="library" exported="" name="slf4j-api-1.7.2" level="project" />
     <orderEntry type="library" exported="" name="grizzly-framework-2.3.20" level="project" />
+    <orderEntry type="library" exported="" name="blaubot-cam-server.blaubot-cam-server" level="project" />
   </component>
 </module>
