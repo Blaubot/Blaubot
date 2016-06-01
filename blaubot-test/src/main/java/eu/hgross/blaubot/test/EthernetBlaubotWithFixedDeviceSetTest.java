@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import eu.hgross.blaubot.core.Blaubot;
 import eu.hgross.blaubot.core.BlaubotAdapterConfig;
@@ -340,6 +341,17 @@ public class EthernetBlaubotWithFixedDeviceSetTest {
         final List<BlaubotChannelManager> channelManagers = BlaubotJunitHelper.getChannelManagersFromKingdom(currentKingdom);
         ChannelManagerTest.testMessageOrder(channelManagers);
     }
+
+	@Test(timeout=320000)
+	public void testExcludeSender() throws InterruptedException, TimeoutException {
+		// form a kingdom
+		List<Blaubot> currentKingdom = instances;
+		Assert.assertTrue("The blaubot instances could not form a kingdom fast enough. States: " + BlaubotJunitHelper.createBlaubotCensusString(currentKingdom), BlaubotJunitHelper.blockUntilWeHaveOneKingdom(currentKingdom, CONNECTIVITY_TEST_TIMEOUT));
+
+		// get the channel managers for this kingdom
+		final List<BlaubotChannelManager> channelManagers = BlaubotJunitHelper.getChannelManagersFromKingdom(currentKingdom);
+		ChannelManagerTest.testExcludeSender(channelManagers);
+	}
 
 }
 

@@ -151,6 +151,12 @@ public class BlaubotChannel implements IBlaubotChannel {
                 final BlaubotMessage blaubotMessage = picker.pickNextMessage(messageQueue);
                 if (blaubotMessage != null) {
                     final boolean transmitReflexiveMessages = channelConfig.isTransmitReflexiveMessages();
+                    boolean excludeSenderFlagWasSet = blaubotMessage.getMessageType().isSenderExcluded();
+                    if (!transmitReflexiveMessages) {
+                        // we don't want to get this mesage from the master
+                        // we have to make sure to set the exclude flag on the message
+                        blaubotMessage.getMessageType().setExcludeSender(true);
+                    }
                     final boolean publishToConnections = !(weAreOnlySubscriber && !transmitReflexiveMessages);
                     boolean wasNotSendToAnyConnection = true;
                     // only publish to master, if needed (respect transmitReflexiveMssages option) 
@@ -170,13 +176,17 @@ public class BlaubotChannel implements IBlaubotChannel {
                     if (notifyLocalListeners) {
                         // -- notify in new thread (to not mix up send and notification threads)
                         // we will not receive it again from the master device because the excludeSender flag will be set on the message,
-                        // if isTransmitReflexiveMessages is false.
-                        notificationExecutorService.execute(new Runnable() {
-                            @Override
-                            public void run() {
-                                BlaubotChannel.this.notify(blaubotMessage);
-                            }
-                        });
+                        // if isTransmitReflexiveMessages is false (see above).
+
+                        // we finally check the prior state of the flag to know, if we have to dispatch it locally
+                        if (!excludeSenderFlagWasSet) {
+                            notificationExecutorService.execute(new Runnable() {
+                                @Override
+                                public void run() {
+                                    BlaubotChannel.this.notify(blaubotMessage);
+                                }
+                            });
+                        }
                     }
 
                     if (!wasNotSendToAnyConnection || notifyLocalListeners) {
@@ -375,7 +385,7 @@ public class BlaubotChannel implements IBlaubotChannel {
         blaubotMessage.setChannelId(this.channelConfig.getChannelId());
         blaubotMessage.getMessageType().setIsFirstHop(true);
         blaubotMessage.setPriority(channelConfig.getPriority());
-        blaubotMessage.getMessageType().setExcludeSender(excludeSender || !channelConfig.isTransmitReflexiveMessages());
+        blaubotMessage.getMessageType().setExcludeSender(excludeSender);
     }
 
 

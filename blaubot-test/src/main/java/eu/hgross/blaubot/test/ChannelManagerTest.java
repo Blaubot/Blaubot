@@ -1,5 +1,7 @@
 package eu.hgross.blaubot.test;
 
+import net.jodah.concurrentunit.Waiter;
+
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -11,10 +13,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import eu.hgross.blaubot.core.BlaubotConstants;
 import eu.hgross.blaubot.admin.AbstractAdminMessage;
 import eu.hgross.blaubot.admin.StringAdminMessage;
+import eu.hgross.blaubot.messaging.BlaubotChannel;
 import eu.hgross.blaubot.messaging.BlaubotChannelManager;
 import eu.hgross.blaubot.messaging.BlaubotMessage;
 import eu.hgross.blaubot.messaging.IBlaubotAdminMessageListener;
@@ -277,8 +282,12 @@ public class ChannelManagerTest {
     public void testMessageOrder() throws InterruptedException {
         final List<BlaubotChannelManager> deviceMockups = connectNetwork();
         testMessageOrder(deviceMockups);
+    }
 
-
+    @Test(timeout = 10000)
+    public void testExcludeSender() throws InterruptedException, TimeoutException {
+        final List<BlaubotChannelManager> deviceMockups = connectNetwork();
+        testExcludeSender(deviceMockups);
     }
 
     /**
@@ -357,4 +366,70 @@ public class ChannelManagerTest {
         }
     }
 
+    /**
+     * Tests if the excludeSender option of a channel's publish method is respected for some specific
+     * channel settings
+     * @param channelManagers the channel managers to test, note that they have to be already connected as one network
+     *                        and that the first element in the list has to be the master/king
+     */
+    public static void testExcludeSender(List<BlaubotChannelManager> channelManagers) throws InterruptedException, TimeoutException {
+        /*
+        We will build a network of two, subscribe to one channel number on both nodes and check that
+        they never receive their own message when the excludeSender option is used with the transmitReflexiveMessagesOption=false
+         */
+
+        BlaubotChannelManager king = channelManagers.get(0);
+        BlaubotChannelManager anyClient = channelManagers.get(1);
+
+        // define messages to be sent by king and client
+        final String kingMessage = "SentByKing";
+        final String clientMessage = "SentByClient";
+
+        // we await two messages, so we create a latch for that
+        final Waiter waiter = new Waiter();
+
+        IBlaubotChannel kingChannel = king.createOrGetChannel((short) 1);
+        kingChannel.getChannelConfig().setTransmitReflexiveMessages(false);
+        kingChannel.subscribe(new IBlaubotMessageListener() {
+            @Override
+            public void onMessage(BlaubotMessage blaubotMessage) {
+                // assert that the king never receives the message he sent
+                String msgReceived = new String(blaubotMessage.getPayload(), BlaubotConstants.STRING_CHARSET);
+                System.out.println("kng"+msgReceived);
+                waiter.assertTrue(!msgReceived.equals(kingMessage));
+
+                // but make sure we receive the client's message
+                waiter.assertEquals(msgReceived, clientMessage);
+
+                waiter.resume();
+            }
+        });
+
+        IBlaubotChannel clientChannel = anyClient.createOrGetChannel((short) 1);
+        clientChannel.getChannelConfig().setTransmitReflexiveMessages(false);
+        clientChannel.subscribe(new IBlaubotMessageListener() {
+            @Override
+            public void onMessage(BlaubotMessage blaubotMessage) {
+                // assert that the client never receives the message he sent
+                String msgReceived = new String(blaubotMessage.getPayload(), BlaubotConstants.STRING_CHARSET);
+                System.out.println("clnt"+msgReceived);
+                waiter.assertTrue(!msgReceived.equals(clientMessage));
+
+                // but make sure we receive the kings message
+                waiter.assertEquals(msgReceived, kingMessage);
+
+                waiter.resume();
+            }
+        });
+
+        Thread.sleep(1000); // wait some time for subscriptions to be propagated
+
+        // send with exclude
+        clientChannel.publish(clientMessage.getBytes(), true);
+        kingChannel.publish(kingMessage.getBytes(), true);
+
+        // await the latch (we await 2 asserted messages)
+        waiter.await(10000, 2);
+    }
 }
+
