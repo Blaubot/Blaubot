@@ -386,41 +386,43 @@ public class ChannelManagerTest {
         final String clientMessage = "SentByClient";
 
         // we await two messages, so we create a latch for that
-        final Waiter waiter = new Waiter();
+        final Waiter noReflexiveWaiter = new Waiter();
 
         IBlaubotChannel kingChannel = king.createOrGetChannel((short) 1);
         kingChannel.getChannelConfig().setTransmitReflexiveMessages(false);
-        kingChannel.subscribe(new IBlaubotMessageListener() {
+        IBlaubotMessageListener kingMessageListener = new IBlaubotMessageListener() {
             @Override
             public void onMessage(BlaubotMessage blaubotMessage) {
                 // assert that the king never receives the message he sent
                 String msgReceived = new String(blaubotMessage.getPayload(), BlaubotConstants.STRING_CHARSET);
-                System.out.println("kng"+msgReceived);
-                waiter.assertTrue(!msgReceived.equals(kingMessage));
+                System.out.println("kng" + msgReceived);
+                noReflexiveWaiter.assertTrue(!msgReceived.equals(kingMessage));
 
                 // but make sure we receive the client's message
-                waiter.assertEquals(msgReceived, clientMessage);
+                noReflexiveWaiter.assertEquals(msgReceived, clientMessage);
 
-                waiter.resume();
+                noReflexiveWaiter.resume();
             }
-        });
+        };
+        kingChannel.subscribe(kingMessageListener);
 
         IBlaubotChannel clientChannel = anyClient.createOrGetChannel((short) 1);
         clientChannel.getChannelConfig().setTransmitReflexiveMessages(false);
-        clientChannel.subscribe(new IBlaubotMessageListener() {
+        IBlaubotMessageListener clientMessageListener = new IBlaubotMessageListener() {
             @Override
             public void onMessage(BlaubotMessage blaubotMessage) {
                 // assert that the client never receives the message he sent
                 String msgReceived = new String(blaubotMessage.getPayload(), BlaubotConstants.STRING_CHARSET);
-                System.out.println("clnt"+msgReceived);
-                waiter.assertTrue(!msgReceived.equals(clientMessage));
+                System.out.println("clnt" + msgReceived);
+                noReflexiveWaiter.assertTrue(!msgReceived.equals(clientMessage));
 
                 // but make sure we receive the kings message
-                waiter.assertEquals(msgReceived, kingMessage);
+                noReflexiveWaiter.assertEquals(msgReceived, kingMessage);
 
-                waiter.resume();
+                noReflexiveWaiter.resume();
             }
-        });
+        };
+        clientChannel.subscribe(clientMessageListener);
 
         Thread.sleep(1000); // wait some time for subscriptions to be propagated
 
@@ -429,7 +431,59 @@ public class ChannelManagerTest {
         kingChannel.publish(kingMessage.getBytes(), true);
 
         // await the latch (we await 2 asserted messages)
-        waiter.await(10000, 2);
+        noReflexiveWaiter.await(10000, 2);
+
+
+        // now again, we test it with setTransmitReflexiveMessages set to true
+        kingChannel.getChannelConfig().setTransmitReflexiveMessages(true);
+        clientChannel.getChannelConfig().setTransmitReflexiveMessages(true);
+
+        // we create new listeners
+        kingChannel.removeMessageListener(kingMessageListener);
+        clientChannel.removeMessageListener(clientMessageListener);
+
+        final Waiter reflexiveWaiter = new Waiter();
+        kingMessageListener = new IBlaubotMessageListener() {
+            @Override
+            public void onMessage(BlaubotMessage blaubotMessage) {
+                // assert that the king never receives the message he sent
+                String msgReceived = new String(blaubotMessage.getPayload(), BlaubotConstants.STRING_CHARSET);
+                System.out.println("kng" + msgReceived);
+                reflexiveWaiter.assertTrue(!msgReceived.equals(kingMessage));
+
+                // but make sure we receive the client's message
+                reflexiveWaiter.assertEquals(msgReceived, clientMessage);
+
+                reflexiveWaiter.resume();
+            }
+        };
+        clientMessageListener = new IBlaubotMessageListener() {
+            @Override
+            public void onMessage(BlaubotMessage blaubotMessage) {
+                // assert that the client never receives the message he sent
+                String msgReceived = new String(blaubotMessage.getPayload(), BlaubotConstants.STRING_CHARSET);
+                System.out.println("clnt" + msgReceived);
+                reflexiveWaiter.assertTrue(!msgReceived.equals(clientMessage));
+
+                // but make sure we receive the kings message
+                reflexiveWaiter.assertEquals(msgReceived, kingMessage);
+
+                reflexiveWaiter.resume();
+            }
+        };
+
+        kingChannel.subscribe(kingMessageListener);
+        clientChannel.subscribe(clientMessageListener);
+
+        Thread.sleep(300); // wait some time for subscriptions to be propagated/listeners be wired
+
+        // we don't need to wait for subscriptions to come through here
+        // send with exclude
+        clientChannel.publish(clientMessage.getBytes(), true);
+        kingChannel.publish(kingMessage.getBytes(), true);
+
+        // await the latch (we await 2 asserted messages)
+        reflexiveWaiter.await(10000, 2);
     }
 }
 
