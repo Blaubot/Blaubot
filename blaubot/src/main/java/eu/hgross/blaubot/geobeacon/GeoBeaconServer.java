@@ -302,7 +302,7 @@ public class GeoBeaconServer {
     }
 
     /**
-     * Given an IBlaubotConneciton, this objects holds the sender and receiver.
+     * Given an IBlaubotConnection, this objects holds the sender and receiver.
      */
     private static class GeoBeaconServerClient {
         private IBlaubotConnection connection;
