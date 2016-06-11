@@ -74,7 +74,7 @@ public class BeaconAndAcceptorsTest {
         }
     }
 
-    @Test
+    @Test(timeout = 30000)
     /**
      * Tests fast and many start,start/stop,stop calls
      */

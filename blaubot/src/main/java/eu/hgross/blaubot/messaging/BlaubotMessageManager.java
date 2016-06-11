@@ -20,7 +20,6 @@ public class BlaubotMessageManager {
     private static final long MAX_SENDER_AND_RECEIVER_SHUTDOWN_TIME = 5000;
     private final BlaubotMessageReceiver messageReceiver;
     private final BlaubotMessageSender messageSender;
-    private final BlaubotChannelManager channelManager;
 
     /**
      * Constructs a BlaubotMessageManager based on a pre-created receiver and sender object.
@@ -29,10 +28,9 @@ public class BlaubotMessageManager {
      * @param messageSender
      * @param messageReceiver
      */
-    public BlaubotMessageManager(BlaubotMessageSender messageSender, BlaubotMessageReceiver messageReceiver, BlaubotChannelManager channelManager) {
+    public BlaubotMessageManager(BlaubotMessageSender messageSender, BlaubotMessageReceiver messageReceiver) {
         this.messageReceiver = messageReceiver;
         this.messageSender = messageSender;
-        this.channelManager = channelManager;
     }
 
     /**
@@ -42,8 +40,7 @@ public class BlaubotMessageManager {
      * @param blaubotConnection
      * @param channelManager
      */
-    public BlaubotMessageManager(IBlaubotConnection blaubotConnection, BlaubotChannelManager channelManager) {
-        this.channelManager = channelManager;
+    public BlaubotMessageManager(IBlaubotConnection blaubotConnection) {
         this.messageReceiver = new BlaubotMessageReceiver(blaubotConnection);
         this.messageSender = new BlaubotMessageSender(blaubotConnection);
     }

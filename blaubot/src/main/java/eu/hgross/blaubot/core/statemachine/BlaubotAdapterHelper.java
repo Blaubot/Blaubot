@@ -90,8 +90,8 @@ public class BlaubotAdapterHelper {
 
 			@Override
 			public void onListeningStarted(IBlaubotConnectionAcceptor connectionAcceptor) {
-				if(Log.logDebugMessages()) {
-					Log.d(LOG_TAG, "Got listeningStarted from connectionAcceptor: " + connectionAcceptor);
+				if(Log.logErrorMessages()) {
+					Log.e(LOG_TAG, "Got listeningStarted from connectionAcceptor: " + connectionAcceptor);
 				}
 				throw new IllegalStateException("Got onListeningStarted while waiting for the acceptors to stop!");
 			}
@@ -148,8 +148,8 @@ public class BlaubotAdapterHelper {
 
 			@Override
 			public void onListeningStarted(IBlaubotConnectionAcceptor connectionAcceptor) {
-				if(Log.logDebugMessages()) {
-					Log.d(LOG_TAG, "Got listeningStarted from connectionAcceptor: " + connectionAcceptor);
+				if(Log.logErrorMessages()) {
+					Log.e(LOG_TAG, "Got listeningStarted from connectionAcceptor: " + connectionAcceptor);
 				}
 				throw new IllegalStateException("Got onListeningStarted while waiting for the acceptors to stop!");
 			}
@@ -216,8 +216,8 @@ public class BlaubotAdapterHelper {
 
             @Override
             public void onListeningStarted(IBlaubotConnectionAcceptor connectionAcceptor) {
-                if(Log.logDebugMessages()) {
-                    Log.d(LOG_TAG, "Got listeningStarted from connectionAcceptor: " + connectionAcceptor);
+                if(Log.logErrorMessages()) {
+                    Log.e(LOG_TAG, "Got listeningStarted from connectionAcceptor: " + connectionAcceptor);
                 }
                 throw new IllegalStateException("Got onListeningStarted while waiting for the acceptors to stop!");
             }
@@ -256,8 +256,8 @@ public class BlaubotAdapterHelper {
 		IBlaubotListeningStateListener listeningStateListener = new IBlaubotListeningStateListener() {
 			@Override
 			public void onListeningStopped(IBlaubotConnectionAcceptor connectionAcceptor) {
-				if(Log.logDebugMessages()) {
-					Log.d(LOG_TAG, "Got listeningStopped from connectionAcceptor: " + connectionAcceptor);
+				if(Log.logErrorMessages()) {
+					Log.e(LOG_TAG, "Got listeningStopped from connectionAcceptor: " + connectionAcceptor);
 				}
 				throw new IllegalStateException("Got onListeningStopped while waiting for the acceptors to start!");
 			}
@@ -310,8 +310,8 @@ public class BlaubotAdapterHelper {
 		IBlaubotListeningStateListener listeningStateListener = new IBlaubotListeningStateListener() {
 			@Override
 			public void onListeningStopped(IBlaubotConnectionAcceptor connectionAcceptor) {
-				if(Log.logDebugMessages()) {
-					Log.d(LOG_TAG, "Got listeningStopped from connectionAcceptor: " + connectionAcceptor);
+				if(Log.logErrorMessages()) {
+					Log.e(LOG_TAG, "Got listeningStopped from connectionAcceptor: " + connectionAcceptor);
 				}
 				throw new IllegalStateException("Got onListeningStopped while waiting for the acceptors to start!");
 			}
@@ -359,8 +359,8 @@ public class BlaubotAdapterHelper {
 		IBlaubotListeningStateListener listeningStateListener = new IBlaubotListeningStateListener() {
 			@Override
 			public void onListeningStopped(IBlaubotConnectionAcceptor connectionAcceptor) {
-				if(Log.logDebugMessages()) {
-					Log.d(LOG_TAG, "Got listeningStopped from connectionAcceptor: " + connectionAcceptor);
+				if(Log.logErrorMessages()) {
+					Log.e(LOG_TAG, "Got listeningStopped from connectionAcceptor: " + connectionAcceptor);
 				}
 				throw new IllegalStateException("Got onListeningStopped while waiting for the acceptors to start!");
 			}

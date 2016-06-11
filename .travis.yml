@@ -19,4 +19,4 @@ before_install:
  - chmod +x gradlew
  - touch local.properties
 
-script: ./gradlew clean build
+script: ./gradlew clean build distZip

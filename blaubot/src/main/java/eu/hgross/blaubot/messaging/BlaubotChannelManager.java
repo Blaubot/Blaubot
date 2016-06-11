@@ -199,7 +199,7 @@ public class BlaubotChannelManager {
                 final IBlaubotConnection receivingConnection = sendingConnection.getOtherEndpointConnection(masterDummyDevice);
                 final BlaubotMessageReceiver receiver = new BlaubotMessageReceiver(receivingConnection);
                 final BlaubotMessageSender sender = new BlaubotMessageSender(sendingConnection);
-                final BlaubotMessageManager ownMm = new BlaubotMessageManager(sender, receiver, this);
+                final BlaubotMessageManager ownMm = new BlaubotMessageManager(sender, receiver);
                 final boolean added = messageManagers.putIfAbsent(receivingConnection, ownMm) == null;
                 if (added) {
                     ownMessageManager = ownMm;
@@ -260,7 +260,7 @@ public class BlaubotChannelManager {
         if (Log.logDebugMessages()) {
             Log.d(LOG_TAG, "Adding connection: " + connection);
         }
-        BlaubotMessageManager mm = new BlaubotMessageManager(connection, this);
+        BlaubotMessageManager mm = new BlaubotMessageManager(connection);
         boolean added = messageManagers.putIfAbsent(connection, mm) == null;
         if (added) {
             connection.addConnectionListener(disconnectionListener);

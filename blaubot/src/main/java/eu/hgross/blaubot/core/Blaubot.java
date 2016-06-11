@@ -177,8 +177,7 @@ public class Blaubot implements Closeable {
     }
 
     /**
-     * Starts blaubot. If blaubot is already started, it will be RESTARTED.
-     * (stop, then start).
+     * Starts blaubot. 
      */
     public void startBlaubot() {
         if (Log.logDebugMessages()) {
@@ -189,6 +188,9 @@ public class Blaubot implements Closeable {
         connectionStateMachine.startStateMachine();
     }
 
+    /**
+     * Stops blaubot
+     */
     public void stopBlaubot() {
         if (Log.logDebugMessages())
             Log.d(LOG_TAG, "Stopping ConnectionStateMachine ... ");

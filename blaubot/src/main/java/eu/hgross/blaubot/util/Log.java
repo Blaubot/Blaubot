@@ -30,6 +30,7 @@ public class Log {
 	static {
 		LOG_LEVEL = LogLevel.ERRORS;
 //		LOG_LEVEL = LogLevel.WARNINGS;
+//		LOG_LEVEL = LogLevel.DEBUG;
 		Package androidUtil = Package.getPackage("android.util");
 		Class<?> aLog = null;
 		if(androidUtil != null) {
