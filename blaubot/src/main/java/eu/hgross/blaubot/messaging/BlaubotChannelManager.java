@@ -138,7 +138,7 @@ public class BlaubotChannelManager {
 
     /**
      * Sets this ChannelManager to master mode, meaning that this instance is managing all
-     * communications or client mode.
+     * communication traffic or acts in client mode.
      * If the previous state was the same, nothing happens.
      * All the connection managers will be discarded when called, meaning that all connections
      * that are still valid have to be added again.

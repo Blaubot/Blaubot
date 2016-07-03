@@ -66,7 +66,12 @@ public class PrinceState implements IBlaubotState, IBlaubotSubordinatedState {
 			int connectedDevices = session.getConnectionManager().getAllConnections().size();
 			// assert there is only the king connection
 			if (connectedDevices != 1) {
-				throw new IllegalStateException("Incosistant state! There are " + connectedDevices + " connected devices (should be exactly 1)");
+				String errorMsg = "Inconsistant network state! There are " + connectedDevices + " connected devices (should be exactly 1 (= king)).";
+				if (Log.logErrorMessages()) {
+					Log.e(LOG_TAG, errorMsg);
+				}
+                // remain in prince state
+				return this;
 			}
 			final IBlaubotDevice kingDevice = session.getConnectionManager().getAllConnections().get(0).getRemoteDevice();
             final List<ConnectionMetaDataDTO> metaDataList = discoveryEvent.getConnectionMetaData();

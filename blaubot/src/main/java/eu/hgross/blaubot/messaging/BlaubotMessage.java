@@ -588,8 +588,16 @@ public class BlaubotMessage {
         // assert a compatible message schema
         byte messageSchemaVersion = headerByteBuffer.get();
         if (messageSchemaVersion != BlaubotConstants.MESSAGE_SCHEMA_VERSION) {
-            // TODO: maybe close connection
-            throw new RuntimeException("Incompatible Blaubot message schema version: " + messageSchemaVersion);
+            final String errorMsg = "Error reading BlaubotMessage from connection " + blaubotConnection + ". Either the remote device is using a different Blaubot message schema version (" + messageSchemaVersion + ") or the byte stream got corrupted.";
+            if (Log.logErrorMessages()) {
+                Log.e(LOG_TAG, errorMsg);
+            }
+            
+            // the connection is useless now, so we close it
+            blaubotConnection.disconnect();
+            
+            // something went wrong, so we throw an io exception as promised
+            throw new IOException(errorMsg);
         }
 
         // pre-create the MessageType to determine, how much header length is left to be read

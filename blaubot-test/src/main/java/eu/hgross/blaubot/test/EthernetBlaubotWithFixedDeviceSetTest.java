@@ -72,9 +72,13 @@ public class EthernetBlaubotWithFixedDeviceSetTest {
 	
 	@After
 	public void cleanUp() throws UnknownHostException, InterruptedException {
-		BlaubotJunitHelper.stopBlaubotInstances(instances, MAX_STOPPING_TIMEOUT_FOR_ALL_INSTANCES);
+		boolean stopped = BlaubotJunitHelper.stopBlaubotInstances(instances, MAX_STOPPING_TIMEOUT_FOR_ALL_INSTANCES);
 		this.instances.clear();
 		Thread.sleep(WAIT_TIME_BETWEEN_TESTS);
+		if (!stopped) {
+            Blaubot b;
+			throw new RuntimeException("Failed to stop blaubot instances");
+		}
 	}
 
 
@@ -255,7 +259,7 @@ public class EthernetBlaubotWithFixedDeviceSetTest {
 		
 		// assert that we do not wait longer than the no peasants timeout!
 		Assert.assertTrue("Bad configuration (should: sleepTime < connectionStateMachineConfig.getKingWithoutPeasantsTimeout()) is: ("+sleepTime+" >= " + connectionStateMachineConfig.getKingWithoutPeasantsTimeout() + ").", sleepTime < connectionStateMachineConfig.getKingWithoutPeasantsTimeout());
-		Thread.sleep(sleepTime);
+		Thread.sleep(sleepTime/2);
 		
 		// now check that the former prince is king
 		Assert.assertTrue("The wrong blaubot instance is king. Expected " + princeDevice  + "; " + BlaubotJunitHelper.createBlaubotCensusString(currentKingdom), BlaubotJunitHelper.filterBlaubotInstancesByState(State.King, princeDevice).size() == 1);
@@ -295,7 +299,7 @@ public class EthernetBlaubotWithFixedDeviceSetTest {
 			Thread.sleep(sleepTime);
 			
 			// check if we have a valid kingdom now
-            BlaubotJunitHelper.blockUntilWeHaveOneKingdom(currentKingdom, 330000);
+            BlaubotJunitHelper.blockUntilWeHaveOneKingdom(currentKingdom, 60000);
 			Assert.assertTrue("The prince did not took over the throne fast enough. Current kingdom: "  + BlaubotJunitHelper.createBlaubotCensusString(currentKingdom), BlaubotJunitHelper.formOneKingdom(currentKingdom));
 			
 			// check if the former prince is now our king

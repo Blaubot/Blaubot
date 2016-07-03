@@ -38,7 +38,6 @@ public class BlaubotMessageManager {
      * and Sender objects by itself.
      * Note: mainly used for incoming connections
      * @param blaubotConnection
-     * @param channelManager
      */
     public BlaubotMessageManager(IBlaubotConnection blaubotConnection) {
         this.messageReceiver = new BlaubotMessageReceiver(blaubotConnection);
@@ -105,7 +104,24 @@ public class BlaubotMessageManager {
                             if (Log.logErrorMessages()) {
                                 Log.e(LOG_TAG, "A MessageReceiver did not shut down fast enough (waited " + MAX_SENDER_AND_RECEIVER_SHUTDOWN_TIME + " ms); Receiver: "+ messageReceiver);
                             }
-                            // TODO: there is a bug regarding .disconnect() call on queue connections which causes the own connection's receiver not to be called here? Looks like setMaster(false); on the channel manager is called multiple times anyways -> check that
+                            /*
+                                When the receiver's activate() method is called multiple times in a row, for each call
+                                a new read-thread will be started reading from the connection. The old read-thread will 
+                                recognize that after he completed the last message read and will terminate itself after that.
+                                
+                                The receiver reads from the connection using DataInputStream's readFully() method, which
+                                is blocking until something is received through the connection.
+                                Therefore calling deactivate() without closing the connection or interrupting the read thread
+                                will result in this time out.
+                                
+                                Here is why we don't want any of the two possible thread terminations:
+                                Closing the connection
+                                    - We would disconnect healthy connections but only intend to deactivate reception of messages.
+                                Interrupting the read thread
+                                    - We could interrupt a message read and leaving an out of sync byte-stream behind (very bad).
+                             
+                                So this timeout does not harm us and is legit, but a cleaner termination strategy would be nice.
+                             */
                             //throw new RuntimeException("A MessageReceiver did not shut down fast enough (waited " + MAX_SENDER_AND_RECEIVER_SHUTDOWN_TIME + " ms); Receiver: "+ messageReceiver);
                         }
                     } catch (InterruptedException e) {
