@@ -61,7 +61,7 @@ public class WebSocketGeoBeaconServerMain {
         final GeoLocationBeacon geoLocationBeacon1 = new GeoLocationBeacon(beaconStore, connector1){};
         final IBlaubotConnector connector2 = BlaubotFactory.createBlaubotWebsocketAdapter(device2, "0.0.0.0", 8084).getConnector();
         final GeoLocationBeacon geoLocationBeacon2 = new GeoLocationBeacon(beaconStore, connector2){};
-        final IBlaubotConnector connector3 = BlaubotFactory.createBlaubotWebsocketAdapter(device3, "0.0.0.0", 8084).getConnector();
+        final IBlaubotConnector connector3 = BlaubotFactory.createBlaubotWebsocketAdapter(device3, "0.0.0.0", 8085).getConnector();
         final GeoLocationBeacon geoLocationBeacon3 = new GeoLocationBeacon(beaconStore, connector3){};
         
         // create blaubot instances
