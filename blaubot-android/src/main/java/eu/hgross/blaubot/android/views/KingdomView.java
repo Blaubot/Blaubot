@@ -32,7 +32,7 @@ import eu.hgross.blaubot.ui.IBlaubotDebugView;
  * 
  * Add this view to a blaubot instance like this: stateView.registerBlaubotInstance(blaubot);
  * 
- * @author Henning Gross <mail.to@henning-gross.de>
+ * @author Henning Gross {@literal (mail.to@henning-gross.de)}
  * 
  */
 public class KingdomView extends LinearLayout implements IBlaubotDebugView {

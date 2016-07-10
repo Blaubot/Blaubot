@@ -16,7 +16,7 @@ import eu.hgross.blaubot.core.connector.IBlaubotConnector;
 /**
  * BlaubotAdapter-Bluetooth implementation using jsr 82 (i.e. bluecove)
  * 
- * @author Henning Gross <mail.to@henning-gross.de>
+ * @author Henning Gross {@literal (mail.to@henning-gross.de)}
  *
  */
 public class BlaubotJsr82BluetoothAdapter implements IBlaubotAdapter {

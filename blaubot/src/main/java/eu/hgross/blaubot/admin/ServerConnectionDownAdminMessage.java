@@ -9,7 +9,7 @@ import eu.hgross.blaubot.messaging.BlaubotMessage;
 /**
  * Notifies the king, that a server connection is down on the sending device (uniqueDeviceId included)
  * 
- * @author Henning Gross <mail.to@henning-gross.de>
+ * @author Henning Gross {@literal (mail.to@henning-gross.de)}
  *
  */
 public class ServerConnectionDownAdminMessage extends AbstractAdminMessage {

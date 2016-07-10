@@ -41,7 +41,7 @@ import eu.hgross.blaubot.util.Log;
 /**
  * Bluetooth connector implementation for android.
  * 
- * @author Henning Gross <mail.to@henning-gross.de>
+ * @author Henning Gross {@literal (mail.to@henning-gross.de)}
  */
 public class BlaubotJsr82BluetoothConnector implements IBlaubotConnector {
 	private static final String LOG_TAG = "BlaubotJsr82BluetoothConnector";

@@ -5,7 +5,7 @@ import eu.hgross.blaubot.core.statemachine.events.AbstractBlaubotDeviceDiscovery
 /**
  * Contains the onDeviceDiscoveryEvent callback which is called immediately after a device's state is discovered.
 
- * @author Henning Gross <mail.to@henning-gross.de>
+ * @author Henning Gross {@literal (mail.to@henning-gross.de)}
  *
  */
 public interface IBlaubotDiscoveryEventListener {

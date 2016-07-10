@@ -35,7 +35,7 @@ import eu.hgross.blaubot.util.Log;
 
 /**
  * 
- * @author Henning Gross <mail.to@henning-gross.de>
+ * @author Henning Gross {@literal (mail.to@henning-gross.de)}
  * 
  */
 public class KingState implements IBlaubotState {
@@ -66,7 +66,7 @@ public class KingState implements IBlaubotState {
 	 * 
 	 * We use a little ACK-Protocol to pronounce the prince.
 	 * 
-	 * @author Henning Gross <mail.to@henning-gross.de>
+	 * @author Henning Gross {@literal (mail.to@henning-gross.de)}
 	 * 
 	 */
 	class PrinceWatcher {

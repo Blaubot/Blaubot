@@ -13,8 +13,8 @@ import eu.hgross.blaubot.messaging.BlaubotMessage;
 
 /**
  * Admin message used to dispatch a beacon event over
- * 
- * @author Henning Gross <mail.to@henning-gross.de>
+ *
+ * @author Henning Gross {@literal (mail.to@henning-gross.de)}
  *
  */
 public class DiscoveredDeviceAdminMessage extends AbstractAdminMessage {

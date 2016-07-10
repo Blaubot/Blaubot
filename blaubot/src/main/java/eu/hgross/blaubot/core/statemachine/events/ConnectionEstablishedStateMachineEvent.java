@@ -3,8 +3,8 @@ package eu.hgross.blaubot.core.statemachine.events;
 import eu.hgross.blaubot.core.IBlaubotConnection;
 
 /**
- * 
- * @author Henning Gross <mail.to@henning-gross.de>
+ *
+ * @author Henning Gross {@literal (mail.to@henning-gross.de)}
  * 
  */
 public class ConnectionEstablishedStateMachineEvent extends AbstractBlaubotStateMachineEvent {

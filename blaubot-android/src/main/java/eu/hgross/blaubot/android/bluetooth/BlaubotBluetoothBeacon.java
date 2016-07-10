@@ -41,7 +41,7 @@ import eu.hgross.blaubot.util.Log;
 /**
  * A beacon implementation for bluetooth on android.
  *
- * @author Henning Gross <mail.to@henning-gross.de>
+ * @author Henning Gross {@literal (mail.to@henning-gross.de)}
  *
  */
 public class BlaubotBluetoothBeacon implements IBlaubotBeacon {
@@ -192,7 +192,7 @@ public class BlaubotBluetoothBeacon implements IBlaubotBeacon {
 	 * {@link IBlaubotIncomingConnectionListener} for further handling of the state information exchange.
 	 *
 	 *
-	 * @author Henning Gross <mail.to@henning-gross.de>
+	 * @author Henning Gross {@literal (mail.to@henning-gross.de)}
 	 *
 	 */
 	class BeaconAcceptThread extends Thread {
@@ -272,7 +272,7 @@ public class BlaubotBluetoothBeacon implements IBlaubotBeacon {
 	 * trying to establish a connection to the device. If successful, the discovered state is propagated via the
 	 * beacon's handleDiscoveredBlaubotDevice(..) method.
 	 *
-	 * @author Henning Gross <mail.to@henning-gross.de>
+	 * @author Henning Gross {@literal (mail.to@henning-gross.de)}
 	 *
 	 */
 	class BeaconScanner extends Thread {

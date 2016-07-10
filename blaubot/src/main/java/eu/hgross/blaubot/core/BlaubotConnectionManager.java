@@ -17,7 +17,7 @@ import eu.hgross.blaubot.util.Log;
 /**
  * Manager to store and retrieve Connections related to {@link IBlaubotDevice} instances.
  *
- * @author Henning Gross <mail.to@henning-gross.de>
+ * @author Henning Gross {@literal (mail.to@henning-gross.de)}
  */
 public class BlaubotConnectionManager {
     /**
@@ -276,7 +276,7 @@ public class BlaubotConnectionManager {
      * Tries to connect to the {@link IBlaubotDevice} corresponding to the given uniqueId
      * by aksing all connectors if for a device object belonging to this uniqueId and trying
      * to connect to this device.
-     * <p/>
+     *
      * If not successful after maxRetries, null will be returned.
      * The retry mechanism uses the exponential backoff method which
      * waiting time is configured by the {@link BlaubotAdapterConfig}

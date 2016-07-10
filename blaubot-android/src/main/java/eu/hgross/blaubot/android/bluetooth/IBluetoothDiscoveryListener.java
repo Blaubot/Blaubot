@@ -11,7 +11,7 @@ import android.bluetooth.BluetoothDevice;
 /**
  * TODO: introduce an abstraction layer to remove {@link BluetoothDevice} and to use {@link IBlaubotDevice} instead
  * 
- * @author Henning Gross <mail.to@henning-gross.de>
+ * @author Henning Gross {@literal (mail.to@henning-gross.de)}
  *
  */
 public interface IBluetoothDiscoveryListener {

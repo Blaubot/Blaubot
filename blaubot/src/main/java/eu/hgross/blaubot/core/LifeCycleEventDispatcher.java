@@ -24,10 +24,9 @@ import eu.hgross.blaubot.util.Util;
 /**
  * Listens for {@link eu.hgross.blaubot.admin.CensusMessage}s, calculates the diff (left or joined
  * devices and prince changes) and communicates them through the {@link eu.hgross.blaubot.core.ILifecycleListener}s attached to this {@link eu.hgross.blaubot.core.Blaubot} instance.
- * <p/>
+ *
  * If attached to a {@link eu.hgross.blaubot.core.statemachine.ConnectionStateMachine}, dispatches the corresponding
  * events to it's listeners when a kingdom merge takes place, the king dies, the prince takes over and so on.
- * <p/>
  */
 public class LifeCycleEventDispatcher implements IBlaubotAdminMessageListener, IBlaubotConnectionStateMachineListener {
     public static final String LOG_TAG = "LifeCycleEventDispatchingListener";

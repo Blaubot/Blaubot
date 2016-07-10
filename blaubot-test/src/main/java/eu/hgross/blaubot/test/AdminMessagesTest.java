@@ -27,7 +27,7 @@ import static org.junit.Assert.assertTrue;
  * Testing the serialization and deserialization of {@link AbstractAdminMessage}
  * s to and from {@link BlaubotMessage}s.
  * 
- * @author Henning Gross <mail.to@henning-gross.de>
+ * @author Henning Gross {@literal (mail.to@henning-gross.de)}
  * 
  */
 public class AdminMessagesTest {

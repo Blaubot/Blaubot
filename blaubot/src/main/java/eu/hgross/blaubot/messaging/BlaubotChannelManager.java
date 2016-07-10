@@ -28,7 +28,7 @@ import eu.hgross.blaubot.util.Log;
 /**
  * Factory class for the creation of BlaubotChannel instances.
  * Keeps all created instances under control.
- * <p/>
+ * 
  * TODO: more documentation here
  */
 public class BlaubotChannelManager {
@@ -612,7 +612,7 @@ public class BlaubotChannelManager {
 
     /**
      * Note: This is a low level messaging method used for internal messaging and admin messages.
-     * <p/>
+     * 
      * Sends (queues) the given BlaubotMessage to all connections added via addConnection(..)
      * Obviously this means that if in master mode this method dispatches the message to all connected
      * clients and in client mode to the master.
@@ -681,7 +681,7 @@ public class BlaubotChannelManager {
     /**
      * Note: This is a low level messaging method used for internal messaging and admin messages.
      * Use channels for your messages.
-     * <p/>
+     * 
      * Sends (queues) the given BlaubotMessage to be sent to the connection(s) of the device
      * with the given uniqueDeviceId (if any managed connection(s) are from  the device with
      * uniqueDeviceId).
@@ -779,14 +779,19 @@ public class BlaubotChannelManager {
 
     /**
      * Removes all connections (and deactivates their senders/receivers).
+     * @return List of removed connections
      */
-    public void reset() {
+    public List<IBlaubotConnection> reset() {
         // remove all connections and their messagemanagers
         final Collection<BlaubotMessageManager> blaubotMessageManagers = messageManagers.values();
+        final List<IBlaubotConnection> removedConnections = new ArrayList<>(blaubotMessageManagers.size());
         for (BlaubotMessageManager manager : blaubotMessageManagers) {
             // removes managed connection and deactivates message manager
-            removeConnection(manager.getMessageSender().getBlaubotConnection());
+            IBlaubotConnection conn = manager.getMessageSender().getBlaubotConnection();
+            removeConnection(conn);
+            removedConnections.add(conn);
         }
+        return removedConnections;
     }
 
 

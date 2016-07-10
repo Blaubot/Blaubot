@@ -19,7 +19,7 @@ import eu.hgross.blaubot.admin.PronouncePrinceAdminMessage;
 import eu.hgross.blaubot.util.Log;
 
 /**
- * @author Henning Gross <mail.to@henning-gross.de>
+ * @author Henning Gross {@literal (mail.to@henning-gross.de)}
  */
 public class PeasantState implements IBlaubotState, IBlaubotSubordinatedState {
     private static final int MAX_RETRIES_TO_CONNECT_TO_PRINCE_OR_KING = 4;
@@ -30,7 +30,7 @@ public class PeasantState implements IBlaubotState, IBlaubotSubordinatedState {
 
     public enum ConnectionAccomplishmentType {
         /**
-         * We connected voluntarily to the current king (Free -> Peasant)
+         * We connected voluntarily to the current king (Free to Peasant)
          */
         VOLUNTARILY,
         /**

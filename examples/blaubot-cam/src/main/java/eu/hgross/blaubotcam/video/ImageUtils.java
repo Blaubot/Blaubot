@@ -13,7 +13,7 @@ import android.util.Log;
 /**
  * http://stackoverflow.com/questions/5272388/extract-black-and-white-image-from-android-cameras-nv21-format
  * 
- * @author Henning Gross <mail.to@henning-gross.de>
+ * @author Henning Gross {@literal (mail.to@henning-gross.de)}
  *
  */
 public class ImageUtils {

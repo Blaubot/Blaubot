@@ -28,14 +28,14 @@ import eu.hgross.blaubot.util.Log;
 /**
  * Manages the connection to the BlaubotServer (if set).
  * It makes use of the BlaubotChannelManager to listen and send admin messages to other devices.
- * <p/>
+ *
  * It operates in two modes:
  * Client and Master (as the BlaubotChannelManager).
- * <p/>
+ * 
  * It always sends admin messages if a connection to the server is available or down.
- * <p/>
+ * 
  * In client mode it listens to RelayAdminMessages and sends them to the available server connection (if any).
- * <p/>
+ * 
  * In server mode it listens to the Available/Down messages and collects possible connections to the
  * server as there could be more than just one.
  */

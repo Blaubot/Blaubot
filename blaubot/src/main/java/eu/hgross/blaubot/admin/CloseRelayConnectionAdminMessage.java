@@ -8,8 +8,8 @@ import eu.hgross.blaubot.messaging.BlaubotMessage;
 
 /**
  * Instructs a mediator to close it's connection to the server
- * 
- * @author Henning Gross <mail.to@henning-gross.de>
+ *
+ * @author Henning Gross {@literal (mail.to@henning-gross.de)}
  *
  */
 public class CloseRelayConnectionAdminMessage extends AbstractAdminMessage {

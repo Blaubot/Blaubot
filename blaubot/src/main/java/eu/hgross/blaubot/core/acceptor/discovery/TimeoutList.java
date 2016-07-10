@@ -10,7 +10,7 @@ import eu.hgross.blaubot.util.Log;
 /**
  * Helper to determine if an object is alive or dead. Can be used for keepAlive purposes as well as a seen cache for SDP lookups or similar use cases.
  *
- * @author Henning Gross <mail.to@henning-gross.de>
+ * @author Henning Gross {@literal (mail.to@henning-gross.de)}
  */
 public class TimeoutList<T> {
     private static final String LOG_TAG = "TimeoutList";

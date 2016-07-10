@@ -8,8 +8,8 @@ import eu.hgross.blaubot.messaging.BlaubotMessage;
 
 /**
  * Helper object managing the keep alive message delivery at a fixed rate.
- * 
- * @author Henning Gross <mail.to@henning-gross.de>
+ *
+ * @author Henning Gross {@literal (mail.to@henning-gross.de)}
  * 
  */
 public class KeepAliveSender {

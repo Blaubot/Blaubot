@@ -31,7 +31,7 @@ import eu.hgross.blaubot.util.Log;
 /**
  * Utility class for some test methods.
  * 
- * @author Henning Gross <mail.to@henning-gross.de>
+ * @author Henning Gross {@literal (mail.to@henning-gross.de)}
  * 
  */
 public class BlaubotJunitHelper {

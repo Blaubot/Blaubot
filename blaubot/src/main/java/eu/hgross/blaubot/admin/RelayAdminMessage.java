@@ -10,7 +10,7 @@ import eu.hgross.blaubot.messaging.BlaubotMessage;
  * Relays a BlaubotMessage to the server.
  * Contains only the BlaubotMessage that has to be sent to the server
  *
- * @author Henning Gross <mail.to@henning-gross.de>
+ * @author Henning Gross {@literal (mail.to@henning-gross.de)}
  */
 public class RelayAdminMessage extends AbstractAdminMessage {
     private static final int MAX_PAYLOAD = BlaubotConstants.MAX_PAYLOAD_SIZE + AbstractAdminMessage.HEADER_LENGTH + BlaubotMessage.FULL_HEADER_LENGTH;

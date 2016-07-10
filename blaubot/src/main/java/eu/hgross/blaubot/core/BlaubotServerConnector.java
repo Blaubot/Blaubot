@@ -15,7 +15,7 @@ import eu.hgross.blaubot.util.Log;
  * This class connects to BlaubotServer instances.
  * It consists of a BeaconStore holding the immutable connection params for the server and
  * a set of connectors to be used to connect to the given connection params.
- * <p/>
+ *
  * It is designed to be started from a lifecycle listener and should be activated/deactivated by
  * the connect/disconnect events.
  */

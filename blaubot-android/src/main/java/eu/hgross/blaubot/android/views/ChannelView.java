@@ -38,7 +38,7 @@ import eu.hgross.blaubot.util.Log;
 /**
  * Represents a Channel that has to be injected via setChannel(ChannelInfo)
  *
- * @author Henning Gross <mail.to@henning-gross.de>
+ * @author Henning Gross {@literal (mail.to@henning-gross.de)}
  */
 public class ChannelView extends FrameLayout {
     private static final String LOG_TAG = "ChannelView";

@@ -29,7 +29,7 @@ import eu.hgross.blaubot.util.PingMeasurerResult;
 /**
  * Android view to display results of the PingMeasurer
  *
- * @author Henning Gross <mail.to@henning-gross.de>
+ * @author Henning Gross {@literal (mail.to@henning-gross.de)}
  */
 public class PingMeasureResultView extends LinearLayout {
     private static final String LOG_TAG = "PingMeasureResultView";

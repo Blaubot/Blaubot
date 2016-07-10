@@ -15,7 +15,7 @@ import eu.hgross.blaubot.util.Log;
 /**
  * An android specific {@link IBlaubotConnection} implementation for bluetooth.
  * 
- * @author Henning Gross <mail.to@henning-gross.de>
+ * @author Henning Gross {@literal (mail.to@henning-gross.de)}
  *
  */
 public class BlaubotBluetoothConnection extends AbstractBlaubotConnection {

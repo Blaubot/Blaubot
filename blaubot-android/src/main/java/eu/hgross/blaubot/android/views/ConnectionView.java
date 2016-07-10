@@ -28,7 +28,7 @@ import eu.hgross.blaubot.util.Log;
  * A view to visualize a list of IBlaubotConnections beautifully ;-)
  * Implements IBlaubotDebugView but can also be used manually via addConnection, removeConnection and clearConnections.
  *
- * @author Henning Gross <mail.to@henning-gross.de>
+ * @author Henning Gross {@literal (mail.to@henning-gross.de)}
  */
 public class ConnectionView extends LinearLayout implements IBlaubotConnectionManagerListener, IBlaubotDebugView {
     private static final String LOG_TAG = "ConnectionView";

@@ -40,7 +40,7 @@ import eu.hgross.blaubot.util.PingMeasurerResult;
  * <p/>
  * Add this view to a blaubot instance like this: pingView.registerBlaubotInstance(blaubot);
  *
- * @author Henning Gross <mail.to@henning-gross.de>
+ * @author Henning Gross {@literal (mail.to@henning-gross.de)}
  */
 public class PingView extends FrameLayout implements IBlaubotDebugView {
     private static final short CHANNEL_ID = BlaubotDebugViewConstants.PING_VIEW_CHANNEL_ID;

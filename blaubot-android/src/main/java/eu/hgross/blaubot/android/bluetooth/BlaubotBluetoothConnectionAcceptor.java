@@ -23,7 +23,7 @@ import eu.hgross.blaubot.util.Log;
 /**
  * An Acceptor handling incoming bluetooth connections for android devices.
  * 
- * @author Henning Gross <mail.to@henning-gross.de>
+ * @author Henning Gross {@literal (mail.to@henning-gross.de)}
  * 
  */
 public class BlaubotBluetoothConnectionAcceptor implements IBlaubotConnectionAcceptor {
@@ -105,7 +105,7 @@ public class BlaubotBluetoothConnectionAcceptor implements IBlaubotConnectionAcc
 	/**
 	 * Handles initial BlauBot instance communication. Once a client connects, the connected socket is handed over to the {@link BlaubotConnectionManager} clientConnections
 	 * 
-	 * @author Henning Gross <mail.to@henning-gross.de>
+	 * @author Henning Gross {@literal (mail.to@henning-gross.de)}
 	 */
 	public class BluetoothAcceptThread extends Thread {
 		private final String LOG_TAG = "BluetoothAcceptor.BluetoothAcceptThread";

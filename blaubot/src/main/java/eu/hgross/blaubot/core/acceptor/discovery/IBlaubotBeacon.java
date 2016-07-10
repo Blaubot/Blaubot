@@ -18,7 +18,7 @@ import eu.hgross.blaubot.core.statemachine.states.IBlaubotState;
  * to the beacon and inform registered {@link IBlaubotIncomingConnectionListener} 
  * about this new connections (see {@link IBlaubotConnectionAcceptor}).
  * 
- * @author Henning Gross <mail.to@henning-gross.de>
+ * @author Henning Gross {@literal (mail.to@henning-gross.de)}
  *
  */
 public interface IBlaubotBeacon extends IBlaubotConnectionAcceptor {

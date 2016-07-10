@@ -9,9 +9,8 @@ import java.util.logging.Logger;
 
 /**
  * A log wrapper for blaubot
- * TODO mpras: use slf4j for build AND check out how to configure it on android 
  * 
- * @author Henning Gross <mail.to@henning-gross.de>
+ * @author Henning Gross {@literal (mail.to@henning-gross.de)}
  * 
  */
 public class Log {

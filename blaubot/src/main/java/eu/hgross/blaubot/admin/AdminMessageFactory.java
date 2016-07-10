@@ -5,7 +5,7 @@ import eu.hgross.blaubot.messaging.BlaubotMessage;
 /**
  * Handles message creation and validation for AdminMessages.
  *
- * @author Henning Gross <mail.to@henning-gross.de>
+ * @author Henning Gross {@literal (mail.to@henning-gross.de)}
  */
 public class AdminMessageFactory {
     private static final String LOG_TAG = "AdminMessageFactory";

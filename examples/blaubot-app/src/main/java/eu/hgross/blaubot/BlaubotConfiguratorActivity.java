@@ -61,7 +61,7 @@ import eu.hgross.blaubot.websocket.BlaubotWebsocketAdapter;
 /**
  * Blaubot configurator to dynamically create a blaubot instance with different beacons and adapters
  *
- * @author Henning Gross <mail.to@henning-gross.de>
+ * @author Henning Gross {@literal (mail.to@henning-gross.de)}
  */
 public class BlaubotConfiguratorActivity extends Activity {
     private static final String LOG_TAG = "BlaubotConfiguratorActivity";

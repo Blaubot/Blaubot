@@ -26,7 +26,7 @@ import eu.hgross.blaubot.core.IBlaubotDevice;
  * USAGE:
  *  WebsocketServerConnectorEditView.createAsDialog(myContext, myBlaubot).show();
  *
- * @author Henning Gross <mail.to@henning-gross.de>
+ * @author Henning Gross {@literal (mail.to@henning-gross.de)}
  */
 public class WebsocketServerConnectorEditView extends FrameLayout {
     private static final String LOG_TAG = "WebsocketServerConnectorEditView";

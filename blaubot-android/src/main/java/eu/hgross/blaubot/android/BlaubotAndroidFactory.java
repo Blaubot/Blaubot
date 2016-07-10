@@ -35,7 +35,7 @@ import eu.hgross.blaubot.geobeacon.GeoLocationBeacon;
 /**
  * Factory to create {@link Blaubot} instances for Android.
  *
- * @author Henning Gross <mail.to@henning-gross.de>
+ * @author Henning Gross {@literal (mail.to@henning-gross.de)}
  */
 public class BlaubotAndroidFactory extends eu.hgross.blaubot.core.BlaubotFactory {
     /**

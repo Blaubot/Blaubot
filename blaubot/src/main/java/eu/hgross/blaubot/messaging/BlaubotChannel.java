@@ -20,21 +20,21 @@ import eu.hgross.blaubot.util.Log;
 
 /**
  * A channel managed by the BlaubotChannelManager.
- * <p/>
+ *  
  * Subscriptions to a channel can be made via subscribe() and removed by unsubscribe().
  * To listen to messages on this channel, attach a listener via {BlaubotChannel#addMessageListener}.
  * Listeners can be removed via {BlaubotChannel#removeMessageListener}.
- * <p/>
+ *  
  * Subscriptions are sent immediately to the network, meaning, that if there is no network,
  * no subscription is made.
  * The recommended way to subscribe to channels is to do this by a {ILifecycleListener#onConnected}.
- * <p/>
+ *  
  * Messages send via {BlaubotChannel#publish} are added to a bounded queue, which is processed due to
  * a defined message picking strategy (@see {IBlaubotMessagePickerStrategy}).
  * The processing is activated/deactivated by the activate/deactivate methods.
  * If activated, a processing thread uses the specified picker strategy to get messages from the
  * queue and hands this messages to the BlaubotChannelManager.
- * <p/>
+ *  
  * To influence the MessagePicking and message rates, @see {BlaubotChannel#getChannelConfig}.
  * The picking and rates can be changed at runtime.
  */

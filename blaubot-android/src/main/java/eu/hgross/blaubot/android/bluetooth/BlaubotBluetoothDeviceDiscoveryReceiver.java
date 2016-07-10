@@ -20,7 +20,7 @@ import eu.hgross.blaubot.util.Log;
 /**
  * Decoupled receiver object to find devices via the bluetooth adapter's discovery method.
  * 
- * @author Henning Gross <mail.to@henning-gross.de>
+ * @author Henning Gross {@literal (mail.to@henning-gross.de)}
  * 
  */
 public class BlaubotBluetoothDeviceDiscoveryReceiver extends BroadcastReceiver {

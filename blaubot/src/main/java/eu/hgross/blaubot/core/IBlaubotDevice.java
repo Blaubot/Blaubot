@@ -13,7 +13,7 @@ package eu.hgross.blaubot.core;
  * These methods should be bound to ONE blaubot instance (i.e. by
  * comparing the UUID or smthg else).
  * 
- * @author Henning Gross <mail.to@henning-gross.de>
+ * @author Henning Gross {@literal (mail.to@henning-gross.de)}
  *
  */
 public interface IBlaubotDevice extends Comparable<IBlaubotDevice> {

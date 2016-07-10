@@ -16,7 +16,7 @@ import eu.hgross.blaubot.R;
 /**
  * Blaubot ethernet activity using the bonjour beacon
  * 
- * @author Henning Gross <mail.to@henning-gross.de>
+ * @author Henning Gross {@literal (mail.to@henning-gross.de)}
  * 
  */
 public class EthernetBonjourActivity extends Activity {

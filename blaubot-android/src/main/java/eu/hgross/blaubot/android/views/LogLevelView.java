@@ -19,7 +19,7 @@ import eu.hgross.blaubot.util.Log;
 /**
  * Allows to set the LogLevel at runtime.
  *
- * @author Henning Gross <mail.to@henning-gross.de>
+ * @author Henning Gross {@literal (mail.to@henning-gross.de)}
  * 
  */
 public class LogLevelView extends FrameLayout {

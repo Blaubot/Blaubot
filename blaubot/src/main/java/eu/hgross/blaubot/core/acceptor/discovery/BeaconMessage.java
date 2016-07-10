@@ -20,7 +20,7 @@ import eu.hgross.blaubot.util.Log;
 /**
  * Represents a message exchanged when two devices connect via the beacon interface.
  * 
- * @author Henning Gross <mail.to@henning-gross.de>
+ * @author Henning Gross {@literal (mail.to@henning-gross.de)}
  * 
  */
 public class BeaconMessage implements Serializable {

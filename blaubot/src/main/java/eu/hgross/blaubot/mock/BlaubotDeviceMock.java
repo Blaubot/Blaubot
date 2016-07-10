@@ -6,7 +6,7 @@ import eu.hgross.blaubot.core.IBlaubotDevice;
 /**
  * Mocks a blaubot device
  * 
- * @author Henning Gross <mail.to@henning-gross.de>
+ * @author Henning Gross {@literal (mail.to@henning-gross.de)}
  *
  */
 public class BlaubotDeviceMock implements IBlaubotDevice {

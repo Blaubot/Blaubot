@@ -16,7 +16,7 @@ import eu.hgross.blaubot.messaging.BlaubotMessage;
  * echo with the isAck flag set. If it receives the echo, the channels are activated.
  * This ensures that the client knows about the subscriptions and can act accordingly before posting.
  *
- * @author Henning Gross <mail.to@henning-gross.de>
+ * @author Henning Gross {@literal (mail.to@henning-gross.de)}
  */
 public class FinishedHandshakeAdminMessage extends AbstractAdminMessage {
     private class MessageDTO {

@@ -13,7 +13,7 @@ import eu.hgross.blaubot.util.Log;
 /**
  * Helper class for some ethernet specifics regarding acceptors/connectors/beacons 
  * 
- * @author Henning Gross <mail.to@henning-gross.de>
+ * @author Henning Gross {@literal (mail.to@henning-gross.de)}
  *
  */
 public class BlaubotEthernetUtils {

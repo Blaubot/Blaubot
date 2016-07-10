@@ -73,7 +73,6 @@ public class FixedDeviceSetHelper {
      *
      * @param fixedDeviceConfigSring extracts the ipaddress from an ethernet fixedDeviceConfigSring
      * @return the beaconPort
-     * @throws UnknownHostException
      */
     public static String getIpAddressFromConfigString(String fixedDeviceConfigSring) {
         String[] splitted = fixedDeviceConfigSring.split(FIXED_DEVICE_SET_CONFIG_STRING_SEPARATOR);

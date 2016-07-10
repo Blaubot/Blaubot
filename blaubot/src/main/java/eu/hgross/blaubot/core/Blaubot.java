@@ -31,31 +31,31 @@ import eu.hgross.blaubot.util.Log;
  * The top level Blaubot object. Consists of the
  * {@link BlaubotConnectionManager}, {@link ConnectionStateMachine},
  * {@link eu.hgross.blaubot.messaging.BlaubotChannelManager} and a bunch of {@link IBlaubotAdapter}s.
- * <p/>
+ *
  * The {@link BlaubotConnectionManager} takes {@link IBlaubotConnection}s that
  * are established by the {@link IBlaubotAdapter} implementations which receive
  * incoming connections ({@link IBlaubotConnectionAcceptor}) and create
  * connections ({@link IBlaubotConnector}).
- * <p/>
+ *
  * The {@link ConnectionStateMachine} manages the {@link IBlaubotState}s by
  * receiving {@link AbstractBlaubotStateMachineEvent}s created from incoming
  * admin {@link eu.hgross.blaubot.messaging.BlaubotMessage}s (from {@link IBlaubotConnection}s),
  * {@link AbstractBlaubotDeviceDiscoveryEvent} (from
  * {@link eu.hgross.blaubot.core.acceptor.discovery.IBlaubotBeacon}s) as well as new or closed connections (via
  * {@link IBlaubotConnectionManagerListener}s and their events).
- * <p/>
+ *
  * Based on the {@link ConnectionStateMachine}s state changes, the
  * {@link eu.hgross.blaubot.messaging.BlaubotChannelManager} will be set up to act as a Master or a Slave, reset
  * it's context or stop/start it's services.
- * <p/>
+ *
  * <h1>USAGE:</h1> To create {@link IBlaubotChannel}s for communication a user can use
  * the {@link Blaubot#createChannel(short)} method. Developers
  * should attach {@link ILifecycleListener}s to the {@link Blaubot} instance to
  * get high level information events about the currently formed {@link Blaubot}
  * network (Joins/Leaves of devices, established or broken networks, ...)
- * <p/>
  *
- * @author Henning Gross <mail.to@henning-gross.de>
+ *
+ * @author Henning Gross {@literal (mail.to@henning-gross.de)}
  */
 public class Blaubot implements Closeable {
     private static final String LOG_TAG = "Blaubot";
@@ -274,7 +274,7 @@ public class Blaubot implements Closeable {
      * This listener handles the creation, start and stop of
      * {@link KeepAliveSender}s for all connected {@link IBlaubotDevice}s.
      *
-     * @author Henning Gross <mail.to@henning-gross.de>
+     * @author Henning Gross {@literal (mail.to@henning-gross.de)}
      */
     class ConnectionManagerListener implements IBlaubotConnectionManagerListener {
         /**
@@ -334,7 +334,7 @@ public class Blaubot implements Closeable {
     /**
      * Just for logging purposes.
      *
-     * @author Henning Gross <mail.to@henning-gross.de>
+     * @author Henning Gross {@literal (mail.to@henning-gross.de)}
      */
     static class ConnectionStateMachineListener implements IBlaubotConnectionStateMachineListener {
         @Override

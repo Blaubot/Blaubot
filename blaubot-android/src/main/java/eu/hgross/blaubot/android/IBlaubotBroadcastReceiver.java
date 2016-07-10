@@ -9,7 +9,7 @@ import eu.hgross.blaubot.core.IBlaubotAdapter;
  * An android specific interface applicable to {@link IBlaubotAdapter}s indicating that
  * this adapter needs to receive {@link Intent}s via a {@link BroadcastReceiver}.
  * 
- * @author Henning Gross <mail.to@henning-gross.de>
+ * @author Henning Gross {@literal (mail.to@henning-gross.de)}
  *
  */
 public interface IBlaubotBroadcastReceiver {

@@ -15,7 +15,7 @@ import eu.hgross.blaubot.util.Log;
 /**
  * Helper methods for the WIFI implementations.
  * 
- * @author Henning Gross <mail.to@henning-gross.de>
+ * @author Henning Gross {@literal (mail.to@henning-gross.de)}
  * 
  */
 public class WifiUtils {

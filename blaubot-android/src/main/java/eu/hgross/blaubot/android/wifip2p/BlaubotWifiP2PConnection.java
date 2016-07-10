@@ -26,7 +26,7 @@ import eu.hgross.blaubot.util.Log;
 /**
  * WIFI P2P connection implementation
  * 
- * @author Henning Gross <mail.to@henning-gross.de>
+ * @author Henning Gross {@literal (mail.to@henning-gross.de)}
  * 
  */
 public class BlaubotWifiP2PConnection extends AbstractBlaubotConnection {

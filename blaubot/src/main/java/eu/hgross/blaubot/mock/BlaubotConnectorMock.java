@@ -14,7 +14,7 @@ import eu.hgross.blaubot.core.connector.IncompatibleBlaubotDeviceException;
 /**
  * Connector for debugging purposes.
  * 
- * @author Henning Gross <mail.to@henning-gross.de>
+ * @author Henning Gross {@literal (mail.to@henning-gross.de)}
  * 
  */
 public class BlaubotConnectorMock implements IBlaubotConnector {

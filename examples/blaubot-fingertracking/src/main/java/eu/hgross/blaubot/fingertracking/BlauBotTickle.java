@@ -11,7 +11,7 @@ import eu.hgross.blaubot.fingertracking.model.FingerMessage;
 /**
  * Takes {@link FingerMessage}s to update a {@link FingerField}.
  * 
- * @author Henning Gross <mail.to@henning-gross.de>
+ * @author Henning Gross {@literal (mail.to@henning-gross.de)}
  *
  */
 public class BlauBotTickle {

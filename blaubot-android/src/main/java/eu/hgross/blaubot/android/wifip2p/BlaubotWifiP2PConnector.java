@@ -18,7 +18,7 @@ import eu.hgross.blaubot.core.connector.IncompatibleBlaubotDeviceException;
 /**
  * WIFIDirect connector implementation for android.
  * 
- * @author Henning Gross <mail.to@henning-gross.de>
+ * @author Henning Gross {@literal (mail.to@henning-gross.de)}
  *
  */
 public class BlaubotWifiP2PConnector implements IBlaubotConnector {

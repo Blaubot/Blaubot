@@ -39,7 +39,7 @@ import eu.hgross.blaubot.core.acceptor.discovery.IBlaubotBeacon;
  *    6. onNewIntent(Intent intent)
  *          call blaubot.onNewIntent(intent);
  * 
- * @author Henning Gross <mail.to@henning-gross.de>
+ * @author Henning Gross {@literal (mail.to@henning-gross.de)}
  *
  */
 public class BlaubotAndroid extends Blaubot {

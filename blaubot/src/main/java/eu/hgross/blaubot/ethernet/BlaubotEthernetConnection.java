@@ -14,7 +14,7 @@ import eu.hgross.blaubot.util.Log;
  *
  * TODO: introduce a super class AbstractEthernetConnection that uses an input and outputstream
  *
- * @author Henning Gross <mail.to@henning-gross.de>
+ * @author Henning Gross {@literal (mail.to@henning-gross.de)}
  *
  */
 public class BlaubotEthernetConnection extends AbstractBlaubotConnection {

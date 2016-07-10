@@ -12,7 +12,7 @@ import eu.hgross.blaubot.util.Log;
 /**
  * 
  * 
- * @author Henning Gross <mail.to@henning-gross.de>
+ * @author Henning Gross {@literal (mail.to@henning-gross.de)}
  *
  */
 public class StoppedState implements IBlaubotState {

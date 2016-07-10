@@ -8,8 +8,8 @@ import eu.hgross.blaubot.core.statemachine.states.IBlaubotState;
  * {@link AbstractBlaubotStateMachineEvent}s are lead through the {@link ConnectionStateMachine}s 
  * event queue where the {@link #setConnectionStateMachineState(IBlaubotState)} method will be
  * used to inject the current state.
- * 
- * @author Henning Gross <mail.to@henning-gross.de>
+ *
+ * @author Henning Gross {@literal (mail.to@henning-gross.de)}
  *
  */
 public abstract class AbstractBlaubotStateMachineEvent {

@@ -10,19 +10,19 @@ import eu.hgross.blaubot.core.acceptor.IBlaubotConnectionListener;
 
 /**
  * A connection abstraction.
- * <p/>
+ *
  * First of all an implementation has to offer read and write methods similiar
  * to the well known {@link Socket} class as well as the convenience readFully
  * methods known from the {@link DataInputStream} class.
- * <p/>
+ *
  * Furthermore an implementation MUST inform it's {@link IBlaubotConnectionListener}s
  * if this connection disconnects - whether from an intended disconnect or a
  * connection loss.
- * <p/>
+ *
  * A disconnected connection object is not of further interest to blaubot and
  * should to be thought of as dead and ready for garbage collection.
  *
- * @author Henning Gross <mail.to@henning-gross.de>
+ * @author Henning Gross {@literal (mail.to@henning-gross.de)}
  */
 public interface IBlaubotConnection {
     /**
@@ -60,8 +60,8 @@ public interface IBlaubotConnection {
      * to the output stream. The byte to be written is the eight
      * low-order bits of the argument <code>b</code>. The 24
      * high-order bits of <code>b</code> are ignored.
-     * <p/>
-     * Subclasses of <code>OutputStream</code> must provide an
+     *
+     *  Subclasses of <code>OutputStream</code> must provide an
      * implementation for this method.
      *
      * @param b the <code>byte</code>.
@@ -91,16 +91,16 @@ public interface IBlaubotConnection {
      * output stream in order; element <code>b[off]</code> is the first
      * byte written and <code>b[off+len-1]</code> is the last byte written
      * by this operation.
-     * <p/>
-     * The <code>write</code> method of <code>OutputStream</code> calls
+     *
+     *  The <code>write</code> method of <code>OutputStream</code> calls
      * the write method of one argument on each of the bytes to be
      * written out. Subclasses are encouraged to override this method and
      * provide a more efficient implementation.
-     * <p/>
-     * If <code>b</code> is <code>null</code>, a
+     *
+     *  If <code>b</code> is <code>null</code>, a
      * <code>NullPointerException</code> is thrown.
-     * <p/>
-     * If <code>off</code> is negative, or <code>len</code> is negative, or
+     *
+     *  If <code>off</code> is negative, or <code>len</code> is negative, or
      * <code>off+len</code> is greater than the length of the array
      * <code>b</code>, then an <tt>IndexOutOfBoundsException</tt> is thrown.
      *
@@ -121,8 +121,8 @@ public interface IBlaubotConnection {
      * has been reached, the value <code>-1</code> is returned. This method
      * blocks until input data is available, the end of the stream is detected,
      * or an exception is thrown.
-     * <p/>
-     * <p> A subclass must provide an implementation of this method.
+     *
+     * A subclass must provide an implementation of this method.
      *
      * @return the next byte of data, or <code>-1</code> if the end of the
      * stream is reached.
@@ -136,14 +136,14 @@ public interface IBlaubotConnection {
      * bytes actually read is returned as an integer. This method blocks
      * until input data is available, end of file is detected, or an
      * exception is thrown.
-     * <p/>
-     * <p>If <code>b</code> is null, a <code>NullPointerException</code> is
+     * 
+     * If <code>b</code> is null, a <code>NullPointerException</code> is
      * thrown. If the length of <code>b</code> is zero, then no bytes are
      * read and <code>0</code> is returned; otherwise, there is an attempt
      * to read at least one byte. If no byte is available because the
      * stream is at end of file, the value <code>-1</code> is returned;
      * otherwise, at least one byte is read and stored into <code>b</code>.
-     * <p/>
+     *
      * <p>The first byte read is stored into element <code>b[0]</code>, the
      * next one into <code>b[1]</code>, and so on. The number of bytes read
      * is, at most, equal to the length of <code>b</code>. Let <code>k</code>
@@ -151,7 +151,8 @@ public interface IBlaubotConnection {
      * elements <code>b[0]</code> through <code>b[k-1]</code>, leaving
      * elements <code>b[k]</code> through <code>b[b.length-1]</code>
      * unaffected.
-     * <p/>
+     * </p>
+     * 
      * <p>The <code>read(b)</code> method has the same effect as:
      * <blockquote><pre>
      * read(b, 0, b.length)
@@ -176,16 +177,16 @@ public interface IBlaubotConnection {
      * as many as <code>len</code> bytes, but a smaller number may be read,
      * possibly zero. The number of bytes actually read is returned as an
      * integer.
-     * <p/>
+     *
      * <p> This method blocks until input data is available, end of file is
      * detected, or an exception is thrown.
-     * <p/>
+     * </p>
      * <p> If <code>len</code> is zero, then no bytes are read and
      * <code>0</code> is returned; otherwise, there is an attempt to read at
      * least one byte. If no byte is available because the stream is at end of
      * file, the value <code>-1</code> is returned; otherwise, at least one
      * byte is read and stored into <code>b</code>.
-     * <p/>
+     * </p>
      * <p> The first byte read is stored into element <code>b[off]</code>, the
      * next one into <code>b[off+1]</code>, and so on. The number of bytes read
      * is, at most, equal to <code>len</code>. Let <i>k</i> be the number of
@@ -193,7 +194,7 @@ public interface IBlaubotConnection {
      * <code>b[off]</code> through <code>b[off+</code><i>k</i><code>-1]</code>,
      * leaving elements <code>b[off+</code><i>k</i><code>]</code> through
      * <code>b[off+len-1]</code> unaffected.
-     * <p/>
+     * </p>
      * <p> In every case, elements <code>b[0]</code> through
      * <code>b[off]</code> and elements <code>b[off+len]</code> through
      * <code>b[b.length-1]</code> are unaffected.
@@ -220,7 +221,7 @@ public interface IBlaubotConnection {
     /**
      * See the general contract of the <code>readFully</code>
      * method of <code>DataInput</code>.
-     * <p/>
+     *
      * Bytes
      * for this operation are read from the contained
      * input stream.
@@ -238,7 +239,7 @@ public interface IBlaubotConnection {
     /**
      * See the general contract of the <code>readFully</code>
      * method of <code>DataInput</code>.
-     * <p/>
+     *
      * Bytes
      * for this operation are read from the contained
      * input stream.

@@ -24,7 +24,7 @@ import eu.hgross.blaubot.util.Log;
  * A view showing the connected clients as a ListView encapsulated in an object to get rid of this ugly android specific
  * boilerplate code for a simple ListView ...
  * 
- * @author Henning Gross <mail.to@henning-gross.de>
+ * @author Henning Gross {@literal (mail.to@henning-gross.de)}
  * 
  */
 public class ACLListView extends ListView {

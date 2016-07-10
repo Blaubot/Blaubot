@@ -12,7 +12,7 @@ import eu.hgross.blaubot.messaging.BlaubotMessage;
  * Informs the king about the discovery of a new king.
  *
  * @deprecated use DiscoveredDeviceAdminMessage instead
- * @author Henning Gross <mail.to@henning-gross.de>
+ * @author Henning Gross {@literal (mail.to@henning-gross.de)}
  *
  */
 public class PrinceFoundAKingAdminMessage extends AbstractAdminMessage {

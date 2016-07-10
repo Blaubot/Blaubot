@@ -29,7 +29,7 @@ import eu.hgross.blaubotcam.R;
  * Displays ImageMessages.
  * Attach it to the channel from where you receive the ImageMessages.
  *
- * @author Henning Gross <mail.to@henning-gross.de>
+ * @author Henning Gross {@literal (mail.to@henning-gross.de)}
  */
 public class VideoViewer extends LinearLayout implements IBlaubotMessageListener, IBlaubotAdminMessageListener {
     private static final String LOG_TAG = "VideoViewer";

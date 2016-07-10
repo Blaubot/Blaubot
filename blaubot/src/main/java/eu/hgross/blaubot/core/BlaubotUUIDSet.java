@@ -12,7 +12,7 @@ import java.util.UUID;
  * Note: If a beacon implementation uses the single beaconUUID retrievable via getBeaconUUID()
  *       it SHOULD not use the state specific UUIDs and vice versa.
  * 
- * @author Henning Gross <mail.to@henning-gross.de>
+ * @author Henning Gross {@literal (mail.to@henning-gross.de)}
  * 
  */
 public class BlaubotUUIDSet {

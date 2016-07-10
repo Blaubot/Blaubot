@@ -87,7 +87,7 @@ import eu.hgross.blaubot.util.Log;
  * see: https://code.google.com/p/android/issues/detail?id=40003
  * <p/>
  *
- * @author Henning Gross <mail.to@henning-gross.de>
+ * @author Henning Gross {@literal (mail.to@henning-gross.de)}
  */
 public class BlaubotWifiP2PBeacon implements IBlaubotBeacon, IBlaubotBroadcastReceiver, IEthernetBeacon, Closeable, IBlaubotAndroidComponent {
     private static final String LOG_TAG = "BlaubotWifiP2PBeacon";

@@ -29,7 +29,7 @@ import eu.hgross.blaubot.util.Log.LogLevel;
 /**
  * Blaubot sample application to test latencies.
  *
- * @author Henning Gross <mail.to@henning-gross.de>
+ * @author Henning Gross {@literal (mail.to@henning-gross.de)}
  */
 public class FingerTrackingMainActivity extends Activity implements IBlaubotMessageListener {
     private static final UUID APP_UUID = UUID.fromString("c3c941e0-cfaf-11e3-9c1a-0800200c9a66");

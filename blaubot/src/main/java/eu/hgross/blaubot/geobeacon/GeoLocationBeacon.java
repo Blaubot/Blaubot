@@ -34,7 +34,7 @@ import eu.hgross.blaubot.util.Log;
 /**
  * A Beacon that commits its current state to a server flavoured with geolocation data
  * to get updates about nearby devices that do the same.
- * <p/>
+ *
  * Does not commit updates, if in passive mode.
  * GeoLocation data has to be commited to this beacon instance by calling setGeoData(...). 
  * 

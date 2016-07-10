@@ -24,8 +24,8 @@ import eu.hgross.blaubot.core.statemachine.states.StoppedState;
 
 /**
  * Enum constants wiring together some classes related to device states.
- * 
- * @author Henning Gross <mail.to@henning-gross.de>
+ *
+ * @author Henning Gross {@literal (mail.to@henning-gross.de)}
  *
  */
 public enum State {

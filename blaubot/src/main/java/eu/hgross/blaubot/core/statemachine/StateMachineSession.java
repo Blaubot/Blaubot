@@ -24,8 +24,8 @@ import eu.hgross.blaubot.util.Log;
 
 /**
  * Session object holding data which is shared across state changes.
- * 
- * @author Henning Gross <mail.to@henning-gross.de>
+ *
+ * @author Henning Gross {@literal (mail.to@henning-gross.de)}
  * 
  */
 public class StateMachineSession {

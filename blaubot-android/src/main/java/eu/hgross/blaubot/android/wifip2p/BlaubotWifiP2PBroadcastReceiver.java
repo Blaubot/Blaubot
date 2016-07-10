@@ -24,7 +24,7 @@ import eu.hgross.blaubot.util.Log;
  * This events can be retrieved by regsitering a {@link IBlaubotWifiDirectEventListener}s
  * to this object via addEventListener(..).
  * 
- * @author Henning Gross <mail.to@henning-gross.de>
+ * @author Henning Gross {@literal (mail.to@henning-gross.de)}
  * 
  */
 public class BlaubotWifiP2PBroadcastReceiver extends BroadcastReceiver {

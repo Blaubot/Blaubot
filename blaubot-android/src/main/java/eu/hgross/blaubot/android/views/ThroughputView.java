@@ -34,7 +34,7 @@ import eu.hgross.blaubot.util.Log;
  * <p/>
  * Add this view to a blaubot instance like this: throughputview.registerBlaubotInstance(blaubot);
  *
- * @author Henning Gross <mail.to@henning-gross.de>
+ * @author Henning Gross {@literal (mail.to@henning-gross.de)}
  */
 public class ThroughputView extends FrameLayout implements IBlaubotDebugView {
     private static final short CHANNEL_ID = BlaubotDebugViewConstants.THROUGHPUT_VIEW_CHANNEL_ID;

@@ -29,7 +29,7 @@ import eu.hgross.blaubot.util.Log;
  * ImageMessages as IP-Cam.
  * Each cam is served by the url
  *
- * @author Henning Gross <mail.to@henning-gross.de>
+ * @author Henning Gross {@literal (mail.to@henning-gross.de)}
  */
 public class IPCamServer extends LifecycleListenerAdapter implements IBlaubotMessageListener {
     private static final String LOG_TAG = "IPCamServer";

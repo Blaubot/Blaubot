@@ -15,7 +15,7 @@ import eu.hgross.blaubot.util.Log;
 /**
  * An generic generic {@link IBlaubotConnection} blaubot connection implementation using input and output streams
  *
- * @author Henning Gross <mail.to@henning-gross.de>
+ * @author Henning Gross {@literal (mail.to@henning-gross.de)}
  */
 public abstract class GenericBlaubotConnection extends AbstractBlaubotConnection {
     private IBlaubotDevice blaubotDevice;

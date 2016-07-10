@@ -11,7 +11,7 @@ import eu.hgross.blaubot.core.ILifecycleListener;
 /**
  * Creates an ethernet Blaubot Kingdom with the multicast beacon and runs indefinitely.
  *
- * @author Henning Gross <mail.to@henning-gross.de>
+ * @author Henning Gross {@literal (mail.to@henning-gross.de)}
  */
 public class CreateMulticastBlaubotInstanceMain {
 

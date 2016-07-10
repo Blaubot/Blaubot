@@ -13,7 +13,7 @@ import eu.hgross.blaubot.core.connector.IBlaubotConnector;
 /**
  * Ethernet implementation for Blaubot
  *
- * @author Henning Gross <mail.to@henning-gross.de>
+ * @author Henning Gross {@literal (mail.to@henning-gross.de)}
  *
  */
 public class BlaubotEthernetAdapter implements IBlaubotAdapter {

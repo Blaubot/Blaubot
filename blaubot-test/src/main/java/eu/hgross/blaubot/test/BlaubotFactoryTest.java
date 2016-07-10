@@ -12,7 +12,7 @@ import eu.hgross.blaubot.core.IBlaubotDevice;
 /**
  * Tests the create methods of included dependencies like blaubot-websockets, blaubot-jsr82, ... of the BlaubotFactory
  *
- * @author Henning Gross <mail.to@henning-gross.de>
+ * @author Henning Gross {@literal (mail.to@henning-gross.de)}
  */
 public class BlaubotFactoryTest {
     private static final UUID appUuid = UUID.randomUUID();

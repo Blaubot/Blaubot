@@ -9,7 +9,7 @@ import eu.hgross.blaubot.core.acceptor.IBlaubotConnectionListener;
 /**
  * Abstract {@link IBlaubotConnection} implemeneting only the listener code.
  * 
- * @author Henning Gross <mail.to@henning-gross.de>
+ * @author Henning Gross {@literal (mail.to@henning-gross.de)}
  *
  */
 public abstract class AbstractBlaubotConnection implements IBlaubotConnection {

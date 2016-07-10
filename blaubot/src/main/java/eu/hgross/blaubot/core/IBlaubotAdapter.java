@@ -12,7 +12,7 @@ import eu.hgross.blaubot.core.statemachine.ConnectionStateMachine;
  * via it's getConnectionStateMachineConfig() implementation. The implementation should create a 
  * final {@link ConnectionStateMachineConfig} retrievable by this method.
  * 
- * @author Henning Gross <mail.to@henning-gross.de>
+ * @author Henning Gross {@literal (mail.to@henning-gross.de)}
  *
  */
 public interface IBlaubotAdapter {
@@ -42,6 +42,7 @@ public interface IBlaubotAdapter {
 
     /**
      * Get the current blaubot instance
+	 * @return the blaubot instance
      */
     public Blaubot getBlaubot();
 	

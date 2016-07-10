@@ -39,8 +39,8 @@ import eu.hgross.blaubot.util.Log;
  * Statemachine for the network creation. Simply delegates the events from the {@link BlaubotConnectionManager} and the
  * {@link AbstractBlaubotDeviceDiscoveryEvent}s from the beacons to the current state. The state will handle the event
  * based state changes by themselves (calling nextState).
- * 
- * @author Henning Gross <mail.to@henning-gross.de>
+ *
+ * @author Henning Gross {@literal (mail.to@henning-gross.de)}
  * 
  */
 public class ConnectionStateMachine {
@@ -300,7 +300,7 @@ public class ConnectionStateMachine {
 	/**
 	 * Dispatches events from the eventQueue to the current state. (UI-Thread alike)
 	 *
-	 * @author Henning Gross <mail.to@henning-gross.de>
+	 * @author Henning Gross {@literal (mail.to@henning-gross.de)}
 	 * 
 	 */
 	class StateMachineEventDispatcher extends Thread {

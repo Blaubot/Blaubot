@@ -42,7 +42,7 @@ import eu.hgross.blaubot.util.Log;
 /**
  * The bonjour beacon.
  * Exploits the bonjour protocol to send beacon states.
- * <p/>
+ *
  * Android note:
  * If you use this on Android, ensure that you acquired a MulticastLock from the WiFiManager!
  * WifiManager wifi = (WifiManager) getSystemService(android.content.Context.WIFI_SERVICE);

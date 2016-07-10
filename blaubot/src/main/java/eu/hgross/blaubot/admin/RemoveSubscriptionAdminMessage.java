@@ -9,7 +9,7 @@ import eu.hgross.blaubot.messaging.BlaubotMessage;
 /**
  * Pronounces a new prince device by it's uniqueId string.
  * 
- * @author Henning Gross <mail.to@henning-gross.de>
+ * @author Henning Gross {@literal (mail.to@henning-gross.de)}
  * 
  */
 public class RemoveSubscriptionAdminMessage extends AbstractAdminMessage {

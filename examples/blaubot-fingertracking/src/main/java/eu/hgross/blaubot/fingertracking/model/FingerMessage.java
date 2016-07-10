@@ -5,7 +5,7 @@ import java.util.Arrays;
 /**
  * Simple DTO class to transfer touch positions.
  * 
- * @author Henning Gross <mail.to@henning-gross.de>
+ * @author Henning Gross {@literal (mail.to@henning-gross.de)}
  *
  */
 public class FingerMessage {

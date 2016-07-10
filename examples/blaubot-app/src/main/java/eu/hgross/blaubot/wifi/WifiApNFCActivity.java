@@ -20,7 +20,7 @@ import eu.hgross.blaubot.util.Log;
 /**
  * Blaubot wifi ap activity with a nfc beacon
  *
- * @author Henning Gross <mail.to@henning-gross.de>
+ * @author Henning Gross {@literal (mail.to@henning-gross.de)}
  */
 public class WifiApNFCActivity extends Activity {
     private static final String LOG_TAG = "WifiApNFCAcitivty";

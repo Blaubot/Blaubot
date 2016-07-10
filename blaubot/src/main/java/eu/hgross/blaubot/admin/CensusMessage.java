@@ -16,8 +16,8 @@ import eu.hgross.blaubot.messaging.BlaubotMessage;
  *
  * The status message is sent as one String in this form:
  * 		DeviceId|StateString;Device2Id|StateString; ...
- * 
- * @author Henning Gross <mail.to@henning-gross.de>
+ *
+ * @author Henning Gross {@literal (mail.to@henning-gross.de)}
  *
  */
 public class CensusMessage extends AbstractAdminMessage {

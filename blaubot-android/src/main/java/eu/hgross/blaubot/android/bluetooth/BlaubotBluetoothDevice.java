@@ -16,7 +16,7 @@ import eu.hgross.blaubot.core.connector.IncompatibleBlaubotDeviceException;
 /**
  * Wrapper Object for android's {@link BluetoothDevice} objects only for the bluetooth beacon.
  * 
- * @author Henning Gross <mail.to@henning-gross.de>
+ * @author Henning Gross {@literal (mail.to@henning-gross.de)}
  * 
  */
 public class BlaubotBluetoothDevice extends BlaubotDevice {

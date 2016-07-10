@@ -17,7 +17,7 @@ import eu.hgross.blaubot.util.PingMeasurerResult;
 /**
  * Android view to display results of the Subscribers of a channel
  *
- * @author Henning Gross <mail.to@henning-gross.de>
+ * @author Henning Gross {@literal (mail.to@henning-gross.de)}
  */
 public class SubscribersView extends LinearLayout {
     private static final String LOG_TAG = "PingMeasureResultView";

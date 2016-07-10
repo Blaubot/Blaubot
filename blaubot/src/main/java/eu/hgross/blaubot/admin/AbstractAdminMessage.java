@@ -11,8 +11,8 @@ import eu.hgross.blaubot.messaging.BlaubotMessage;
 /**
  * Abstract class for AdminMessages. The admin messages are identified by their classifiers encoded as one byte.
  * AdminMessages should be created using the {@link AdminMessageFactory}.
- * 
- * @author Henning Gross <mail.to@henning-gross.de>
+ *
+ * @author Henning Gross {@literal (mail.to@henning-gross.de)}
  * 
  */
 public abstract class AbstractAdminMessage {

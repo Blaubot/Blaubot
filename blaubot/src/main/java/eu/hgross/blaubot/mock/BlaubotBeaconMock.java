@@ -19,7 +19,7 @@ import eu.hgross.blaubot.core.statemachine.states.IBlaubotState;
 /**
  * Mock object for beacons.
  * 
- * @author Henning Gross <mail.to@henning-gross.de>
+ * @author Henning Gross {@literal (mail.to@henning-gross.de)}
  *
  */
 public class BlaubotBeaconMock implements IBlaubotBeacon {

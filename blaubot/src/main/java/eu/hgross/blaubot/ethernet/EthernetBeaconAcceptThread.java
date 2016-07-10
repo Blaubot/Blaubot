@@ -20,7 +20,7 @@ import eu.hgross.blaubot.util.Log;
  * The accept thread - once started - will check if he is in charge using the {@link IEthernetBeacon}s getAcceptThread() method 
  * and kill himself, if he is obsolete.
  * 
- * @author Henning Gross <mail.to@henning-gross.de>
+ * @author Henning Gross {@literal (mail.to@henning-gross.de)}
  * 
  */
 public class EthernetBeaconAcceptThread extends Thread {

@@ -7,7 +7,7 @@ import eu.hgross.blaubot.core.BlaubotDevice;
 /**
  * 
  * 
- * @author Henning Gross <mail.to@henning-gross.de>
+ * @author Henning Gross {@literal (mail.to@henning-gross.de)}
  *
  */
 public class BlaubotWifiP2PDevice extends BlaubotDevice {

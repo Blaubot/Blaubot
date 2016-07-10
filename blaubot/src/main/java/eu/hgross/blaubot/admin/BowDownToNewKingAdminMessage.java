@@ -10,8 +10,8 @@ import eu.hgross.blaubot.messaging.BlaubotMessage;
 
 /**
  * Informs the peasants and the prince that they have to join another king's kingdom.
- * 
- * @author Henning Gross <mail.to@henning-gross.de>
+ *
+ * @author Henning Gross {@literal (mail.to@henning-gross.de)}
  *
  */
 public class BowDownToNewKingAdminMessage extends AbstractAdminMessage {

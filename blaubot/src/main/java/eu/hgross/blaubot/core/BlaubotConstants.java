@@ -10,7 +10,7 @@ import eu.hgross.blaubot.messaging.BlaubotMessage;
 /**
  * Blaubot wide constants.
  * 
- * @author Henning Gross <mail.to@henning-gross.de>
+ * @author Henning Gross {@literal (mail.to@henning-gross.de)}
  *
  */
 public class BlaubotConstants {

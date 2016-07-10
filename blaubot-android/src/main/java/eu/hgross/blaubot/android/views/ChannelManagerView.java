@@ -27,7 +27,7 @@ import eu.hgross.blaubot.ui.IBlaubotDebugView;
  * Android view to display informations about the StateMachine's history of states.
  * Add this view to a blaubot instance like this: stateView.registerBlaubotInstance(blaubot);
  *
- * @author Henning Gross <mail.to@henning-gross.de>
+ * @author Henning Gross {@literal (mail.to@henning-gross.de)}
  */
 public class ChannelManagerView extends LinearLayout implements IBlaubotDebugView {
     private static final String LOG_TAG = "ChannelManagerView";

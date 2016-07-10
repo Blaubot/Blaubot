@@ -20,7 +20,7 @@ import eu.hgross.blaubot.wifip2p.WifiP2PActivity;
 /**
  * Blaubot debug app main activity
  * 
- * @author Henning Gross <mail.to@henning-gross.de>
+ * @author Henning Gross {@literal (mail.to@henning-gross.de)}
  * 
  */
 public class MainActivity extends Activity {

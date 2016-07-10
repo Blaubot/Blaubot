@@ -8,7 +8,7 @@ import android.bluetooth.BluetoothDevice;
 /**
  * ListView ListItem wrapper for BluetoothDevice
  * 
- * @author Henning Gross <mail.to@henning-gross.de>
+ * @author Henning Gross {@literal (mail.to@henning-gross.de)}
  *
  */
 public class BluetoothDeviceListItem {

@@ -50,7 +50,7 @@ import eu.hgross.blaubot.util.Log;
  * {@link IBlaubotIncomingConnectionListener}. From here the {@link BlaubotBeaconService} will handle the beacon conversation
  * via the {@link ExchangeStatesTask} (exchanging {@link BeaconMessage}s). 
  * 
- * @author Henning Gross <mail.to@henning-gross.de>
+ * @author Henning Gross {@literal (mail.to@henning-gross.de)}
  * 
  */
 public class BlaubotEthernetMulticastBeacon implements IBlaubotBeacon, IEthernetBeacon {
@@ -237,7 +237,7 @@ public class BlaubotEthernetMulticastBeacon implements IBlaubotBeacon, IEthernet
 	 * Broadcasts the beacon's existence (BeaconUUID) periodically to the network.
 	 * The message has the format BEACON_UUID;acceptorPort;beaconPort
 	 * 
-	 * @author Henning Gross <mail.to@henning-gross.de>
+	 * @author Henning Gross {@literal (mail.to@henning-gross.de)}
 	 * 
 	 */
 	private byte[] broadcastMessage;
@@ -372,7 +372,7 @@ public class BlaubotEthernetMulticastBeacon implements IBlaubotBeacon, IEthernet
 	 * Listens to Broadcasts on the network (if the discovery is active, see setDiscoveryActivated(). If a broadcast is
 	 * discovered, a connection to the beacon will be established to exchange states.
 	 * 
-	 * @author Henning Gross <mail.to@henning-gross.de>
+	 * @author Henning Gross {@literal (mail.to@henning-gross.de)}
 	 * 
 	 */
 	class BroadcastDiscovererThread extends Thread {
@@ -456,7 +456,7 @@ public class BlaubotEthernetMulticastBeacon implements IBlaubotBeacon, IEthernet
 	/**
 	 * Periodically checks the beacon of all devices known as alive (except devices connected to our network) (added to the {@link TimeoutList})
 	 * 
-	 * @author Henning Gross <mail.to@henning-gross.de>
+	 * @author Henning Gross {@literal (mail.to@henning-gross.de)}
 	 *
 	 */
 	class EthernetBeaconScanner extends Thread {

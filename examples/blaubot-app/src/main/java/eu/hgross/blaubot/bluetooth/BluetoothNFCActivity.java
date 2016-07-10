@@ -34,7 +34,7 @@ import eu.hgross.blaubot.R;
 /**
  * Blaubot bluetooth activity with NFC beacon
  *
- * @author Henning Gross <mail.to@henning-gross.de>
+ * @author Henning Gross {@literal (mail.to@henning-gross.de)}
  */
 public class BluetoothNFCActivity extends Activity {
     private static final String LOG_TAG = "BluetoothNFCActivity";

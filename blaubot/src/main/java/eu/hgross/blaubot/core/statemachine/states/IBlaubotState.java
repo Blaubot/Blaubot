@@ -27,7 +27,7 @@ import eu.hgross.blaubot.admin.AbstractAdminMessage;
  * If a state is dismissed by the {@link ConnectionStateMachine}, the onDismiss()
  * method will be called to allow a state to clean up.
  * 
- * @author Henning Gross <mail.to@henning-gross.de>
+ * @author Henning Gross {@literal (mail.to@henning-gross.de)}
  *
  */
 public interface IBlaubotState {

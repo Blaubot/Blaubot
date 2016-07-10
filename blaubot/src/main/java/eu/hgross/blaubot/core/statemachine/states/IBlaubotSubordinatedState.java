@@ -5,7 +5,7 @@ import eu.hgross.blaubot.core.IBlaubotConnection;
 /**
  * Marks {@link IBlaubotState}s that have a king connection.
  * 
- * @author Henning Gross <mail.to@henning-gross.de>
+ * @author Henning Gross {@literal (mail.to@henning-gross.de)}
  *
  */
 public interface IBlaubotSubordinatedState {

@@ -38,7 +38,7 @@ import eu.hgross.blaubot.util.Log;
  * {@link IBlaubotIncomingConnectionListener}. From here the {@link BlaubotBeaconService} will handle the beacon conversation
  * via the {@link ExchangeStatesTask} (exchanging {@link BeaconMessage}s). 
  * 
- * @author Henning Gross <mail.to@henning-gross.de>
+ * @author Henning Gross {@literal (mail.to@henning-gross.de)}
  * 
  */
 public class BlaubotEthernetFixedDeviceSetBeacon implements IBlaubotBeacon, IEthernetBeacon {
@@ -202,7 +202,7 @@ public class BlaubotEthernetFixedDeviceSetBeacon implements IBlaubotBeacon, IEth
 	 * Periodically checks all devices known as alive (added to the {@link TimeoutList}
 	 * TODO: generalize
 	 * 
-	 * @author Henning Gross <mail.to@henning-gross.de>
+	 * @author Henning Gross {@literal (mail.to@henning-gross.de)}
 	 *
 	 */
 	class EthernetBeaconScanner extends Thread {

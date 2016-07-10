@@ -33,7 +33,7 @@ import eu.hgross.blaubot.util.Log;
  * The remote beacon implementation will most likely use the {@link ExchangeStatesTask} to exchange their state with the
  * {@link BeaconConnectionHandler} of this objects.
  * 
- * @author Henning Gross <mail.to@henning-gross.de>
+ * @author Henning Gross {@literal (mail.to@henning-gross.de)}
  * 
  */
 public class BlaubotBeaconService {
@@ -175,7 +175,7 @@ public class BlaubotBeaconService {
 	 * A Task that handles the conversation with beacon clients.
 	 * It is the counterpart of the {@link ExchangeStatesTask}.
 	 * 
-	 * @author Henning Gross <mail.to@henning-gross.de>
+	 * @author Henning Gross {@literal (mail.to@henning-gross.de)}
 	 * 
 	 */
 	private class BeaconConnectionHandler implements Runnable {

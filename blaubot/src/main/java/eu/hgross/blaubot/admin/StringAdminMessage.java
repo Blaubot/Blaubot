@@ -10,7 +10,7 @@ import eu.hgross.blaubot.messaging.BlaubotMessage;
  * A generic admin message that can send strings.
  * Basically introduced for unit testing.
  * 
- * @author Henning Gross <mail.to@henning-gross.de>
+ * @author Henning Gross {@literal (mail.to@henning-gross.de)}
  * 
  */
 public class StringAdminMessage extends AbstractAdminMessage {

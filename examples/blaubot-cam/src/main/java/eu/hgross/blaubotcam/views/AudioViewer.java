@@ -24,7 +24,7 @@ import eu.hgross.blaubotcam.audio.WalkieTalkieMessage;
  * Displays status of the walkietalkie playback on received messagees.
  * Attach it to a BlaubotWalkieTalkie.
  *
- * @author Henning Gross <mail.to@henning-gross.de>
+ * @author Henning Gross {@literal (mail.to@henning-gross.de)}
  */
 public class AudioViewer extends FrameLayout implements IPlaybackListener {
     private static final String LOG_TAG = "AudioViewer";

@@ -16,7 +16,7 @@ import eu.hgross.blaubot.core.acceptor.discovery.IBlaubotBeaconStore;
 /**
  * 
  * 
- * @author Henning Gross <mail.to@henning-gross.de>
+ * @author Henning Gross {@literal (mail.to@henning-gross.de)}
  *
  */
 public class BlaubotWifiP2PAcceptor implements IBlaubotConnectionAcceptor {

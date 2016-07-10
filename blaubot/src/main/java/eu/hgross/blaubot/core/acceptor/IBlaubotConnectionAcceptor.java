@@ -26,7 +26,7 @@ import eu.hgross.blaubot.core.acceptor.discovery.IBlaubotBeaconStore;
  * If a client successfully established a connection it will then be populated through the
  * registered {@link IBlaubotIncomingConnectionListener}.
  * 
- * @author Henning Gross <mail.to@henning-gross.de>
+ * @author Henning Gross {@literal (mail.to@henning-gross.de)}
  *
  */
 public interface IBlaubotConnectionAcceptor {

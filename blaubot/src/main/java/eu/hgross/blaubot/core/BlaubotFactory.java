@@ -31,7 +31,7 @@ import eu.hgross.blaubot.util.Log;
 /**
  * A factory that creates Blaubot, adapter, beacon, BlaubotServer and BlaubotServerConnector instances.
  *
- * @author Henning Gross <mail.to@henning-gross.de>
+ * @author Henning Gross {@literal (mail.to@henning-gross.de)}
  */
 public class BlaubotFactory {
     private static final String LOG_TAG = "BlaubotFactory";
@@ -255,8 +255,7 @@ public class BlaubotFactory {
 
     /**
      * Sets up a default {@link Blaubot} instance using a Jsr82 bluetooth stack for connections and a multicast beacon (ip network) for discovery.
-     * TODO: jsr82 beacon!
-     * <p/>
+     *
      * Note that you have to include a Jsr82 compliant implementation into your classpath (i.e. bluecove (windows, mac); bluecove-gpl (linux); bluez)
      *
      * @param appUUID the app's unique uuid

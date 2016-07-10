@@ -12,7 +12,7 @@ import eu.hgross.blaubot.admin.PronouncePrinceAdminMessage;
  * Configuration object specific to a given {@link IBlaubotAdapter} implementation.
  * Contains adapter specific constants.
  * 
- * @author Henning Gross <mail.to@henning-gross.de>
+ * @author Henning Gross {@literal (mail.to@henning-gross.de)}
  *
  */
 public class ConnectionStateMachineConfig {

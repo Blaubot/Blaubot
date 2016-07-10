@@ -27,7 +27,7 @@ import eu.hgross.blaubot.core.IBlaubotDevice;
  * If you need a pair of connections where one connection writes to the other connections
  * input stream, use {@link BlaubotConnectionQueueMock#getOtherEndpointConnection(eu.hgross.blaubot.core.IBlaubotDevice)}.
  * 
- * @author Henning Gross <mail.to@henning-gross.de>
+ * @author Henning Gross {@literal (mail.to@henning-gross.de)}
  * 
  */
 public class BlaubotConnectionQueueMock extends AbstractBlaubotConnection {

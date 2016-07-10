@@ -4,8 +4,8 @@ import eu.hgross.blaubot.core.statemachine.states.IBlaubotState;
 import eu.hgross.blaubot.admin.AbstractAdminMessage;
 
 /**
- * 
- * @author Henning Gross <mail.to@henning-gross.de>
+ *
+ * @author Henning Gross {@literal (mail.to@henning-gross.de)}
  *
  */
 public class AdminMessageStateMachineEvent extends AbstractBlaubotStateMachineEvent {

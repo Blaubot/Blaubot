@@ -18,7 +18,7 @@ import eu.hgross.blaubot.util.Log;
 /**
  * A task that utilizes a given (and connected) {@link IBlaubotConnection} to exchange the given {@link State} with the
  * remote endpoint.
- * The remote endpoint is the BlaubotBeaconService's {@link eu.hgross.blaubot.core.acceptor.discovery.BlaubotBeaconService.BeaconConnectionHandler} runnable.
+ * The remote endpoint is the BlaubotBeaconService's BeaconConnectionHandler-Runnable.
  * This task does the whole beacon exchange heavy lifting and can be reused in other beacon implementations.
  * 
  * If the exchange is successful, the {@link IBlaubotDiscoveryEventListener} is informed about the discovered state of
@@ -27,7 +27,7 @@ import eu.hgross.blaubot.util.Log;
  * After the execution the connection is closed.
  *
  *
- * @author Henning Gross <mail.to@henning-gross.de>
+ * @author Henning Gross {@literal (mail.to@henning-gross.de)}
  * 
  */
 public class ExchangeStatesTask implements Runnable {

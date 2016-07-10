@@ -5,8 +5,8 @@ import eu.hgross.blaubot.core.statemachine.states.IBlaubotState;
 /**
  * Abstract class for generic timeout events used in {@link IBlaubotState} implementations.
  * 
- * 
- * @author Henning Gross <mail.to@henning-gross.de>
+ *
+ * @author Henning Gross {@literal (mail.to@henning-gross.de)}
  *
  */
 public abstract class AbstractTimeoutStateMachineEvent extends AbstractBlaubotStateMachineEvent {
