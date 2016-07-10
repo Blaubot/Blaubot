@@ -6,6 +6,8 @@ apply plugin: "com.jfrog.bintray"
 
 // This is the version used when deploying the artifact to jcenter
 version = rootProject.blaubot_version
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
 
 dependencies {
     compile project(':blaubot')

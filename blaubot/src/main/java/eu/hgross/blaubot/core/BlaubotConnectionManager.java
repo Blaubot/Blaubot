@@ -2,6 +2,7 @@ package eu.hgross.blaubot.core;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -127,8 +128,12 @@ public class BlaubotConnectionManager {
      */
     public List<IBlaubotDevice> getConnectedDevices() {
         ArrayList<IBlaubotDevice> devices = new ArrayList<>();
+        
+        // jdk8 hiccup ... https://gist.github.com/AlainODea/1375759b8720a3f9f094
+        Map<IBlaubotDevice, List<IBlaubotConnection>> castedMap = connections;
+        
         // there could be devices with no connection -> filter them out
-        for (IBlaubotDevice d : connections.keySet()) {
+        for (IBlaubotDevice d : castedMap.keySet()) {
             if (!connections.get(d).isEmpty()) {
                 devices.add(d);
             }

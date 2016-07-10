@@ -27,7 +27,7 @@ allprojects {
     Global Variables (external properties)
  */
 // global variable to set the version for the blaubot submodules (blaubot, blaubot-android, blaubot-websockets, blaubot-jsr82, ...)
-project.ext.blaubot_version = "2.0.0-beta.1"
+project.ext.blaubot_version = "2.0.0-beta.2"
 // if true, the bintrayUpload tasks will not upload to bintray but just create the artifacts locally
 project.ext.dryRun = true
 // if version should be auto published after an upload

@@ -3,6 +3,8 @@ apply plugin: 'maven'
 apply plugin: "com.jfrog.bintray"
 
 version = rootProject.blaubot_version
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
 
 jar {
     from ("${projectDir}/src/main/java") {
@@ -13,6 +15,7 @@ jar {
         include('README.blaubot.md')
     }
 }
+
 
 
 //sourceSets {

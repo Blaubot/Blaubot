@@ -1,9 +1,5 @@
 package eu.hgross.blaubot.util;
 
-/**
- * Created by henna on 02.05.15.
- */
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -12,11 +8,11 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import eu.hgross.blaubot.core.IBlaubotDevice;
-import eu.hgross.blaubot.core.ILifecycleListener;
 import eu.hgross.blaubot.admin.AbstractAdminMessage;
 import eu.hgross.blaubot.admin.AddSubscriptionAdminMessage;
 import eu.hgross.blaubot.admin.RemoveSubscriptionAdminMessage;
+import eu.hgross.blaubot.core.IBlaubotDevice;
+import eu.hgross.blaubot.core.ILifecycleListener;
 import eu.hgross.blaubot.messaging.IBlaubotAdminMessageListener;
 
 /**
@@ -25,7 +21,7 @@ import eu.hgross.blaubot.messaging.IBlaubotAdminMessageListener;
  * eventing system at runtime.
  */
 public class ChannelSubscriptionListener implements IBlaubotAdminMessageListener, ILifecycleListener {
-    private ConcurrentHashMap<Short, Set<String>> subscriptions = new ConcurrentHashMap<>();
+    private Map<Short, Set<String>> subscriptions = new ConcurrentHashMap<>();
     private Object lock = new Object();
     private List<SubscriptionChangeListener> listeners = new CopyOnWriteArrayList<>();
 
@@ -86,7 +82,7 @@ public class ChannelSubscriptionListener implements IBlaubotAdminMessageListener
 
     private void addSubscription(short channelId, String uniqueDeviceId) {
         synchronized (lock) {
-            subscriptions.putIfAbsent(channelId, new HashSet<String>());
+            ((ConcurrentHashMap)subscriptions).putIfAbsent(channelId, new HashSet<String>());
             Set<String> subscribers = subscriptions.get(channelId);
             subscribers.add(uniqueDeviceId);
         }

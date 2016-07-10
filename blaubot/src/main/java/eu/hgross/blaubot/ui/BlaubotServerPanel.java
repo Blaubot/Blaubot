@@ -1,6 +1,5 @@
 package eu.hgross.blaubot.ui;
 
-import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -11,6 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
@@ -71,7 +71,7 @@ public class BlaubotServerPanel extends JPanel {
     /**
      * Holds connected BlaubotKingdoms and their views.
      */
-    private final ConcurrentHashMap<BlaubotKingdom, BlaubotKingdomView> mBlaubotKingdomViews;
+    private final Map<BlaubotKingdom, BlaubotKingdomView> mBlaubotKingdomViews;
 
     /**
      * Schedules the updateUiTask for the start/stop button state.

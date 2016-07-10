@@ -1,13 +1,29 @@
 apply plugin: 'java'
 
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
+
 sourceSets {
     main.java.srcDirs = ['src/main/java']
+ /*   test {
+        java {
+            srcDirs = ["src/main/java"]  
+        }
+    }
+  */
 }
+
+test {
+    forkEvery = 1
+    maxParallelForks = 1
+}
+
 repositories {
     maven {
         url 'http://www.pyx4me.com/maven2-snapshot' // bluecove snapshots
     }
 }
+
 dependencies {
     compile 'junit:junit:4.11'
     compile 'net.jodah:concurrentunit:0.4.2' // https://github.com/jhalterman/concurrentunit
