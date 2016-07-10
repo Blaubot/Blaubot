@@ -41,6 +41,13 @@ import eu.hgross.blaubot.util.Log;
 public class BlaubotChannel implements IBlaubotChannel {
     private static final String LOG_TAG = "BlaubotChannel";
     /**
+     * Some configurations like "do not transmit reflexive messages", "do not transmit if no subscribers",
+     * internal pause modes, ... leads to skipping the message processing queue.
+     * To avoid infinite loop like load in these cases, we throw in some sleep time in between.
+     * This specific sleep time and threshold is defined by this constant.
+     */
+    private static final int LOAD_AVOIDANCE_SLEEPTIME = 50;
+    /**
      * The channel config used for this channel.
      * Defines the picking strategy and channel id.
      */
@@ -121,9 +128,9 @@ public class BlaubotChannel implements IBlaubotChannel {
                 // check if we are allowed to pick
                 if (doNotTransmit.get()) {
                     // we are not allowed to send, sleep a while if we have a low message rate and come back later
-                    if (channelConfig.getMinMessageRateDelay() < 50) {
+                    if (channelConfig.getMinMessageRateDelay() < LOAD_AVOIDANCE_SLEEPTIME) {
                         try {
-                            Thread.sleep(50);
+                            Thread.sleep(LOAD_AVOIDANCE_SLEEPTIME);
                         } catch (InterruptedException e) {
                             return;
                         }
@@ -141,7 +148,15 @@ public class BlaubotChannel implements IBlaubotChannel {
                     final int subscribers = subscriptions.size();
                     if (subscribers == 0) {
                         // we don't send anything, no subscribers at all
-                        return;
+                        if (channelConfig.getMinMessageRateDelay() < LOAD_AVOIDANCE_SLEEPTIME) {
+                            try {
+                                // sleep some time to avoid useless load generation.
+                                Thread.sleep(LOAD_AVOIDANCE_SLEEPTIME);
+                                return;
+                            } catch (InterruptedException e) {
+                                return;
+                            }
+                        }
                     } else if (subscribers == 1 && ownDeviceIsSubscribed) {
                         weAreOnlySubscriber = true;
                     }
