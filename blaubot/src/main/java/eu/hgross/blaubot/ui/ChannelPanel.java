@@ -17,15 +17,18 @@ import javax.swing.SwingUtilities;
 
 import eu.hgross.blaubot.core.Blaubot;
 import eu.hgross.blaubot.core.BlaubotKingdom;
+import eu.hgross.blaubot.messaging.BlaubotChannelManager;
 import eu.hgross.blaubot.messaging.IBlaubotChannel;
 import eu.hgross.blaubot.util.ChannelSubscriptionListener;
 
 /**
- * Shows all channels that are in use
+ * Shows all channels that are in use.
+ * Can be attached to a BlaubotKingdom XOR Blaubot instance. (use registerBlaubot/unregisterBlaubot and registerKingdom ..)
  */
 public class ChannelPanel extends JPanel implements IBlaubotDebugView, IBlaubotKingdomDebugView {
     private Blaubot mBlaubot;
     private BlaubotKingdom mBlaubotKingdom;
+    private BlaubotChannelManager mBlaubotChannelManager;
     private ChannelSubscriptionListener mChannelSubscriptionListener;
     private JPanel mContentContainer;
 
@@ -68,8 +71,8 @@ public class ChannelPanel extends JPanel implements IBlaubotDebugView, IBlaubotK
                     subscribeButton.addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
-                            if (mBlaubotKingdom != null) {
-                                IBlaubotChannel chan = mBlaubotKingdom.getChannelManager().createOrGetChannel(channelId);
+                            if (mBlaubotChannelManager != null) {
+                                IBlaubotChannel chan = mBlaubotChannelManager.createOrGetChannel(channelId);
                                 chan.subscribe();
                             }
                         }
@@ -80,8 +83,8 @@ public class ChannelPanel extends JPanel implements IBlaubotDebugView, IBlaubotK
                     unsubscribeButton.addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
-                            if (mBlaubotKingdom != null) {
-                                IBlaubotChannel chan = mBlaubotKingdom.getChannelManager().createOrGetChannel(channelId);
+                            if (mBlaubotChannelManager != null) {
+                                IBlaubotChannel chan = mBlaubotChannelManager.createOrGetChannel(channelId);
                                 chan.unsubscribe();
                             }
                         }
@@ -130,7 +133,8 @@ public class ChannelPanel extends JPanel implements IBlaubotDebugView, IBlaubotK
             unregisterBlaubotInstance();
         }
         this.mBlaubot = blaubot;
-        blaubot.getChannelManager().addAdminMessageListener(mChannelSubscriptionListener);
+        this.mBlaubotChannelManager = blaubot.getChannelManager();
+        this.mBlaubotChannelManager.addAdminMessageListener(mChannelSubscriptionListener);
         blaubot.addLifecycleListener(mChannelSubscriptionListener);
     }
 
@@ -141,6 +145,7 @@ public class ChannelPanel extends JPanel implements IBlaubotDebugView, IBlaubotK
             this.mBlaubot.removeLifecycleListener(mChannelSubscriptionListener);
         }
         this.mBlaubot = null;
+        this.mBlaubotChannelManager = null;
     }
 
     @Override
@@ -149,6 +154,7 @@ public class ChannelPanel extends JPanel implements IBlaubotDebugView, IBlaubotK
             unregisterBlaubotKingdomInstance();
         }
         this.mBlaubotKingdom = blaubotKingdom;
+        this.mBlaubotChannelManager = blaubotKingdom.getChannelManager();
         blaubotKingdom.getChannelManager().addAdminMessageListener(mChannelSubscriptionListener);
         blaubotKingdom.addLifecycleListener(mChannelSubscriptionListener);
     }
@@ -159,7 +165,9 @@ public class ChannelPanel extends JPanel implements IBlaubotDebugView, IBlaubotK
             mBlaubotKingdom.getChannelManager().removeAdminMessageListener(mChannelSubscriptionListener);
             mBlaubotKingdom.removeLifecycleListener(mChannelSubscriptionListener);
         }
+        
         this.mBlaubotKingdom = null;
+        this.mBlaubotChannelManager = null;
 
     }
 }
