@@ -133,7 +133,6 @@ public class WifiUtils {
 	
 	/**
 	 * log local ip addresses to log
-	 * @return
 	 */
 	public static void logInterfacesAndIpAddresses() {
 		try {

@@ -168,7 +168,6 @@ public class WifiConnector {
 	 * Connects to the network (same as connect(boolean) but with async api)
 	 * 
 	 * @param callback
-	 * @return true iff success, false if failed
 	 */
 	public void connect(final IWifiConnectorCallback callback) {
 		new Thread(new Runnable() {
