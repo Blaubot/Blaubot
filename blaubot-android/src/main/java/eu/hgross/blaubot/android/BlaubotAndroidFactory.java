@@ -63,7 +63,7 @@ public class BlaubotAndroidFactory extends eu.hgross.blaubot.core.BlaubotFactory
 
     /**
      * Creates a blaubot instance using ethernet adapter and the NFC beacon.
-     * <p/>
+     * 
      * Note that you have to call some lifecycle methods onResume and onPause.
      * See BlaubotAndroid.
      *

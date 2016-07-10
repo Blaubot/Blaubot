@@ -31,7 +31,7 @@ import eu.hgross.blaubot.util.Log;
 
 /**
  * Android view to send and receive many bytes in an endless loop through a blaubot channel
- * <p/>
+ * 
  * Add this view to a blaubot instance like this: throughputview.registerBlaubotInstance(blaubot);
  *
  * @author Henning Gross {@literal (mail.to@henning-gross.de)}

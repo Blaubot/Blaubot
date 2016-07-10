@@ -77,15 +77,15 @@ import eu.hgross.blaubot.util.Log;
 /**
  * We are able to signal some defined strings (see http://upnp.org/specs/dm/UPnP-dm-BasicManagement-v1-Service.pdf)
  * over the upnp framework, so we pick one of them to indicate that there is a blaubot instance running.
- * <p/>
+ * 
  * The beacons then search for this upnp string/service and connect to them to probe if this devices
  * are really blaubot instances. If we find a blaubot instance, they exchange the beaconUUID, and if their beaconIds match
  * the usual {@link BeaconMessage} to exchange their states.
- * <p/>
+ * 
  * Sadly we can not communicate additional attributes via upnp service requests (which we should be according to the upnp standard)
  * on android so we have to actively ask for this attributes (beaconId, state) by connecting to the device.
  * see: https://code.google.com/p/android/issues/detail?id=40003
- * <p/>
+ * 
  *
  * @author Henning Gross {@literal (mail.to@henning-gross.de)}
  */

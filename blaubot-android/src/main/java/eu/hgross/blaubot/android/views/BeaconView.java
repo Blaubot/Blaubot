@@ -30,7 +30,7 @@ import eu.hgross.blaubot.ui.IBlaubotDebugView;
 
 /**
  * Android view to display informations about the beacons registered to the BeaconService.
- * <p/>
+ * 
  * Add this view to a blaubot instance like this: stateView.registerBlaubotInstance(blaubot);
  *
  * @author Henning Gross {@literal (mail.to@henning-gross.de)}

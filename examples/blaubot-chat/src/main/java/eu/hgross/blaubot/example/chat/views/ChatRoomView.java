@@ -40,7 +40,7 @@ import eu.hgross.blaubot.messaging.IBlaubotMessageListener;
  * <li>ChatMessages, that are the actual chat messages</li>
  * <li>NameChangeMessages, which announce a nickname change</li>
  * </ul>
- * <p/>
+ * 
  * Additionally listens to Blaubot's lifecycle to get to know when devices are
  * not part of the blaubot network anymore.
  */

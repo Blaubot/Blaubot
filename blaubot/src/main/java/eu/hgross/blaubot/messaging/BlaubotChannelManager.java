@@ -469,9 +469,9 @@ public class BlaubotChannelManager {
      * MessageRouter
      * This is the central point where messages arrive from the managed IBlaubotConnections and will
      * be dispatched to the designated channels or admin message listeners.
-     * <p/>
+     * 
      * This listener is appended to all MessageReceivers.
-     * <p/>
+     * 
      * The counterparts (sending side) of this can be found in the publishTo*** methods.
      */
     private IBlaubotMessageListener messageDispatcher = new IBlaubotMessageListener() {
