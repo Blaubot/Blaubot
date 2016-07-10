@@ -1,5 +1,6 @@
 package eu.hgross.blaubot.ui;
 
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -8,6 +9,7 @@ import javax.swing.DefaultListModel;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
 import eu.hgross.blaubot.core.Blaubot;
 import eu.hgross.blaubot.core.BlaubotKingdom;
@@ -36,8 +38,10 @@ public class LifeCycleViewPanel extends JPanel implements IBlaubotDebugView, IBl
 
         mLifeCycleEventsListModel = new DefaultListModel<>();
         mLifeCycleEventsList = new JList<>(mLifeCycleEventsListModel);
+        JScrollPane scrollPane = new JScrollPane(mLifeCycleEventsList);
+        scrollPane.setMinimumSize(new Dimension(200, 120));
         add(new JLabel("Lifecycle events:"), gbc);
-        add(mLifeCycleEventsList, gbc);
+        add(scrollPane, gbc);
     }
 
 

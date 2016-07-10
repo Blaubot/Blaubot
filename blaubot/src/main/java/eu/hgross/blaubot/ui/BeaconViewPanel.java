@@ -11,7 +11,8 @@ import eu.hgross.blaubot.core.acceptor.discovery.IBlaubotDiscoveryEventListener;
 import eu.hgross.blaubot.core.statemachine.events.AbstractBlaubotDeviceDiscoveryEvent;
 
 /**
- * Created by henna on 30.04.15.
+ * Shows the last beacon message in the ugly toString.
+ * TODO: beautify, show more messages (like on android)
  */
 public class BeaconViewPanel extends JPanel implements IBlaubotDebugView {
     public static final String LOG_TAG = "BeaconViewPanel";
@@ -21,7 +22,6 @@ public class BeaconViewPanel extends JPanel implements IBlaubotDebugView {
 
     public BeaconViewPanel() {
         super();
-        setLayout(new FlowLayout());
         mLastDiscoveryEventTextView = new JLabel("never got a discovery event");
 
         add(mLastDiscoveryEventTextView);
@@ -31,12 +31,14 @@ public class BeaconViewPanel extends JPanel implements IBlaubotDebugView {
     private IBlaubotDiscoveryEventListener discoveryEventListener = new IBlaubotDiscoveryEventListener() {
         @Override
         public void onDeviceDiscoveryEvent(AbstractBlaubotDeviceDiscoveryEvent discoveryEvent) {
-            mLastDiscoveryEventTextView.setText((new Date()).toString()+ ": "+discoveryEvent + "");
+            final int width = getSize().width/2;
+            String txt = "<html><body><div style=\"width: " + width + "px\"><small>" + new Date().toString()+ ": " + discoveryEvent + "</small></div></body></html>";
+            mLastDiscoveryEventTextView.setText(txt);
             updateUI();
         }
     };
 
-
+    
     @Override
     public void registerBlaubotInstance(Blaubot blaubot) {
         if (this.mBlaubot != null) {

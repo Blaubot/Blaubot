@@ -70,7 +70,7 @@ public class PingPanel extends JPanel implements IBlaubotDebugView, IBlaubotKing
             public void run() {
                 removeAll();
                 String txt = mLastReceivedPingDate != null ? mLastReceivedPingDate.toString() : "never";
-                mLastReceivedLabel.setText("Last received ping: " + txt);
+                mLastReceivedLabel.setText("<html><body><small>Last received ping: " + txt + "</small></body></html>");
                 add(mPingButton);
                 add(mLastReceivedLabel);
                 updateUI();

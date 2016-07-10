@@ -8,16 +8,19 @@ import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.concurrent.FutureTask;
 
+import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
+import javax.swing.border.Border;
 
 import eu.hgross.blaubot.core.Blaubot;
 import eu.hgross.blaubot.core.BlaubotFactory;
 import eu.hgross.blaubot.core.BlaubotServer;
 
 /**
- * Created by henna on 30.04.15.
+ * The Swing based DebugView for Blaubot.
  */
 public class SwingDebugView extends JPanel implements IBlaubotDebugView {
     private final KingdomCensusPanel mKingdomCensusPanel;
@@ -39,10 +42,22 @@ public class SwingDebugView extends JPanel implements IBlaubotDebugView {
         this.mChannelPanel = new ChannelPanel();
         this.mPingPanel = new PingPanel();
 
-        allViews = Arrays.asList(new Component[]{mKingdomCensusPanel, mStateViewPanel, mBeaconViewPanel, mLifeCycleViewPanel, mChannelPanel, mPingPanel});
-        for(Component debugView : allViews) {
+        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+
+        allViews = Arrays.asList(new Component[]{mStateViewPanel, mPingPanel, mKingdomCensusPanel, mBeaconViewPanel, mLifeCycleViewPanel, mChannelPanel});
+        
+        // kingdom view and subscriptions side by side
+        JPanel kingdomViewAndChannelsPanel = new JPanel();
+        kingdomViewAndChannelsPanel.setLayout(new BoxLayout(kingdomViewAndChannelsPanel, BoxLayout.X_AXIS));
+        kingdomViewAndChannelsPanel.add(mKingdomCensusPanel);
+        kingdomViewAndChannelsPanel.add(mChannelPanel);
+
+        // add all components
+        for(Component debugView : Arrays.asList(new Component[]{mStateViewPanel, mPingPanel, kingdomViewAndChannelsPanel, mBeaconViewPanel, mLifeCycleViewPanel})) {
             this.add(debugView);
         }
+
+        setMinimumSize(new Dimension(500, 420));
     }
 
 
@@ -86,9 +101,13 @@ public class SwingDebugView extends JPanel implements IBlaubotDebugView {
                 SwingDebugView debugView = new SwingDebugView();
                 debugView.registerBlaubotInstance(blaubot);
 
+                // add some space
+                Border padding = BorderFactory.createEmptyBorder(10, 10, 10, 10);
+                debugView.setBorder(padding);
+                
                 JFrame frame = new JFrame();
                 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                frame.setMinimumSize(new Dimension(1024, 500));
+                frame.setMinimumSize(debugView.getMinimumSize());
                 frame.add(debugView);
                 frame.pack();
                 frame.setVisible(true);

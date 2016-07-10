@@ -96,20 +96,8 @@ public class KingdomCensusPanel extends JPanel implements IBlaubotDebugView, IBl
                     for(Map.Entry<String, State> entry : entries) {
                         final String uniqueDeviceId = entry.getKey();
                         final State state = entry.getValue();
-                        final BufferedImage icon = Util.getImageForState(state);
-                        final Image scaledInstance = icon.getScaledInstance(30, -1, Image.SCALE_SMOOTH);
-
-
-                        JLabel picLabel = new JLabel(new ImageIcon(scaledInstance));
-                        JLabel comp = new JLabel("<html>" + state.toString() + "<small><br>" + uniqueDeviceId + "</small></html>");
-                        JPanel panel = new JPanel();
-                        panel.setAlignmentX(Component.LEFT_ALIGNMENT);
-                        panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
-                        panel.add(picLabel);
-                        panel.add(Box.createRigidArea(new Dimension(5, 0)));
-                        panel.add(comp);
+                        JPanel panel = Util.createIcon(state, uniqueDeviceId);
                         add(panel);
-
                     }
                     updateUI();
 

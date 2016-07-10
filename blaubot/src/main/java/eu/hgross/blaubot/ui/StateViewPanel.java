@@ -11,20 +11,21 @@ import javax.swing.SwingUtilities;
 
 import eu.hgross.blaubot.core.Blaubot;
 import eu.hgross.blaubot.core.IBlaubotConnection;
+import eu.hgross.blaubot.core.State;
 import eu.hgross.blaubot.core.acceptor.IBlaubotConnectionManagerListener;
 import eu.hgross.blaubot.core.statemachine.IBlaubotConnectionStateMachineListener;
 import eu.hgross.blaubot.core.statemachine.states.IBlaubotState;
 import eu.hgross.blaubot.util.Log;
 
 /**
- * Created by henna on 30.04.15.
+ * Visualizes the current state and provides a start/stop button for the registered instance.
  */
 public class StateViewPanel extends JPanel implements IBlaubotDebugView {
     public static final String LOG_TAG = "StatusViewPanel";
 
+    private JPanel mCurrentStateIconContainer;
     private final JLabel mCurrentStateTextView;
     private final JLabel mConnectedDevicesCountTextView;
-    private final JLabel mOwnUniqueDeviceIdLabel;
     private final JButton mStartStopButton;
     private Blaubot mBlaubot;
 
@@ -32,8 +33,8 @@ public class StateViewPanel extends JPanel implements IBlaubotDebugView {
         super();
         setLayout(new FlowLayout());
         mCurrentStateTextView = new JLabel("");
+        mCurrentStateIconContainer = new JPanel();
         mConnectedDevicesCountTextView = new JLabel("");
-        mOwnUniqueDeviceIdLabel = new JLabel("");
         mStartStopButton = new JButton("Start");
         mStartStopButton.addActionListener(new ActionListener() {
 
@@ -54,43 +55,53 @@ public class StateViewPanel extends JPanel implements IBlaubotDebugView {
             }
         });
 
+        add(mCurrentStateIconContainer);
         add(mCurrentStateTextView);
         add(mStartStopButton);
         add(mConnectedDevicesCountTextView);
-        add(mOwnUniqueDeviceIdLabel);
     }
+    
+    public IBlaubotState mCurrentBlaubotState;
+    
+    private void updateStateIconAndText() {
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                // clear current icon state
+                mCurrentStateIconContainer.removeAll();
 
-    private IBlaubotConnectionStateMachineListener mBlaubotConnectionStateMachineListener = new IBlaubotConnectionStateMachineListener() {
-        public IBlaubotState mCurrentBlaubotState;
-
-        private void updateCurrentStateTextView() {
-            SwingUtilities.invokeLater(new Runnable() {
-                @Override
-                public void run() {
-                    if (mCurrentBlaubotState != null) {
-                        mCurrentStateTextView.setText(mCurrentBlaubotState.toString());
-                    } else {
-                        mCurrentStateTextView.setText("no registered instance");
-                    }
+                if (mCurrentBlaubotState != null) {
+                    State state = State.getStateByStatemachineClass(mCurrentBlaubotState.getClass());
+                    String uniqueDeviceId = mBlaubot.getOwnDevice().getUniqueDeviceID();
+                    JPanel icon = Util.createIcon(state, uniqueDeviceId);
+                    mCurrentStateIconContainer.add(icon);
+                    mCurrentStateIconContainer.setSize(icon.getSize());
+                    mCurrentStateTextView.setText("");
+                } else {
+                    mCurrentStateTextView.setText("no instance registered to view!");
                 }
-            });
-        }
+            }
+        });
+    }
+    
+    private IBlaubotConnectionStateMachineListener mBlaubotConnectionStateMachineListener = new IBlaubotConnectionStateMachineListener() {
+        
 
         @Override
         public void onStateChanged(IBlaubotState oldState, final IBlaubotState state) {
             mCurrentBlaubotState = state;
-            updateCurrentStateTextView();
+            updateStateIconAndText();
         }
 
         @Override
         public void onStateMachineStopped() {
-            updateCurrentStateTextView();
+            updateStateIconAndText();
             setButtonText();
         }
 
         @Override
         public void onStateMachineStarted() {
-            updateCurrentStateTextView();
+            updateStateIconAndText();
             setButtonText();
         }
     };
@@ -107,7 +118,7 @@ public class StateViewPanel extends JPanel implements IBlaubotDebugView {
             SwingUtilities.invokeLater(new Runnable() {
                 @Override
                 public void run() {
-                    mConnectedDevicesCountTextView.setText("Connected devices to ConnectionManager: " + num);
+                    mConnectedDevicesCountTextView.setText(num + " P2P connections.");
                 }
             });
         }
@@ -140,33 +151,18 @@ public class StateViewPanel extends JPanel implements IBlaubotDebugView {
         });
     }
 
-    private void updateOwnUniqueDeviceId() {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                if (mBlaubot != null) {
-                    String uniqueDeviceID = mBlaubot.getOwnDevice().getUniqueDeviceID();
-                    mOwnUniqueDeviceIdLabel.setText(uniqueDeviceID);
-                } else {
-                    mOwnUniqueDeviceIdLabel.setText("");
-                }
-            }
-        });
-    }
-
-
     @Override
     public void registerBlaubotInstance(Blaubot blaubot) {
         if (this.mBlaubot != null) {
             unregisterBlaubotInstance();
         }
         this.mBlaubot = blaubot;
+        this.mCurrentBlaubotState = blaubot.getConnectionStateMachine().getCurrentState();
         blaubot.getConnectionStateMachine().addConnectionStateMachineListener(mBlaubotConnectionStateMachineListener);
         blaubot.getConnectionManager().addConnectionListener(mConnectionManagerListener);
-
+        
         setButtonText();
-        updateOwnUniqueDeviceId();
-
+        updateStateIconAndText();
     }
 
     @Override
@@ -176,5 +172,6 @@ public class StateViewPanel extends JPanel implements IBlaubotDebugView {
             mBlaubot.getConnectionManager().removeConnectionListener(mConnectionManagerListener);
         }
         this.mBlaubot = null;
+        this.mCurrentBlaubotState = null;
     }
 }
