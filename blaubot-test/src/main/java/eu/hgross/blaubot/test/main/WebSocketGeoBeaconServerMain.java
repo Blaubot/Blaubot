@@ -16,11 +16,14 @@ import eu.hgross.blaubot.ethernet.BlaubotEthernetAdapter;
 import eu.hgross.blaubot.geobeacon.GeoBeaconConstants;
 import eu.hgross.blaubot.geobeacon.GeoBeaconServer;
 import eu.hgross.blaubot.geobeacon.GeoLocationBeacon;
+import eu.hgross.blaubot.messaging.IBlaubotChannel;
 import eu.hgross.blaubot.ui.SwingDebugView;
 import eu.hgross.blaubot.util.Log;
 
 /**
- * Runs the GeoBeaconServer using the WebSocket adapter on all local interfaces at port 8082.
+ * Example of how to use the GeoBeaconServer with a Blaubot network of three clients.
+ * It will run the GeoBeaconServer on Port 8082 and the clients will use the ethernet adapter implementation.
+ * They will occupy the ports 17171, 17172, 17173 for their acceptors and spawn a DebugView instance each.
  */
 public class WebSocketGeoBeaconServerMain {
     public static final int WEBSOCKET_ACCEPTOR_PORT = 8082;
@@ -33,12 +36,10 @@ public class WebSocketGeoBeaconServerMain {
         GeoBeaconServer geoBeaconServer = BlaubotFactory.createWebSocketGeoBeaconServer(WEBSOCKET_ACCEPTOR_PORT, GEO_RADIUS);
         geoBeaconServer.startBeaconServer();
 
-
         
         /*
             Now we create the clients using beacons that connect to this geo beacon.
          */
-        
         // create the blaubot instances using the server ...
         final InetAddress localIpAddress = BlaubotFactory.getLocalIpAddress();
         UUID appUUid = UUID.randomUUID();
@@ -69,63 +70,24 @@ public class WebSocketGeoBeaconServerMain {
         final Blaubot b2 = BlaubotFactory.createBlaubot(appUUid, device2, adapter2, geoLocationBeacon2);
         final Blaubot b3 = BlaubotFactory.createBlaubot(appUUid, device3, adapter3, geoLocationBeacon3);
 
-
-        new Thread(new Runnable() {
+        // start a gui for each blaubot instance
+        SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                SwingUtilities.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        SwingDebugView sdb = new SwingDebugView();
-                        sdb.registerBlaubotInstance(b1);
-
-                        JFrame frame = new JFrame();
-                        frame.add(sdb);
-                        frame.pack();
-                        frame.setVisible(true);
-
-                    }
-                });
+                SwingDebugView.createAndShowGui(b1);
             }
-        }).start();
-        new Thread(new Runnable() {
+        });
+        SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                SwingUtilities.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        SwingDebugView sdb = new SwingDebugView();
-                        sdb.setVisible(true);
-                        sdb.registerBlaubotInstance(b2);
-
-                        JFrame frame = new JFrame();
-                        frame.add(sdb);
-                        frame.pack();
-                        frame.setVisible(true);
-                    }
-                });
+                SwingDebugView.createAndShowGui(b2);
             }
-        }).start();
-        new Thread(new Runnable() {
+        });
+        SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                SwingUtilities.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        SwingDebugView sdb = new SwingDebugView();
-                        sdb.setVisible(true);
-                        sdb.registerBlaubotInstance(b3);
-
-                        JFrame frame = new JFrame();
-                        frame.add(sdb);
-                        frame.pack();
-                        frame.setVisible(true);
-                    }
-                });
+                SwingDebugView.createAndShowGui(b3);
             }
-        }).start();
+        });
     }
 }

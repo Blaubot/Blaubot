@@ -17,19 +17,9 @@ jar {
 }
 
 
-
-//sourceSets {
-//    main {
-//        java {
-//            include '**/*.png'
-//        }
-//    }
-//}
-
-
 dependencies {
     //compile 'commons-codec:commons-codec:1.10' <- don't! Collides with the android included lib .. meh. Using a popular public domain Base64 implementation for now  - see util package.
-    compile 'com.google.code.gson:gson:2.3.1'
+    compile 'com.google.code.gson:gson:2.4'
     // Apache 2.0
     compile 'javax.jmdns:jmdns:3.4.1'
     // Apache 2.0

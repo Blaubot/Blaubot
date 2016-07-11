@@ -1,5 +1,7 @@
 package eu.hgross.blaubot.test;
 
+import net.jodah.concurrentunit.Waiter;
+
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -10,8 +12,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import eu.hgross.blaubot.core.BlaubotConstants;
+import eu.hgross.blaubot.core.IActionListener;
 import eu.hgross.blaubot.core.IBlaubotConnection;
 import eu.hgross.blaubot.core.IBlaubotDevice;
 import eu.hgross.blaubot.admin.AbstractAdminMessage;
@@ -57,11 +62,22 @@ public class MessageSenderAndReceiverTest {
     }
 
     @After
-    public void cleanUp() {
-        conn1_sender.deactivate(null);
-        conn2_sender.deactivate(null);
-        conn1_receiver.deactivate(null);
-        conn2_receiver.deactivate(null);
+    public void cleanUp() throws InterruptedException {
+        final CountDownLatch latch = new CountDownLatch(4);
+        IActionListener deactivationListener = new IActionListener() {
+            @Override
+            public void onFinished() {
+                latch.countDown();
+            }
+        };
+        conn1_sender.deactivate(deactivationListener);
+        conn2_sender.deactivate(deactivationListener);
+        conn1_receiver.deactivate(deactivationListener);
+        conn2_receiver.deactivate(deactivationListener);
+        
+        boolean timedOut = !latch.await(5000, TimeUnit.MILLISECONDS);
+        Assert.assertTrue("MessageSender or Receiver deactivation timed out", !timedOut);
+        
     }
 
     private byte[] createRandomPayload() {
@@ -74,10 +90,168 @@ public class MessageSenderAndReceiverTest {
         return b;
     }
 
+    /**
+     * Tests deactivation of each receiver/listeners once and asserts the callback invocation
+     * @param waiter the waiter to be resolved when finished
+     */
+    private void deactivateSendersAndReceivers(Waiter waiter) {
+        final int LATCH_TIMEOUT = 5000; // ms
+        final CountDownLatch receiverLatch = new CountDownLatch(2);
+        IActionListener receiverActionListener = new IActionListener() {
+            @Override
+            public void onFinished() {
+                receiverLatch.countDown();
+            }
+        };
+
+        final CountDownLatch senderLatch = new CountDownLatch(2);
+        IActionListener senderActionListener = new IActionListener() {
+            @Override
+            public void onFinished() {
+                senderLatch.countDown();
+            }
+        };
+
+
+        conn1_receiver.deactivate(receiverActionListener);
+        conn2_receiver.deactivate(receiverActionListener);
+
+        conn1_sender.deactivate(senderActionListener);
+        conn2_sender.deactivate(senderActionListener);
+
+        boolean senderLatchTimedOut = false;
+        boolean receiverLatchTimedOut = false;
+        try {
+            senderLatchTimedOut = !senderLatch.await(LATCH_TIMEOUT, TimeUnit.MILLISECONDS);
+            receiverLatchTimedOut = !receiverLatch.await(LATCH_TIMEOUT, TimeUnit.MILLISECONDS);
+        } catch (InterruptedException e) {
+            receiverLatchTimedOut = true;
+        }
+        // assert that the receiver and sender latches were called twice for the initial deactivate call
+        if (senderLatchTimedOut) {
+            waiter.fail("One of the sender deactivate() listeners were not called in time");
+        }
+        if (receiverLatchTimedOut) {
+            waiter.fail("One of the receiver deactivate() listeners were not called in time");
+        }
+        waiter.resume();
+    }
+
+    /**
+     * Helper method to create some traffic originating from both sides.
+     * It will send one message per side
+     */
+    private void sendOneMessagePerSide() {
+        BlaubotMessage msg1 = new BlaubotMessage();
+        BlaubotMessage msg2 = new BlaubotMessage();
+        msg1.setPayload("TestMessageToConn1".getBytes(BlaubotConstants.STRING_CHARSET));
+        msg2.setPayload("TestMessageToConn2".getBytes(BlaubotConstants.STRING_CHARSET));
+        conn1_sender.sendMessage(msg1);
+        conn2_sender.sendMessage(msg2);
+    }
+
+    /**
+     * 
+     * Helper method to send multiple messages per side to create some traffic.
+     * @param messagesPerSide number of messages to be sent from each side
+     */
+    private void sendMultipleMessagesPerSide(int messagesPerSide) {
+        for(int i=0; i<messagesPerSide; i++) {
+            sendOneMessagePerSide();
+        }
+    }
+    
+    @Test(timeout=45000)
+    /**
+     * Tests if that for each deactivate-call to a message receiver/sender the finished callback is called 
+     * after some time.
+     */
+    public void testDeactivationCallbackIsAlwaysCalled() throws InterruptedException, TimeoutException {
+        Waiter waiter = new Waiter();
+        
+        // test the deactivation's happy path
+        deactivateSendersAndReceivers(waiter);
+        
+        
+        // now we test the same for consecutive deactivate calls (idempotence)
+        for (int i=0; i < 30; i++) {
+            Waiter w = new Waiter();
+            deactivateSendersAndReceivers(w);
+            w.await();
+        }
+        
+        // now the same with activation beforehand
+        for (int i=0; i < 30; i++) {
+            conn1_receiver.activate();
+            conn2_receiver.activate();
+            conn1_sender.activate();
+            conn2_sender.activate();
+            Waiter w = new Waiter();
+            deactivateSendersAndReceivers(w);
+            w.await();
+        }
+
+        int cnt = 1;
+        // now the same with multiple (idempotent) activations beforehand
+        for (int i=0; i < cnt; i++) {
+            conn1_receiver.activate();
+            conn2_receiver.activate();
+            conn1_sender.activate();
+            conn2_sender.activate();
+            conn1_receiver.activate();
+            conn2_receiver.activate();
+            conn1_sender.activate();
+            conn2_sender.activate();
+            Waiter w = new Waiter();
+            deactivateSendersAndReceivers(w);
+            w.await();
+        }
+
+        // now multiple deactivations
+        for (int i=0; i < 30; i++) {
+            conn1_receiver.activate();
+            conn2_receiver.activate();
+            conn1_sender.activate();
+            conn2_sender.activate();
+            Waiter w = new Waiter(), w2 = new Waiter(), w3 = new Waiter();
+            deactivateSendersAndReceivers(w);
+            deactivateSendersAndReceivers(w2);
+            deactivateSendersAndReceivers(w3);
+            w.await();
+            w2.await();
+            w3.await();
+        }
+
+        // now the same with multiple activations beforehand and everything in parallel
+        final Waiter concurrentWaiter = new Waiter();
+        for (int i=0; i < cnt; i++) {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    conn1_receiver.activate();
+                    conn2_receiver.activate();
+                    conn1_sender.activate();
+                    conn2_sender.activate();
+                    conn1_receiver.activate();
+                    conn2_receiver.activate();
+                    conn1_sender.activate();
+                    conn2_sender.activate();
+                    Waiter w = new Waiter();
+                    deactivateSendersAndReceivers(w);
+                    try {
+                        w.await();
+                    } catch (TimeoutException e) {
+                        concurrentWaiter.fail("Deactivation timed out");
+                    }
+                    concurrentWaiter.resume();
+                }
+            }).start();
+        }
+        concurrentWaiter.await(10000, TimeUnit.MILLISECONDS, cnt);
+    }
+    
     @Test(timeout=5000)
     public void testSendAndReceiveSequentially() throws InterruptedException {
-
-
         for(int i=0; i<100; i++) {
             // we create a random payload, send it over conn1, receive it on the other end, deserialize it, send it back over conn2 and then receive it on conn1
             final CountDownLatch latch = new CountDownLatch(2);
@@ -126,7 +300,7 @@ public class MessageSenderAndReceiverTest {
     public void testSendAndReceiveChunkedMessagesSequentiallyBorderCase() throws InterruptedException {
         int times = 3;
 
-        // test it with a multiple of 5
+        // test it with a multiple
         for(int i=0; i<times; i++) {
             // we create a random payload that exceeds the MAX_PAYLOAD size, send it over conn1, receive it on the other end, deserialize it, send it back over conn2 and then receive it on conn1
             final CountDownLatch latch = new CountDownLatch(2);

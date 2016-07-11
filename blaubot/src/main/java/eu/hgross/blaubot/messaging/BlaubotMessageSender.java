@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.PriorityBlockingQueue;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -17,10 +18,10 @@ import eu.hgross.blaubot.util.Log;
 /**
  * The message sender simply queues messages that are going to be sent over the IBlaubotConnection
  * for which this message sender was created for.
- * <p/>
+ * 
  * The sender can be activated/deactivated, meaning stopping and starting a queue consuming thread
  * that serializes and sends the queued messages (if any) over the given IBlaubotConnection.
- * <p/>
+ *
  * TODO: handle failing connections
  */
 public class BlaubotMessageSender {
@@ -60,6 +61,11 @@ public class BlaubotMessageSender {
     private long sentPayloadBytes = 0;
     private volatile AtomicLong queuedBytes = new AtomicLong(0);
 
+    /**
+     * Synchronizing monitor for activation and deactivation.
+     */
+    private Object activationLock = new Object();
+    
     /**
      * Comparator for the priority queue.
      * Comparing by the priority first and then the sequence number, if same priority
@@ -143,8 +149,10 @@ public class BlaubotMessageSender {
      */
     public void activate() {
         MessageSendingThread mrt = new MessageSendingThread();
-        mrt.setName("msg-sender-" + blaubotConnection.getRemoteDevice().getUniqueDeviceID());
-        messageSendingThread = mrt;
+        mrt.setName("msg-sender-" + blaubotConnection.getRemoteDevice().getUniqueDeviceID() + ", " + mrt.getId());
+        synchronized (activationLock) {
+            messageSendingThread = mrt;
+        }
         mrt.start();
     }
 
@@ -155,14 +163,21 @@ public class BlaubotMessageSender {
      * @param actionListener callback to be informed when the sender was closed (thread finished), can be null
      */
     public void deactivate(IActionListener actionListener) {
-        MessageSendingThread mst = messageSendingThread;
-        messageSendingThread = null;
-        if (mst != null) {
-            mst.attachFinishListener(actionListener);
-            mst.interrupt();
-        } else {
-            if (actionListener != null) {
-                actionListener.onFinished();
+        final MessageSendingThread mst;
+        synchronized (activationLock) {
+            mst = messageSendingThread;
+            messageSendingThread = null;
+         
+            if (mst != null) {
+                mst.attachFinishListener(actionListener);
+                if (!mst.isInterrupted()) {
+                    mst.interrupt();
+                }
+                // the thread will call the listener on finish
+            } else {
+                if (actionListener != null) {
+                    actionListener.onFinished();
+                }
             }
         }
     }
@@ -188,9 +203,13 @@ public class BlaubotMessageSender {
         private static final long WAIT_TIME_ON_FAILED_SEND = 500;
         private static final String LOG_TAG = "MessageSendingThread";
 
-        private IActionListener finishedListener;
+        private CopyOnWriteArrayList<IActionListener> finishedListeners;
         private boolean finished = false;
         private Object finishedMonitor = new Object();
+
+        public MessageSendingThread() {
+            finishedListeners = new CopyOnWriteArrayList<>();
+        }
 
         /**
          * Attaches a listener that gets called, if the thread finished.
@@ -202,9 +221,12 @@ public class BlaubotMessageSender {
          */
         public void attachFinishListener(IActionListener listener) {
             synchronized (finishedMonitor) {
-                this.finishedListener = listener;
+                if (listener == null) {
+                    return;
+                }
+                this.finishedListeners.add(listener);
                 if (finished) {
-                    finishedListener.onFinished();
+                    listener.onFinished();
                 }
             }
         }
@@ -252,8 +274,10 @@ public class BlaubotMessageSender {
                 }
                 synchronized (finishedMonitor) {
                     finished = true;
-                    if (finishedListener != null) {
-                        finishedListener.onFinished();
+                    if (!finishedListeners.isEmpty()) {
+                        for (IActionListener finishedListener : finishedListeners) {
+                            finishedListener.onFinished();
+                        }
                     }
                 }
                 if (Log.logDebugMessages()) {

@@ -11,10 +11,10 @@ import org.junit.runners.Suite.SuiteClasses;
 	    BeaconMessagesTest.class,
 	    BitManipTest.class,
         ChannelManagerTest.class,
-        EthernetBlaubotWithFixedDeviceSetTest.class,
         LifecycleListenerTest.class,
         MessageSenderAndReceiverTest.class,
         MockObjectsTest.class,
+		EthernetBlaubotWithFixedDeviceSetTest.class,
         BlaubotFactoryTest.class
 	})
 public class AllSuite {

@@ -4,15 +4,20 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.HashSet;
 import java.util.UUID;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 import eu.hgross.blaubot.core.Blaubot;
 import eu.hgross.blaubot.core.BlaubotDevice;
 import eu.hgross.blaubot.core.BlaubotFactory;
 import eu.hgross.blaubot.core.IBlaubotDevice;
+import eu.hgross.blaubot.core.ILifecycleListener;
 import eu.hgross.blaubot.core.statemachine.BlaubotAdapterHelper;
+import eu.hgross.blaubot.core.statemachine.ConnectionStateMachineAdapter;
 
 /**
  * Created by henna on 03.02.15.
@@ -28,8 +33,17 @@ public class BeaconAndAcceptorsTest {
     }
 
     @After
-    public void tearDown() {
+    public void tearDown() throws IOException, InterruptedException {
+        final CountDownLatch latch = new CountDownLatch(1);
+        blaubot.getConnectionStateMachine().addConnectionStateMachineListener(new ConnectionStateMachineAdapter() {
+            @Override
+            public void onStateMachineStopped() {
+                latch.countDown();
+            }
+        });
         blaubot.stopBlaubot();
+        boolean timedOut = !latch.await(5000, TimeUnit.MILLISECONDS);
+        blaubot.close();
         blaubot = null;
     }
 

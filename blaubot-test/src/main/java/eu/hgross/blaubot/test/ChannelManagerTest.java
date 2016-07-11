@@ -8,29 +8,35 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+import java.util.concurrent.atomic.AtomicInteger;
 
-import eu.hgross.blaubot.core.BlaubotConstants;
 import eu.hgross.blaubot.admin.AbstractAdminMessage;
 import eu.hgross.blaubot.admin.StringAdminMessage;
-import eu.hgross.blaubot.messaging.BlaubotChannel;
+import eu.hgross.blaubot.core.BlaubotConstants;
+import eu.hgross.blaubot.core.BlaubotDevice;
+import eu.hgross.blaubot.core.IActionListener;
 import eu.hgross.blaubot.messaging.BlaubotChannelManager;
 import eu.hgross.blaubot.messaging.BlaubotMessage;
+import eu.hgross.blaubot.messaging.BlaubotMessageManager;
 import eu.hgross.blaubot.messaging.IBlaubotAdminMessageListener;
 import eu.hgross.blaubot.messaging.IBlaubotChannel;
 import eu.hgross.blaubot.messaging.IBlaubotMessageListener;
+import eu.hgross.blaubot.mock.BlaubotConnectionQueueMock;
 import eu.hgross.blaubot.test.mockups.ChannelManagerDeviceMockup;
 
 /**
  * A test for channel managers that can be used with any blaubot implementation by providing a
  * list of BlaubotChannelManager instances for each blaubot instance to the static methods.
- *
  */
 public class ChannelManagerTest {
     private static final int NUMBER_OF_CLIENTS = 5;
@@ -85,6 +91,143 @@ public class ChannelManagerTest {
         testAdminBMessageBroadcast(deviceMockups);
     }
 
+    @Test(timeout = 30000)
+    /**
+     * Tests if the ChannelManager's start/stop methods are idempotent
+     */
+    public void testStartStopIdempotence() throws InterruptedException {
+        BlaubotConnectionQueueMock mockConnnection = new BlaubotConnectionQueueMock(new BlaubotDevice("Device1"));
+        BlaubotConnectionQueueMock mockConnectionRemoteEndpoint = mockConnnection.getOtherEndpointConnection(new BlaubotDevice("Dev2"));
+        
+        final BlaubotMessageManager mm1 = new BlaubotMessageManager(mockConnnection);
+        final BlaubotMessageManager mm2 = new BlaubotMessageManager(mockConnectionRemoteEndpoint);
+
+        // send queues
+        final String mm1Msg = "mm1Msg", mm2Msg = "mm2Msg";
+        final ArrayList<String> mm1ToMm2 = new ArrayList();
+        final ArrayList<String> mm2ToMm1 = new ArrayList();
+        
+        // receive queues
+        final BlockingQueue mm1Received = new LinkedBlockingQueue();
+        final BlockingQueue mm2Received = new LinkedBlockingQueue();
+        
+        // fill send queues
+        for(int i=0; i<500;i++) {
+            mm1ToMm2.add(mm1Msg + i);
+            mm2ToMm1.add(mm2Msg + i);
+        }
+
+        
+        // add listeners to receivers
+        final CountDownLatch receivedAllMessagesLatch = new CountDownLatch(mm1ToMm2.size() + mm2ToMm1.size());
+        mm1.getMessageReceiver().addMessageListener(new IBlaubotMessageListener() {
+            @Override
+            public void onMessage(BlaubotMessage blaubotMessage) {
+                try {
+                    mm1Received.put(new String(blaubotMessage.getPayload(), BlaubotConstants.STRING_CHARSET));
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        mm2.getMessageReceiver().addMessageListener(new IBlaubotMessageListener() {
+            @Override
+            public void onMessage(BlaubotMessage blaubotMessage) {
+                try {
+                    mm2Received.put(new String(blaubotMessage.getPayload(), BlaubotConstants.STRING_CHARSET));
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        
+        // async start sending the messages from each side
+        final CountDownLatch sendingFinishedLatch = new CountDownLatch(2);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                for (String current : mm1ToMm2) {
+                    BlaubotMessage msg = new BlaubotMessage();
+                    msg.setPayload(current.getBytes(BlaubotConstants.STRING_CHARSET));
+                    mm1.getMessageSender().sendMessage(msg);
+                }
+                sendingFinishedLatch.countDown();
+            }
+        }).start();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                for (String current : mm2ToMm1) {
+                    BlaubotMessage msg = new BlaubotMessage();
+                    msg.setPayload(current.getBytes(BlaubotConstants.STRING_CHARSET));
+                    mm2.getMessageSender().sendMessage(msg);
+                }
+                sendingFinishedLatch.countDown();
+            }
+        }).start();
+        
+        // start/stop calls
+        int iterations = 20;
+        // setup callbacks for the deactivations
+        final AtomicInteger finishedCountMm1 = new AtomicInteger(0);
+        final CountDownLatch deactivationListenerLatch = new CountDownLatch(iterations * 2 * 11);
+        final IActionListener actionListener = new IActionListener() {
+            @Override
+            public void onFinished() {
+                finishedCountMm1.incrementAndGet();
+                deactivationListenerLatch.countDown();
+            }
+        };
+        final CountDownLatch threadCountDownLatch = new CountDownLatch(iterations * 2); 
+        for(int i=0; i < 20; i++) {
+            for (final BlaubotMessageManager mm : Arrays.asList(mm1, mm2)) {
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mm.activate();
+                        mm.deactivate(actionListener);
+                        mm.deactivate(actionListener);
+                        mm.deactivate(actionListener);
+                        mm.activate();
+                        mm.activate();
+                        mm.activate();
+                        mm.deactivate(actionListener);
+                        mm.activate();
+                        mm.activate();
+                        mm.activate();
+                        mm.activate();
+                        mm.activate();
+                        mm.activate();
+                        mm.deactivate(actionListener);
+                        mm.deactivate(actionListener);
+                        mm.activate();
+                        mm.activate();
+                        mm.activate();
+                        mm.deactivate(actionListener);
+                        mm.deactivate(actionListener);
+                        mm.deactivate(actionListener);
+                        mm.deactivate(actionListener);
+                        mm.activate();
+                        mm.activate();
+                        mm.deactivate(actionListener);
+                        
+                        threadCountDownLatch.countDown();
+                    }
+                }).start();
+            }
+        }
+        
+        // await finish of sending and activate/deactivate calls
+        sendingFinishedLatch.await();
+        
+        threadCountDownLatch.await();
+        boolean deactivationTimedOut = !deactivationListenerLatch.await(10000, TimeUnit.MILLISECONDS);
+        Assert.assertFalse("Not all deactivation listeners were called", deactivationTimedOut);
+        
+        // We should have counted 2*11*iterations deactivation callbacks (11 times called deactivate)
+        Assert.assertEquals("The deactivation listener were not called", 2 * 11 * iterations, finishedCountMm1.get());
+    }
+    
     /**
      * Tests the admin broadcast on the given channelManagers.
      *
@@ -119,7 +262,6 @@ public class ChannelManagerTest {
                         return;
                     }
                     receivedMessages.add(adminMessage);
-                    //Assert.assertEquals("Message was not correctly received", expected, adminMessage);
                     latch.countDown();
                 }
             });

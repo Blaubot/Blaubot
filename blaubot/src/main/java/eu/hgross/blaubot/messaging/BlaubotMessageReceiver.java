@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import eu.hgross.blaubot.core.BlaubotConstants;
@@ -20,10 +19,14 @@ import eu.hgross.blaubot.util.Log;
  * listeners when a message was completely read.
  * <p/>
  * Message listeners can be activated and deactivated.
- * <p/>
- * TODO: review handling of dead connection (IOExceptions ...)
  */
 public class BlaubotMessageReceiver {
+    /* 
+     * TODO the current deactivate/activate implementation will stack new blocking threads on each
+     * deactivate/activate cycle if no message is received in between.
+     * Shouldn't be a problem in almost every use case but is still not pretty.
+     */ 
+    
     private static final String LOG_TAG = "BlaubotMessageReceiver";
     /**
      * Locks the access to the chunked message mappings
@@ -62,6 +65,7 @@ public class BlaubotMessageReceiver {
 
     /**
      * The blaubot connection used to receive messages.
+     *
      * @return the connection object used to receive messages
      */
     public IBlaubotConnection getBlaubotConnection() {
@@ -69,12 +73,16 @@ public class BlaubotMessageReceiver {
     }
 
     /**
-     * Activates the message receiver (reading from the connection)
+     * Activates the message receiver (reading from the connection).
+     * If the receiver was already started, it will start a new consumer-thread that will sequentially
+     * take over the work from the previous thread.
      */
     public void activate() {
         MessageReceivingThread mrt = new MessageReceivingThread();
-        mrt.setName("msg-receiver-" + blaubotConnection.getRemoteDevice().getUniqueDeviceID());
-        synchronized (deactivateLock) {
+        mrt.setName("msg-receiver-" + blaubotConnection.getRemoteDevice().getUniqueDeviceID() + ", " + mrt.getId());
+        synchronized (activationLock) {
+            // we don't interrupt a possibly already running receive thread here, see comment in BlaubotMessageManager 
+            // deactivate() method.
             messageReceivingThread = mrt;
         }
         mrt.start();
@@ -86,32 +94,27 @@ public class BlaubotMessageReceiver {
      * @param actionListener callback to be informed when the receiver was closed (thread finished), can be null
      */
     public void deactivate(final IActionListener actionListener) {
-        MessageReceivingThread mrt;
-        synchronized (deactivateLock) {
+        final MessageReceivingThread mrt;
+        synchronized (activationLock) {
             mrt = messageReceivingThread;
             messageReceivingThread = null;
+
+            // replacing the consumer thread is sufficient, we call the listener
+            if (actionListener != null) actionListener.onFinished();
         }
         if (mrt != null) {
-            // the thread will call the listener
-            mrt.attachFinishListener(actionListener);
-            mrt.interrupt();
-        } else {
-            // no thread active, we have to call the listener
-            if (actionListener != null) {
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        actionListener.onFinished();
-                    }
-                }).start();
-            }
+            //mrt.interrupt(); // we don't interrupt the thread, because we could end up in a out of sync bytestream this way
         }
         // clear chunk mappings
         synchronized (chunkLock) {
             receivedLastChunkMapping.clear();
         }
     }
-    private Object deactivateLock = new Object();
+
+    /**
+     * Monitor for activation/deactivation calls.
+     */
+    private Object activationLock = new Object();
 
 
     /**
@@ -203,12 +206,13 @@ public class BlaubotMessageReceiver {
         }
         if (completeListOfChunks != null) {
             BlaubotMessage msg = BlaubotMessage.fromChunks(completeListOfChunks);
-            //Log.d(LOG_TAG, "ReceivedChunks: " + completeListOfChunks);
-            //Log.d(LOG_TAG, "Got all chunks for chunkId " + chunkId + " (" + completeListOfChunks.size() + " chunks), bytes: " + msg.getPayload().length);
             notifyListeners(msg);
         }
     }
 
+    /**
+     * Consumes the connection's byte stream and deserializes BlaubotMessages from it.
+     */
     class MessageReceivingThread extends Thread {
         /**
          * Milliseconds to wait if an io exception happens on read to not block the whole system in this cases and
@@ -217,18 +221,13 @@ public class BlaubotMessageReceiver {
         private static final long SLEEP_TIME_ON_IO_FAILURE = 350;
         private final String LOG_TAG = "MessageReceivingThread";
 
-        private IActionListener finishedListener;
-        private boolean finished = false;
-        private Object finishedMonitor = new Object();
-
         @Override
         public void run() {
-            // TODO handle exceptions: they need to bubble up to the top level to eliminate this receiver. Maybe we just close the connection due to the obviously corrupted messaging
             synchronized (receiverMonitor) {
                 if (Log.logDebugMessages()) {
                     Log.d(LOG_TAG, "Started receiver for connection: " + blaubotConnection);
                 }
-                byte[] headerBuffer, payloadBuffer;
+                byte[] headerBuffer;
                 int headerLength = BlaubotMessage.FULL_HEADER_LENGTH;
                 headerBuffer = new byte[headerLength];
                 ByteBuffer headerByteBuffer = ByteBuffer.wrap(headerBuffer).order(BlaubotConstants.BYTE_ORDER);
@@ -237,10 +236,8 @@ public class BlaubotMessageReceiver {
                 while (messageReceivingThread == this && !isInterrupted()) {
                     // Read from the InputStream
                     try {
-                        Random r = new Random();
-                        int i = r.nextInt();
                         BlaubotMessage message = BlaubotMessage.readFromBlaubotConnection(blaubotConnection, headerByteBuffer, headerBuffer);
-
+                        
                         // maintain stats
                         receivedMessages += 1;
                         receivedPayloadBytes += message.getPayload().length;
@@ -259,23 +256,17 @@ public class BlaubotMessageReceiver {
 
 
                     } catch (IOException e) {
+                        // on connection failure the message receiver will transition to an inactive state
+                        // failed connection are handled by the connection manager and this receiver will
+                        // get a deactivate() call
                         if (Log.logDebugMessages()) {
-                            Log.d(LOG_TAG, "IOException ("+e.getMessage()+") while reading from connection: " + blaubotConnection);
+                            Log.d(LOG_TAG, "IOException (" + e.getMessage() + ") while reading from connection: " + blaubotConnection);
                         }
                         try {
                             Thread.sleep(SLEEP_TIME_ON_IO_FAILURE);
                         } catch (InterruptedException e1) {
-                            break; // got interupted - RETREAT!
+                            break; // got interrupted, we exit
                         }
-                    }
-                }
-                synchronized (finishedMonitor) {
-                    finished = true;
-                    if (Log.logDebugMessages()) {
-                        Log.d(LOG_TAG, "Receiver finished. Notifying listener (connection: " + blaubotConnection + ")");
-                    }
-                    if (finishedListener != null) {
-                        finishedListener.onFinished();
                     }
                 }
                 if (Log.logDebugMessages()) {
@@ -284,24 +275,13 @@ public class BlaubotMessageReceiver {
             }
         }
 
-        /**
-         * Attaches a listener that gets called, if the thread finished.
-         * Meaning the run() method finished once.
-         * If attached after it already finished, the listener is called
-         * immediately.
-         *
-         * @param listener the listener
-         */
-        public void attachFinishListener(IActionListener listener) {
-            synchronized (finishedMonitor) {
-                this.finishedListener = listener;
-                if (finished) {
-                    finishedListener.onFinished();
-                }
-            }
-        }
     }
 
+    /**
+     * Notifies all attached message listeners about a newly received message
+     *
+     * @param message the message to be dispatched to the listening parties.
+     */
     private void notifyListeners(BlaubotMessage message) {
         // notify listeners about new message
         for (IBlaubotMessageListener listener : messageListeners) {

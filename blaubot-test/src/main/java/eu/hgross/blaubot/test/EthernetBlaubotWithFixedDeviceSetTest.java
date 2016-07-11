@@ -6,6 +6,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -18,6 +19,7 @@ import java.util.concurrent.TimeoutException;
 import eu.hgross.blaubot.core.Blaubot;
 import eu.hgross.blaubot.core.BlaubotAdapterConfig;
 import eu.hgross.blaubot.core.ConnectionStateMachineConfig;
+import eu.hgross.blaubot.core.IBlaubotConnection;
 import eu.hgross.blaubot.core.State;
 import eu.hgross.blaubot.core.statemachine.IBlaubotConnectionStateMachineListener;
 import eu.hgross.blaubot.core.statemachine.states.FreeState;
@@ -34,7 +36,7 @@ import eu.hgross.blaubot.util.Log.LogLevel;
  * 
  * Note: These tests are based on the {@link BlaubotEthernetFixedDeviceSetBeacon} component without multicast. 
  * 
- * @author Henning Gross <mail.to@henning-gross.de>
+ * @author Henning Gross {@literal (mail.to@henning-gross.de)}
  *
  */
 public class EthernetBlaubotWithFixedDeviceSetTest {
@@ -43,7 +45,7 @@ public class EthernetBlaubotWithFixedDeviceSetTest {
 	/**
 	 * The number of blaubot instances to test with.
 	 */
-	private static final int NUMBER_OF_BLAUBOT_INSTANCES = 4; // min 3!
+	private static final int NUMBER_OF_BLAUBOT_INSTANCES = 3; // min 3!
 	private static final int MAX_STOPPING_TIMEOUT_FOR_ALL_INSTANCES = 30000;
 	private static final int MAX_START_TIME_FOR_ALL_INSTANCES = 30000;
 	/**
@@ -73,12 +75,28 @@ public class EthernetBlaubotWithFixedDeviceSetTest {
 	@After
 	public void cleanUp() throws UnknownHostException, InterruptedException {
 		boolean stopped = BlaubotJunitHelper.stopBlaubotInstances(instances, MAX_STOPPING_TIMEOUT_FOR_ALL_INSTANCES);
-		this.instances.clear();
+		
 		Thread.sleep(WAIT_TIME_BETWEEN_TESTS);
 		if (!stopped) {
-            Blaubot b;
-			throw new RuntimeException("Failed to stop blaubot instances");
+            // on failure disconnect all connections manually
+            for (Blaubot blaubot : this.instances) {
+                List<IBlaubotConnection> conns = blaubot.getChannelManager().reset();
+                for (IBlaubotConnection conn : conns) {
+                    conn.disconnect();
+                }
+                
+                // and use the closeable impl
+                try {
+                    blaubot.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+			this.instances.clear();
+            throw new RuntimeException("Failed to stop blaubot instances");
 		}
+
+		this.instances.clear();
 	}
 
 
@@ -155,7 +173,7 @@ public class EthernetBlaubotWithFixedDeviceSetTest {
 	
 	@Test
 	/**
-	 * Lets the Blaubot instances form a kingdom and validates the participants states after a defined
+	 * Lets the Blaubot instances form a kingdom and validates the participant's states after a defined
 	 * time.
 	 */
 	public void testConnectivity() throws InterruptedException {

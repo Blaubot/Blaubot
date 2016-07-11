@@ -39,7 +39,7 @@ android {
 dependencies {
     compile project(':blaubot')
     // Apache 2.0
-    compile 'org.apache.commons:commons-collections4:4.0'
+    compile 'org.apache.commons:commons-collections4:4.1'
 }
 
 /*
