@@ -11,8 +11,9 @@ import eu.hgross.blaubot.core.IBlaubotConnection;
 public interface IBlaubotIncomingConnectionListener {
 	/**
 	 * Called when a connection was established.
-	 * @param connection
+	 * 
+	 * @param connection the newly established connection
 	 */
-	public void onConnectionEstablished(IBlaubotConnection connection);
+	void onConnectionEstablished(IBlaubotConnection connection);
 	
 }

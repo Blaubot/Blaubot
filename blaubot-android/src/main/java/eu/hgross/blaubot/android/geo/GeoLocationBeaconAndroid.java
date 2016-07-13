@@ -128,6 +128,7 @@ public class GeoLocationBeaconAndroid extends GeoLocationBeacon implements Locat
      *
      * @param location            The new Location that you want to evaluate
      * @param currentBestLocation The current Location fix, to which you want to compare the new one
+     * @return true, iff location is more accurate than currentBestLocation 
      */
     protected boolean isBetterLocation(Location location, Location currentBestLocation) {
         if (currentBestLocation == null) {

@@ -65,13 +65,14 @@ public abstract class AbstractAdminMessage {
 	
 	/**
 	 * Gets this message's byte representation (NOT including the classifier) 
-	 * @return
+	 * @return the payload as byte array
 	 */
 	protected abstract byte[] payloadToBytes();
 	
 	/**
 	 * Get this message's byte representation including the classifier bytes
-	 * @return
+	 * 
+	 * @return the serialized classifier and payload bytes
 	 */
 	protected byte[] classifierAndPayloadBytes() {
 		byte[] payloadBytes = payloadToBytes();

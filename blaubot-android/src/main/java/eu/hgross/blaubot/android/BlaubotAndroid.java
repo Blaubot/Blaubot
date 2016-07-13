@@ -122,7 +122,7 @@ public class BlaubotAndroid extends Blaubot {
 	 * This method is recommended to be called inside the onResume() method of
 	 * an {@link Activity} or {@link Service}.
 	 * 
-	 * @param context
+	 * @param context the current android context
 	 */
 	public void registerReceivers(Context context) {
         ArrayList<Object> blaubotComponents = new ArrayList<>();
@@ -144,7 +144,7 @@ public class BlaubotAndroid extends Blaubot {
 	 * This method is recommended to be called inside the onPause() method of
 	 * an {@link Activity} or {@link Service}.
 	 * 
-	 * @param context
+	 * @param context the current android context
 	 */
 	public void unregisterReceivers(Context context) {
         ArrayList<Object> blaubotComponents = new ArrayList<>();

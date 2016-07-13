@@ -169,7 +169,7 @@ public class ChannelView extends FrameLayout {
     /**
      * Sets the channel to be displayed
      *
-     * @param channelInfo
+     * @param channelInfo the channel info model that is to be rendered
      */
     public void setChannelInfo(ChannelInfo channelInfo) {
         this.mChannelInfo = channelInfo;
@@ -179,6 +179,7 @@ public class ChannelView extends FrameLayout {
     /**
      * Creates a dialog which lets a user change the properties of the channel's config.
      *
+     * @param context the current android context
      * @param blaubotChannel the blaubot channel to edit
      * @return the dialog
      */

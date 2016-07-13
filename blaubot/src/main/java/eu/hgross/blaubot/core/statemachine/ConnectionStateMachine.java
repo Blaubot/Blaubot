@@ -60,10 +60,12 @@ public class ConnectionStateMachine {
     /**
      * Create the connection state machine for a blaubot instance.
      *
-     * @param ownDevice
+     * @param ownDevice the own device
      * @param connectionManager the connection manager managing the blaubot acceptors
      * @param adapters the adapters
+	 * @param beacons the beacons to be used    
      * @param blaubot the blaubot instance
+     * @param serverConnectionManager server connection manager
      */
 	public ConnectionStateMachine(IBlaubotDevice ownDevice, final BlaubotConnectionManager connectionManager, final List<IBlaubotAdapter> adapters, List<IBlaubotBeacon> beacons, final Blaubot blaubot, ServerConnectionManager serverConnectionManager) {
 		this.blaubot = blaubot;

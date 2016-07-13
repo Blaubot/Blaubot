@@ -55,7 +55,7 @@ public class WifiApUtil {
 
     /**
      *
-     * @param mgr
+     * @param mgr android's wifi manager service
      * @return instance or null, if ap mode is not supported
      */
     public static WifiApUtil createInstance(WifiManager mgr) {

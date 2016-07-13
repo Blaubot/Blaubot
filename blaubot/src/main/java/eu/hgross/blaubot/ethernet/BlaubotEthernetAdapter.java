@@ -31,8 +31,9 @@ public class BlaubotEthernetAdapter implements IBlaubotAdapter {
 	/**
 	 * Sets up the Adapter.
      *
-	 * @param acceptorPort
-	 * @param ownInetAddr
+	 * @param ownDevice the own blaubot device
+	 * @param acceptorPort the acceptor port
+	 * @param ownInetAddr the inet addr to listen on
 	 */
 	public BlaubotEthernetAdapter(IBlaubotDevice ownDevice, int acceptorPort, InetAddress ownInetAddr) {
 		// TODO remove InetAddress dependency.

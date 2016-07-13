@@ -81,13 +81,12 @@ public class ViewUtils {
         /**
          * Called iff the text was changed and validation was successful.
          *
-         * @param text
+         * @param text the new text
          */
         public abstract void onSettingChanged(String text);
 
         /**
-         * @param val
-         *            the current edittext's state
+         * @param val the current edittext's state
          * @return true if val is a valid input, false otherwise
          */
         protected abstract boolean validate(String val);
@@ -120,7 +119,9 @@ public class ViewUtils {
 
     private static final Pattern URL_PATTERN = Pattern.compile("^(([^:/?#]+):)?(//([^/?#]*))?([^?#]*)(\\?([^#]*))?(#(.*))?");
     /**
-     * @param val
+     * Validates url path segements.
+     * 
+     * @param val the url path segment to be validated
      * @return true iff val is a valid URL path (without protocol, host, port)
      */
     public static boolean validateURLPathSegment(String val) {
@@ -132,8 +133,9 @@ public class ViewUtils {
     private static final Pattern validHostnameRegex = Pattern.compile("^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\\-]*[a-zA-Z0-9])\\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\\-]*[A-Za-z0-9])$");
 
     /**
-     *
-     * @param hostname
+     * Validates a hostname
+     * 
+     * @param hostname the hostname to be validated
      * @return true, iff hostname is a valid hostname (not an ip)
      */
     public static boolean isValidHostname(String hostname) {
@@ -141,7 +143,9 @@ public class ViewUtils {
     }
 
     /**
-     * @param ip
+     * Checks wheter an ipv4 address is valid
+     * 
+     * @param ip the ip to be checked
      * @return true, iff ip is a valid ip address
      */
     public static boolean isValidIpAddress(String ip) {

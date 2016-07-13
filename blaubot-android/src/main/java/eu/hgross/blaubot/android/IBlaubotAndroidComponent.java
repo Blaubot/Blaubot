@@ -24,13 +24,13 @@ public interface IBlaubotAndroidComponent {
 
     /**
      * Gets called when onPause was called on the foreground activity
-     * @param context
+     * @param context the current android context
      */
     public void onPause(Activity context);
 
     /**
      * Gets called when a new intent was received on the foreground activity
-     * @param intent
+     * @param intent the new intent
      */
     public void onNewIntent(Intent intent);
 }

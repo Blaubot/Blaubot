@@ -16,8 +16,8 @@ public class BeaconHelper {
      * Given a beaconMessage and the listener, this method generates and populates the discovery events
      * for the remote end's device as well as it's king (if any).
      * 
-     * @param beaconMessage
-     * @param discoveryEventListener
+     * @param beaconMessage the beacon message
+     * @param discoveryEventListener the listener
      */
     public static void populateEventsFromBeaconMessage(BeaconMessage beaconMessage, IBlaubotDiscoveryEventListener discoveryEventListener) {
         if (discoveryEventListener == null) {

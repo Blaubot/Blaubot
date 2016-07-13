@@ -48,8 +48,8 @@ public class WifiConnector {
 
 	/**
 	 *
-	 * @param connectivityManager
-	 * @param wifiManager
+	 * @param connectivityManager android's connectivity manager service
+	 * @param wifiManager android's wifi manager service
 	 * @param ssid
 	 *            the network's SSID
 	 * @param psk
@@ -167,7 +167,7 @@ public class WifiConnector {
 	/**
 	 * Connects to the network (same as connect(boolean) but with async api)
 	 * 
-	 * @param callback
+	 * @param callback the callback to be called when the connect operation finished
 	 */
 	public void connect(final IWifiConnectorCallback callback) {
 		new Thread(new Runnable() {

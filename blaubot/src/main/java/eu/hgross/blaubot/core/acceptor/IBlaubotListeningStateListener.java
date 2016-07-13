@@ -10,10 +10,15 @@ package eu.hgross.blaubot.core.acceptor;
 public interface IBlaubotListeningStateListener {
 	/**
 	 * Called when listening for incoming connections started
+     * 
+     * @param connectionAcceptor the acceptor that just started listening
 	 */
-	public void onListeningStarted(IBlaubotConnectionAcceptor connectionAcceptor);
+	void onListeningStarted(IBlaubotConnectionAcceptor connectionAcceptor);
+	
 	/**
 	 * Called when listening for incoming connections stopped
+     * 
+     * @param connectionAcceptor the acceptor that just stopped listening for connections
 	 */
-	public void onListeningStopped(IBlaubotConnectionAcceptor connectionAcceptor);
+	void onListeningStopped(IBlaubotConnectionAcceptor connectionAcceptor);
 }

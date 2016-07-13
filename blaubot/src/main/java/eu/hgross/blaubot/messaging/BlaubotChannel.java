@@ -462,7 +462,7 @@ public class BlaubotChannel implements IBlaubotChannel {
      * The subscription itsef is removed, when the master sends the message back and removeSubscription gets
      * called by the ChannelManager.
      *
-     * @param uniqueDeviceId
+     * @param uniqueDeviceId the unique device id
      * @return number of MessageManagers to which the message was committed
      */
     protected int sendRemoveSubscription(String uniqueDeviceId) {
@@ -474,7 +474,7 @@ public class BlaubotChannel implements IBlaubotChannel {
      * Adds a subscription to uniqueDeviceId to this channel.
      * The operation is idempotent.
      *
-     * @param uniqueDeviceID
+     * @param uniqueDeviceID the unique device id of the device that will be a new subscriber
      */
     protected void addSubscription(String uniqueDeviceID) {
         synchronized (channelManager.subscriptionLock) {
@@ -490,7 +490,7 @@ public class BlaubotChannel implements IBlaubotChannel {
      * Removes the subscription of uniqueDeviceId to this channel
      * The operation is idempotent.
      *
-     * @param uniqueDeviceId
+     * @param uniqueDeviceId the unique device id of the device that will be unsubscribed
      */
     protected void removeSubscription(String uniqueDeviceId) {
         synchronized (channelManager.subscriptionLock) {

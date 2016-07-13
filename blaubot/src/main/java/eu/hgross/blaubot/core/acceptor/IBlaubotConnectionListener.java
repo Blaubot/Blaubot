@@ -10,7 +10,8 @@ import eu.hgross.blaubot.core.IBlaubotConnection;
 public interface IBlaubotConnectionListener {
 	/**
 	 * Called when a connection was closed (for any reason)
-	 * @param connection
+	 * 
+	 * @param connection the connection that was just closed
 	 */
-	public void onConnectionClosed(IBlaubotConnection connection);
+	void onConnectionClosed(IBlaubotConnection connection);
 }

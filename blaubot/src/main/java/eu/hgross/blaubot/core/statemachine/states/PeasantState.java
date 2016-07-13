@@ -50,6 +50,7 @@ public class PeasantState implements IBlaubotState, IBlaubotSubordinatedState {
 
     /**
      * @param kingConnection the connection to our king
+     * @param connectionAccomplishmentType information about how the connection was accomplished 
      */
     public PeasantState(IBlaubotConnection kingConnection, ConnectionAccomplishmentType connectionAccomplishmentType) {
         this.connectionAccomplishmentType = connectionAccomplishmentType;

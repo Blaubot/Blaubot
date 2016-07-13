@@ -69,6 +69,7 @@ public class BlaubotKingdom {
     /**
      * Choses the connection to the kingDevice and starts the kingdom management.
      *
+     * @param connection the king-connection that is to be managed by this kingdom instance
      * @throws IllegalStateException if manageConncetion was called before
      */
     protected void manageConnection(BlaubotKingdomConnection connection) {
@@ -119,7 +120,7 @@ public class BlaubotKingdom {
     /**
      * Adds a listener to this kingdom's life cycle events
      *
-     * @param lifecycleListener
+     * @param lifecycleListener the listener to be added
      */
     public void addLifecycleListener(ILifecycleListener lifecycleListener) {
         lifeCycleEventDispatcher.addLifecycleListener(lifecycleListener);
@@ -128,7 +129,7 @@ public class BlaubotKingdom {
     /**
      * Removes a listener to this kingdom's life cycle events
      *
-     * @param lifecycleListener
+     * @param lifecycleListener the listener to be removed
      */
     public void removeLifecycleListener(ILifecycleListener lifecycleListener) {
         lifeCycleEventDispatcher.removeLifecycleListener(lifecycleListener);

@@ -42,8 +42,7 @@ public class BlaubotJsr82BluetoothAcceptor implements IBlaubotConnectionAcceptor
     private IBlaubotBeaconStore beaconStore;
 
     /**
-     *
-     * @param blaubotBluetoothAdapter
+     * @param blaubotBluetoothAdapter the blaubot adapter
      * @throws BluetoothStateException if we cannot acces the hardware bluetooth adapter
      */
     public BlaubotJsr82BluetoothAcceptor(BlaubotJsr82BluetoothAdapter blaubotBluetoothAdapter) throws BluetoothStateException {

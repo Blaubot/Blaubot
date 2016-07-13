@@ -23,7 +23,9 @@ public class BlaubotMessageType {
 
     /**
      * Constructs a BlaubotMessageType object from a byte
+     * 
      * @param typeByte header byte
+     * @return the message type enum deserialized from a byte 
      */
     protected static BlaubotMessageType fromByte(byte typeByte) {
         BlaubotMessageType msgType = new BlaubotMessageType();
@@ -33,8 +35,10 @@ public class BlaubotMessageType {
     }
 
     /**
-     * copies a message type
-     * @param blaubotMessageType
+     * Copies a message type object.
+     * 
+     * @param blaubotMessageType the message type to be copied
+     * @return the copy of blaubotMessageType
      */
     protected static BlaubotMessageType copy(BlaubotMessageType blaubotMessageType) {
         final byte b = blaubotMessageType.toByte();

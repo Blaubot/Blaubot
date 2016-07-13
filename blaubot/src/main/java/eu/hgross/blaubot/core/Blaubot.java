@@ -170,7 +170,7 @@ public class Blaubot implements Closeable {
     /**
      * The device object identifying this blaubot instance.
      *
-     * @return
+     * @return the own blaubot device containing our unique device id.
      */
     public IBlaubotDevice getOwnDevice() {
         return ownDevice;

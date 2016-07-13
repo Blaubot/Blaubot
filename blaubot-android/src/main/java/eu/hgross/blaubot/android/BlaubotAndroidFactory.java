@@ -89,7 +89,7 @@ public class BlaubotAndroidFactory extends eu.hgross.blaubot.core.BlaubotFactory
      * @param appUUID        the app's uuid
      * @param acceptorPort   the port of the connector's accepting socket
      * @param ownInetAddress the own {@link InetAddress} of the network to act on
-     * @return
+     * @return the blaubot instance
      */
     public static BlaubotAndroid createEthernetBlaubotWithBluetoothBeacon(UUID appUUID, int acceptorPort, InetAddress ownInetAddress) {
         if (ownInetAddress == null || appUUID == null) {
@@ -122,6 +122,8 @@ public class BlaubotAndroidFactory extends eu.hgross.blaubot.core.BlaubotFactory
      * Sets up a default {@link Blaubot} instance using only the bluetooth adapter.
      *
      * @param appUUID the app's unique uuid
+     * @param beaconPort the port on which the beacon accepts connections via tcp 
+     * @param beaconBroadcastPort the port on which the beacons broadcasts and receives udp multicasts
      * @return blaubot instance
      */
     public static BlaubotAndroid createBluetoothBlaubotWithMulticastBeacon(UUID appUUID, int beaconPort, int beaconBroadcastPort) {
@@ -211,9 +213,10 @@ public class BlaubotAndroidFactory extends eu.hgross.blaubot.core.BlaubotFactory
      * WARNING: This experimental and not recommended in production environments.
      *
      * @param appUUID         the app's unique uuid
-     * @param wifiManager
-     * @param beaconChannel
-     * @param acceptorChannel
+     * @param p2pWifiManager  android's p2p wifi manager service 
+     * @param wifiManager     the android wifi manager service
+     * @param beaconChannel   the beaconChannel (wifip2p) to be used for beacon transmissions
+     * @param acceptorChannel the acceptorChannel (wifip2p) on which connection are going to be accepted
      * @return blaubot instance
      */
     public static BlaubotAndroid createWifiP2PBlaubot(UUID appUUID, WifiP2pManager p2pWifiManager, WifiManager wifiManager, WifiP2pManager.Channel beaconChannel, WifiP2pManager.Channel acceptorChannel) {

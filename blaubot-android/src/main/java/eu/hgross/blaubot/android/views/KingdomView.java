@@ -89,10 +89,11 @@ public class KingdomView extends LinearLayout implements IBlaubotDebugView {
 
 	/**
 	 * Creates a kingdom view list item
+	 * 
 	 * @param context the context
 	 * @param state the state of the device to visualize
 	 * @param uniqueDeviceId the unique device id
-	 * @return
+	 * @return the constructed view
 	 */
 	public static View createKingdomViewListItem(Context context, State state, String uniqueDeviceId) {
 		final Drawable icon = ViewUtils.getDrawableForBlaubotState(context, state);

@@ -266,7 +266,7 @@ public class BlaubotServerConnector  {
     /**
      * Sets the incoming connection listener which is called if a connection to the server was established.
      *
-     * @param incomingConnectionListener
+     * @param incomingConnectionListener the listener to be set
      */
     public void setIncomingConnectionListener(IBlaubotIncomingConnectionListener incomingConnectionListener) {
         this.incomingConnectionListener = incomingConnectionListener;

@@ -48,8 +48,9 @@ public class WifiUtils {
 	}
 
 	/**
-	 * 
-	 * @param mac
+	 * Tries to resolve the ip address for a given mac address from the ARP cache.
+     * 
+	 * @param mac the mac address to get the ip for
 	 * @return null or ip
 	 */
 	public static String getIpByMACFromARP(String mac) {
@@ -90,8 +91,10 @@ public class WifiUtils {
 
 
 	/**
+	 * Given an ipv4 <strong>ip</strong> address, tries to retrieve the MAC of the device to which
+     * this ip is assigned.
 	 * 
-	 * @param ip
+	 * @param ip the ipv4 address in the form of x.x.x.x
 	 * @return null or mac
 	 */
 	public static String getMACbyIpFromARP(String ip) {

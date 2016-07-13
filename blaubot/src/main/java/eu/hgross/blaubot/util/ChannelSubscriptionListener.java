@@ -28,7 +28,8 @@ public class ChannelSubscriptionListener implements IBlaubotAdminMessageListener
     public interface SubscriptionChangeListener {
         /**
          * Called when the list of subscriptions to this channel changed
-         * @param channelId
+         * 
+         * @param channelId the channel id on which a subscription changed
          */
         void onSubscriptionChanged(short channelId);
 
@@ -154,15 +155,17 @@ public class ChannelSubscriptionListener implements IBlaubotAdminMessageListener
 
     /**
      * Adds a listener to be informed when the subscriptions change.
-     * @param changeListener
+     * 
+     * @param changeListener the listener to be added
      */
     public void addSubscriptionChangeListener(SubscriptionChangeListener changeListener) {
         listeners.add(changeListener);
     }
 
     /**
-     * removes a formerly added listener
-     * @param changeListener
+     * Removes a formerly added listener
+     * 
+     * @param changeListener the listener to be removed
      */
     public void removeSubscriptionChangeListener(SubscriptionChangeListener changeListener) {
         listeners.remove(changeListener);

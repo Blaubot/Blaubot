@@ -28,7 +28,9 @@ import io.netty.handler.codec.http.websocketx.WebSocketVersion;
 import io.netty.util.CharsetUtil;
 
 /**
- * After .connect() via the bootstrapper, call getConncetion().
+ * WebSocketClientHandler that manages the BlaubotWebsocketConnection
+ * 
+ * After .connect() via the bootstrapper, call getConnection().
  */
 public class WebsocketClientHandler extends SimpleChannelInboundHandler<Object> {
     private static final String LOG_TAG = "WebsocketClientHandler";
@@ -39,8 +41,10 @@ public class WebsocketClientHandler extends SimpleChannelInboundHandler<Object> 
     private BlaubotWebsocketConnection connection;
 
     /**
+     * Creates a new WebSocketClientHandler that manages the BlaubotWebsocketConnection
      * @param uri                  The uri to connect with
      * @param remoteUniqueDeviceId the unique device id of the device we are connecting to
+     * @param listenerReference    a reference Object that handles the connection listener
      */
     public WebsocketClientHandler(URI uri, String remoteUniqueDeviceId, AtomicReference<IBlaubotIncomingConnectionListener> listenerReference) {
         // Connect with V13 (RFC 6455 aka HyBi-17).
@@ -137,7 +141,7 @@ public class WebsocketClientHandler extends SimpleChannelInboundHandler<Object> 
      * If done, the blaubot connection is returned
      *
      * @return the blaubot connection if the connection was successful or null, if not
-     * @throws InterruptedException
+     * @throws InterruptedException if interrupted while waiting for the handshake
      */
     public synchronized BlaubotWebsocketConnection getConnection() throws InterruptedException {
         if (this.connection != null) {

@@ -34,9 +34,9 @@ public interface IBlaubotAdapter {
 	public IBlaubotConnectionAcceptor getConnectionAcceptor();
 
 	/**
-	 * Setter for dependency injecton of the blaubot instance.
+	 * Setter for dependency injection of the blaubot instance.
      *
-	 * @param blaubotInstance
+	 * @param blaubotInstance the blaubot instance
 	 */
 	public void setBlaubot(Blaubot blaubotInstance);
 

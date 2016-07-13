@@ -9,7 +9,8 @@ public interface IBlaubotAdminMessageListener {
 
     /**
      * Called when an admin message was received
-     * @param adminMessage
+     * 
+     * @param adminMessage the received admin message
      */
     public void onAdminMessage(AbstractAdminMessage adminMessage);
 }

@@ -57,7 +57,7 @@ public class BlaubotUUIDSet {
 
 	/**
 	 * The UUID identifying the app
-	 * @return
+	 * @return the uuid for the app
 	 */
 	public UUID getAppUUID() {
 		return appUUID;

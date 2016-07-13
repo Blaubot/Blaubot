@@ -36,7 +36,8 @@ public class BlaubotAdapterConfig {
 	/**
 	 * The initial timeout to wait if using the exponential backoff method of
 	 * {@link BlaubotConnectionManager}.
-	 * @param connectorRetryTimeout
+	 * 
+	 * @param connectorRetryTimeout the timeout after which a failed connect is retried 
 	 */
 	public void setConnectorRetryTimeout(int connectorRetryTimeout) {
 		this.connectorRetryTimeout = connectorRetryTimeout;
@@ -50,19 +51,25 @@ public class BlaubotAdapterConfig {
 	/**
 	 * The factor to be used in the exponential backoff method of {@link BlaubotConnectionManager}.
 	 * 
-	 * @param exponentialBackoffFactor
+	 * @param exponentialBackoffFactor the backof factor
 	 */
 	public void setExponentialBackoffFactor(float exponentialBackoffFactor) {
 		this.exponentialBackoffFactor = exponentialBackoffFactor;
 	}
 
+    /**
+     * Max number of connection retries
+     *
+     * @return max retry count
+     */
 	public int getMaxConnectionRetries() {
 		return maxConnectionRetries;
 	}
 
 	/**
 	 * The global maximum number of retries when connecting to another device via this adapter.
-	 * @param maxConnectionRetries
+     * 
+	 * @param maxConnectionRetries the max numer of retries 
 	 */
 	public void setMaxConnectionRetries(int maxConnectionRetries) {
 		this.maxConnectionRetries = maxConnectionRetries;
@@ -78,7 +85,7 @@ public class BlaubotAdapterConfig {
 	 * will actively try to discover and determine the state of devices nearby and not connected
 	 * with their own network.
 	 * 
-	 * @param mergeKingdomsActivated
+	 * @param mergeKingdomsActivated true, if merges should happen
 	 */
 	public void setMergeKingdomsActivated(boolean mergeKingdomsActivated) {
 		this.mergeKingdomsActivated = mergeKingdomsActivated;
@@ -86,6 +93,7 @@ public class BlaubotAdapterConfig {
 
 	/**
 	 * Max connect duration.
+     * 
 	 * @return timeout in ms
 	 */
 	public int getConnectionTimeout() {
@@ -94,6 +102,7 @@ public class BlaubotAdapterConfig {
 
 	/**
 	 * Sets the max connection time before we timeout.
+     * 
 	 * @param connectionTimeout the timeout in ms
 	 */
 	public void setConnectionTimeout(int connectionTimeout) {

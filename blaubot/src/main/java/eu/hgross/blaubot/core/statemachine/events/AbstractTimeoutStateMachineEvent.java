@@ -19,8 +19,9 @@ public abstract class AbstractTimeoutStateMachineEvent extends AbstractBlaubotSt
 
 	/**
 	 * The state that triggered the timeout
+	 * 
 	 * @deprecated is now redundant to {@link #getConnectionStateMachineState()}
-	 * @return
+	 * @return the state that triggered this timeout event by its internal logic
 	 */
 	public IBlaubotState getFromState() {
 		return fromState;

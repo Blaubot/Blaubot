@@ -42,7 +42,7 @@ public class WifiConnectionMetaDataDTO extends EthernetConnectionMetaDataDTO {
 
     /**
      * The psk to access the ssid
-     * @return
+     * @return the pre-shared key
      */
     public String getPsk() {
         return metaData.get(PSK_KEY);
@@ -51,7 +51,7 @@ public class WifiConnectionMetaDataDTO extends EthernetConnectionMetaDataDTO {
 
     /**
      * The acceptor's device's mac address
-     * @return
+     * @return the mac address
      */
     public String getMacAddress() {
         return metaData.get(MAC_KEY);

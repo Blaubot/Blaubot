@@ -66,6 +66,7 @@ public class ConnectionMetaDataDTO {
     /**
      * Get a json string serializing the given connection meta data list
      *
+     * @param connectionMetaDataDTOList the list of connection metadata objects that is to be serialized
      * @return the json representation
      */
     public static String toJson(List<ConnectionMetaDataDTO> connectionMetaDataDTOList) {

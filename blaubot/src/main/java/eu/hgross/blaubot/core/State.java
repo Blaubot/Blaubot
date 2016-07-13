@@ -79,10 +79,11 @@ public enum State {
 	}
 	
 	/**
-	 * Creates the appropriate discovery event from the given State 
+	 * Creates the appropriate discovery event from the given State
+     * 
 	 * @param device the device associated with this state
      * @param connectionMetaDataList the meta data for the acceptors of `device`
-	 * @return
+	 * @return the discovery event for the given device
 	 */
 	public AbstractBlaubotDeviceDiscoveryEvent createDiscoveryEventForDevice (IBlaubotDevice device, List<ConnectionMetaDataDTO> connectionMetaDataList) {
 		Constructor<? extends AbstractBlaubotDeviceDiscoveryEvent> constructor;
@@ -96,7 +97,9 @@ public enum State {
 	}
 	
 	/**
-	 * @param toState
+	 * Checks if a transition to "toState" is allowed from "this" state.
+	 * 
+	 * @param toState the state to check
 	 * @return true iff a state change from 'this' state to 'toState' is allowed.
 	 */
 	public boolean isStateChangeAllowed(State toState) {

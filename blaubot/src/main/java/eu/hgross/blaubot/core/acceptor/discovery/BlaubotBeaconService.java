@@ -50,6 +50,7 @@ public class BlaubotBeaconService {
 
 
     /**
+     * @param ownDevice our own device
      * @param blaubotBeacons the list of beacons to be managed
      * @param connectionAcceptors the acceptors to be exposed by the beacons
      * @param connectionStateMachine the connection state machine which state should be exposed by the beacons
@@ -116,7 +117,8 @@ public class BlaubotBeaconService {
     /**
      * Adds an {@link IBlaubotDiscoveryEventListener} to the beacon service.
      * The listeners are called for each discovery event of any {@link IBlaubotBeacon}.
-     * @param discoveryEventListener
+     * 
+     * @param discoveryEventListener the listener to be added
      */
     public void addDiscoveryEventListener(IBlaubotDiscoveryEventListener discoveryEventListener) {
         this.discoveryEventListeners.add(discoveryEventListener);
@@ -124,7 +126,8 @@ public class BlaubotBeaconService {
 
     /**
      * Removes a listener
-     * @param discoveryEventListener
+	 * 
+     * @param discoveryEventListener the listener to be removed
      */
     public void removeDiscoveryEventListener(IBlaubotDiscoveryEventListener discoveryEventListener) {
         this.discoveryEventListeners.remove(discoveryEventListener);
@@ -246,7 +249,7 @@ public class BlaubotBeaconService {
 	/**
 	 * Informs the BlaubotBeaconService that the blaubot connection state has changed.
 	 * 
-	 * @param newState
+	 * @param newState the new state 
 	 */
 	public void onStateChanged(IBlaubotState newState) {
         if (Log.logDebugMessages()) {

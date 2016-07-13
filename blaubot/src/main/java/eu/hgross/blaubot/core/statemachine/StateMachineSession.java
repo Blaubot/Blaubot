@@ -117,16 +117,18 @@ public class StateMachineSession {
 	}
 
     /**
-     * The server connection manager
-     * @return
+     * Gets the server connection manager
+     * 
+     * @return the server connection manager
      */
     public ServerConnectionManager getServerConnectionManager() {
         return serverConnectionManager;
     }
 
     /**
-     * Tries to find out the if the given unique device id is a server unique device id.
+     * Checks whether the given unique device id is a server unique device id.
      *
+     * @param uniqueDeviceId the uid to check
      * @return the uniqueDeviceId or null, if unknown or not available
      */
     public boolean isServerUniqueDeviceId(String uniqueDeviceId) {

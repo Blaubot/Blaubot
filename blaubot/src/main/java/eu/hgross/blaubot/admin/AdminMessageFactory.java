@@ -14,7 +14,7 @@ public class AdminMessageFactory {
      * Create a {@link AbstractAdminMessage} instance from a received rawMessage.
      *
      * @param rawMessage the rawMessage
-     * @return
+     * @return the deserialized, typed admin message
      */
     public static AbstractAdminMessage createAdminMessageFromRawMessage(BlaubotMessage rawMessage) {
         byte classifier = rawMessage.getPayload()[0];

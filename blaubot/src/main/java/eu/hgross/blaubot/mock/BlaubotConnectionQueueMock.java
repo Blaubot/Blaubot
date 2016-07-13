@@ -60,9 +60,8 @@ public class BlaubotConnectionQueueMock extends AbstractBlaubotConnection {
 	 * Retrieve a {@link BlaubotConnectionQueueMock} object which reads from THIS object
 	 * for its read() methods and writes to THIS object.
 	 * 
-	 * @param otherSidesDevice
-	 *            the other endpoint's {@link IBlaubotDevice}
-	 * @return
+	 * @param otherSidesDevice the other endpoint's {@link IBlaubotDevice}
+	 * @return the remote device's connection (their perspective)
 	 */
 	public BlaubotConnectionQueueMock getOtherEndpointConnection(IBlaubotDevice otherSidesDevice) {
 		BlaubotConnectionQueueMock otherSide = new BlaubotConnectionQueueMock(otherSidesDevice);
@@ -90,7 +89,7 @@ public class BlaubotConnectionQueueMock extends AbstractBlaubotConnection {
 	 * Retrieve an {@link InputStream} to get the data written to this
 	 * {@link IBlaubotConnection} via it's write*() methods.
 	 * 
-	 * @return
+	 * @return the input stream
 	 */
 	public InputStream getInputStreamForWrittenConnectionData() {
 		return new InputStream() {

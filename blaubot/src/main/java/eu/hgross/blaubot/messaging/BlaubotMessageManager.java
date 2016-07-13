@@ -25,8 +25,9 @@ public class BlaubotMessageManager {
      * Constructs a BlaubotMessageManager based on a pre-created receiver and sender object.
      * Note: this is used to emulate the reflexive connection when a BlaubotChannelManager is
      * acting as master.
-     * @param messageSender
-     * @param messageReceiver
+     * 
+     * @param messageSender the message sender
+     * @param messageReceiver the message receiver
      */
     public BlaubotMessageManager(BlaubotMessageSender messageSender, BlaubotMessageReceiver messageReceiver) {
         this.messageReceiver = messageReceiver;
@@ -37,7 +38,8 @@ public class BlaubotMessageManager {
      * Constructs the MessageManager based on a IBlaubotConnection. Creates the needed Receiver
      * and Sender objects by itself.
      * Note: mainly used for incoming connections
-     * @param blaubotConnection
+     * 
+     * @param blaubotConnection the connection to be managed 
      */
     public BlaubotMessageManager(IBlaubotConnection blaubotConnection) {
         this.messageReceiver = new BlaubotMessageReceiver(blaubotConnection);

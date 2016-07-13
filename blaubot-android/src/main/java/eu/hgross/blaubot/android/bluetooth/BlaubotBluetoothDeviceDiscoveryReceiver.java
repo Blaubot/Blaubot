@@ -171,7 +171,7 @@ public class BlaubotBluetoothDeviceDiscoveryReceiver extends BroadcastReceiver {
 	/**
 	 * The device object for the given macAddress, if the device was already discovered.
 	 * 
-	 * @param macAddress
+	 * @param macAddress the macAddress to search for
 	 * @return The device object for the given macAddress, if the device was already discovered - null otherwise 
 	 */
 	public BluetoothDevice getBluetoothDeviceByAddress(String macAddress) {

@@ -90,7 +90,7 @@ public class BlaubotFactory {
      * @param acceptorPort   the port of the connector's accepting socket
      * @param beaconPort     the port for the beacon to accept connections on
      * @param ownInetAddress the own {@link InetAddress} of the network to act on
-     * @return
+     * @return the blaubot instance
      */
     public static Blaubot createEthernetBlaubotWithBonjourBeacon(UUID appUUID, int acceptorPort, int beaconPort, InetAddress ownInetAddress) {
         if (ownInetAddress == null || appUUID == null) {
@@ -111,7 +111,7 @@ public class BlaubotFactory {
      * @param beaconPort          the port of the beacon's accepting socket
      * @param beaconBroadcastPort the broadcast port. Has to be the same for all instances.
      * @param ownInetAddress      the own {@link InetAddress} of the network to act on
-     * @return
+     * @return the blaubot instance
      */
     public static Blaubot createEthernetBlaubot(UUID appUUID, int acceptorPort, int beaconPort, int beaconBroadcastPort, InetAddress ownInetAddress) {
         if (ownInetAddress == null || appUUID == null) {
@@ -132,7 +132,7 @@ public class BlaubotFactory {
      * @param beaconPort          the port of the beacon's accepting socket
      * @param beaconBroadcastPort the broadcast port. Has to be the same for all instances.
      * @param ownInetAddress      the ip of this device to bind the websocket to
-     * @return
+     * @return the blaubot instance
      * @throws ClassNotFoundException if the blaubot-websocket dependency could not be resolved
      */
     public static Blaubot createWebSocketBlaubotWithMulticastBeacon(UUID appUUID, int websocketPort, int beaconPort, int beaconBroadcastPort, InetAddress ownInetAddress) throws ClassNotFoundException {
@@ -154,7 +154,7 @@ public class BlaubotFactory {
      * @param websocketPort  the port for the websocket acceptor to listen on
      * @param beaconPort     the port of the beacon's accepting socket
      * @param ownInetAddress the own {@link InetAddress} of the network to act on
-     * @return
+     * @return the blaubot instance
      * @throws ClassNotFoundException if the blaubot-websocket dependency could not be resolved
      */
     public static Blaubot createWebSocketBlaubotWithBonjourBeacon(UUID appUUID, int websocketPort, int beaconPort, InetAddress ownInetAddress) throws ClassNotFoundException {
@@ -179,17 +179,18 @@ public class BlaubotFactory {
      * @param beaconPort      the port of the beacon's accepting socket
      * @param ownInetAddress  the own {@link InetAddress} of the network to act on
      * @param fixedDevicesSet a set of fixed devices to connect to (represented as uniqueIdStrings)
-     * @return
+     * @return the blaubot instance
+     * @throws UnknownHostException if inetAddress was invalid
      */
     public static Blaubot createEthernetBlaubotWithFixedDevicesBeacon(UUID appUUID, IBlaubotDevice ownDevice, int acceptorPort, int beaconPort, InetAddress ownInetAddress, Set<String> fixedDevicesSet) throws UnknownHostException {
         if (ownInetAddress == null || appUUID == null)
             throw new NullPointerException("InetAddress or appUUID was null.");
         BlaubotEthernetAdapter ethernetAdapter = new BlaubotEthernetAdapter(ownDevice, acceptorPort, ownInetAddress);
-        final Set<BlaubotEthernetFixedDeviceSetBeacon.FixedDeviceSetBlaubotDevice> fixedDeviceSetInstances = FixedDeviceSetHelper.createFixedDeviceSetInstances(fixedDevicesSet, ethernetAdapter.getConnector());
+        final Set<BlaubotEthernetFixedDeviceSetBeacon.FixedDeviceSetBlaubotDevice> fixedDeviceSetInstances = FixedDeviceSetHelper.createFixedDeviceSetInstances(fixedDevicesSet);
         final BlaubotEthernetFixedDeviceSetBeacon fixedDeviceSetBeacon = new BlaubotEthernetFixedDeviceSetBeacon(fixedDeviceSetInstances, beaconPort);
         return createBlaubot(appUUID, ownDevice, ethernetAdapter, fixedDeviceSetBeacon);
     }
-
+    
 
     /**
      * Creates a Blaubot instance from a given adapter and multiple beacons.
@@ -272,8 +273,11 @@ public class BlaubotFactory {
     }
 
     /**
+     * Creates a JSR82 adapter that can be used on Windows, Mac and Linux, if a jsr82 implementation is available.
+     * 
      * @param uuidSet   uuid set (created from the app uid)
      * @param ownDevice the own device
+     * @return the adapter instance 
      * @throws ClassNotFoundException if the blaubot-jsr82 jar is not in the classpath
      */
     public static final IBlaubotAdapter createJsr82Adapter(BlaubotUUIDSet uuidSet, IBlaubotDevice ownDevice) throws ClassNotFoundException {
@@ -333,9 +337,13 @@ public class BlaubotFactory {
     }
 
     /**
+     * This shortcut method creates a websocket meta data object that can be used to provide endpoint 
+     * information when using a websocket based BlaubotServer or GeoBeaconServer.
+     * 
      * @param host the hostname to connect to
      * @param path the path to connect the websocket with (with leading slash)
      * @param port the port
+     * @return the connection metadata
      * @throws ClassNotFoundException if the websocket jar is not in the classpath
      */
     public static final ConnectionMetaDataDTO createWebSocketMetaDataDTO(String host, String path, int port) throws ClassNotFoundException {

@@ -165,7 +165,8 @@ public class BeaconMessage implements Serializable {
 	/**
      * Create the message from the stream of a blaubot connection.
      * Note: The connection will be closed via disconnect() on IO errors.
-	 * @param connection
+     * 
+	 * @param connection the connection to receive the message from
 	 * @return message or null, if smthg went wrong
 	 */
 	public static BeaconMessage fromBlaubotConnection(IBlaubotConnection connection) {

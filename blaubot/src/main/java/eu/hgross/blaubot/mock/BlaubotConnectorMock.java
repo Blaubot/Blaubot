@@ -40,17 +40,16 @@ public class BlaubotConnectorMock implements IBlaubotConnector {
     public void setBeaconStore(IBlaubotBeaconStore beaconStore) {
         this.beaconStore = beaconStore;
     }
+	
 	/**
 	 * Mock a new connection by directly injecting it via this connector
 	 * @param connection the connection to be mocked
 	 * @param connectionAcceptorMock the mocked acceptor
-	 * @return
 	 */
-	public boolean mockConnectToDevice(IBlaubotConnection connection, BlaubotConnectionAcceptorMock connectionAcceptorMock) {
+	public void mockConnectToDevice(IBlaubotConnection connection, BlaubotConnectionAcceptorMock connectionAcceptorMock) {
 		connectionAcceptorMock.mockNewConnection(connection);
 		
 		this.incomingConnectionListener.onConnectionEstablished(connection);
-		return true;
 	}
 
 	@Override

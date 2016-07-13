@@ -22,8 +22,9 @@ public class BlaubotAdapterHelper {
 	public static final String LOG_TAG = "BlaubotAdapterHelper";
 	
 	/**
-	 * 
-	 * @param adapters
+	 * Traverses adapters to retrieve all acceptors.
+     * 
+	 * @param adapters the adapters
 	 * @return all connection acceptors contained by the list of adapters
 	 */
 	public static List<IBlaubotConnectionAcceptor> getConnectionAcceptors(List<IBlaubotAdapter> adapters) {
@@ -34,8 +35,9 @@ public class BlaubotAdapterHelper {
 	}
 
 	/**
-	 * 
-	 * @param adapters
+	 * Traverses adapters to retrieve all connectors from them.
+     * 
+	 * @param adapters the adapters to get the connectors from
 	 * @return all connectors contained by the list of adapters
 	 */
 	public static List<IBlaubotConnector> getConnectors(List<IBlaubotAdapter> adapters) {
@@ -67,8 +69,9 @@ public class BlaubotAdapterHelper {
 	
 	/**
 	 * Calls setDiscoveryActivated on all beacons
-	 * @param beaconService
-	 * @param newState
+	 * 
+	 * @param beaconService the beacon service
+	 * @param newState the new state
 	 */
 	public static void setDiscoveryActivated(BlaubotBeaconService beaconService, boolean newState) {
 		for(IBlaubotBeacon beacon : beaconService.getBeacons()) {
@@ -130,8 +133,8 @@ public class BlaubotAdapterHelper {
 	/**
 	 * blocking until all acceptors and beacons are stopped (if started)
 	 * 
-	 * @param acceptors
-	 * @param beaconService
+	 * @param acceptors the acceptors
+	 * @param beaconService the beacon service
 	 */
 	public static void stopAcceptorsAndBeacons(List<IBlaubotConnectionAcceptor> acceptors, BlaubotBeaconService beaconService) {
 		List<IBlaubotBeacon> beacons = beaconService.getBeacons();
@@ -198,8 +201,8 @@ public class BlaubotAdapterHelper {
 
     /**
      * blocking until all beacons are stopped (if started)
-     *
-     * @param beaconService
+     * 
+     * @param beaconService the beacon service
      */
     public static void stopBeacons(BlaubotBeaconService beaconService) {
         List<IBlaubotBeacon> beacons = beaconService.getBeacons();

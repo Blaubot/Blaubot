@@ -300,7 +300,7 @@ public class BlaubotMessage {
      * by setPayload(), to this instance.
      * The payload's length is returned.
      *
-     * @param headerBytes
+     * @param headerBytes the byte array containing all header informations
      * @return the payloads length in bytes - 0 if no payload at all.
      */
     public int applyBytes(byte[] headerBytes) {
@@ -424,9 +424,11 @@ public class BlaubotMessage {
     }
 
     /**
-     *
+     * Deserializes a BlaubotMessage from a byte array.
+     * The byte array should contain the header and payload.
+     * 
      * @param messageBytes byte array containing header and payload
-     * @return
+     * @return the deserialized blaubot message
      */
     public static BlaubotMessage fromByteArray(byte[] messageBytes) {
         int headerLength = BlaubotMessage.FULL_HEADER_LENGTH;

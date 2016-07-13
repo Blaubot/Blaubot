@@ -36,15 +36,15 @@ public interface IBlaubotState {
 	 * 
 	 * @param stateMachineSession a session object with access to the relevant {@link Blaubot} components.
 	 */
-	public void handleState(StateMachineSession stateMachineSession);
+	void handleState(StateMachineSession stateMachineSession);
 	
 	/**
 	 * Gets called when an {@link AbstractAdminMessage} was received.
 	 *
-	 * @param adminMessage
-	 * @return
+	 * @param adminMessage the received admin message
+	 * @return the next state based on this event, could be a new state or the identity
 	 */
-	public IBlaubotState onAdminMessage(AbstractAdminMessage adminMessage);
+	IBlaubotState onAdminMessage(AbstractAdminMessage adminMessage);
 	
 	/**
 	 * Gets called if a {@link eu.hgross.blaubot.core.acceptor.discovery.IBlaubotBeacon} discovered a {@link IBlaubotDevice}.
@@ -54,26 +54,26 @@ public interface IBlaubotState {
 	 * subclass can be found in the de.hsrm.blaubot.statemachine.events package.
 	 * 
 	 * @param discoveryEvent the discovery event.
-	 * @return
+	 * @return the next state based on this event, could be a new state or the identity
 	 */
-	public IBlaubotState onDeviceDiscoveryEvent(AbstractBlaubotDeviceDiscoveryEvent discoveryEvent);
+	IBlaubotState onDeviceDiscoveryEvent(AbstractBlaubotDeviceDiscoveryEvent discoveryEvent);
 	
 	/**
 	 * Gets called if a new connection from a remote {@link IBlaubotDevice} was established.
 	 * 
-	 * @param connection
-	 * @return
+	 * @param connection the established connection
+	 * @return the next state based on this event, could be a new state or the identity
 	 */
-	public IBlaubotState onConnectionEstablished(IBlaubotConnection connection);
+	IBlaubotState onConnectionEstablished(IBlaubotConnection connection);
 	
 	/**
 	 * Gets called if a previously established connection from a remote {@link IBlaubotDevice}
 	 * was closed due to an exception or intentionally.
 	 * 
-	 * @param connection
-	 * @return
+	 * @param connection the closed connection
+	 * @return the next state based on this event, could be a new state or the identity
 	 */
-	public IBlaubotState onConnectionClosed(IBlaubotConnection connection);
+	IBlaubotState onConnectionClosed(IBlaubotConnection connection);
 	
 	/**
 	 * This is a helper for Timeout-Events needed for some {@link IBlaubotState}s.
@@ -84,8 +84,8 @@ public interface IBlaubotState {
 	 * can check if the timeout event belongs to himself or ignore it when this is not the 
 	 * case.
 	 * 
-	 * @param timeoutEvent
-	 * @return
+	 * @param timeoutEvent the occured event
+	 * @return the next state based on this event, could be a new state or the identity
 	 */
-	public IBlaubotState onTimeoutEvent(AbstractTimeoutStateMachineEvent timeoutEvent);
+	IBlaubotState onTimeoutEvent(AbstractTimeoutStateMachineEvent timeoutEvent);
 }

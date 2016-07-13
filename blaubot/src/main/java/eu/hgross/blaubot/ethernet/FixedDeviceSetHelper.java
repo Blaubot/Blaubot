@@ -61,7 +61,7 @@ public class FixedDeviceSetHelper {
      *
      * @param fixedDeviceConfigSring extracts the InetAddress from an ethernet fixedDeviceConfigSring
      * @return the beaconPort
-     * @throws java.net.UnknownHostException
+     * @throws java.net.UnknownHostException if the host inside the config string is unknown or invalid
      */
     public static InetAddress getInetAddressFromConfigString(String fixedDeviceConfigSring) throws UnknownHostException {
         String[] splitted = fixedDeviceConfigSring.split(FIXED_DEVICE_SET_CONFIG_STRING_SEPARATOR);
@@ -81,12 +81,12 @@ public class FixedDeviceSetHelper {
 
     /**
      * Transforms a set of fixed device config {@link String}s into a {@link java.util.Set} of {@link eu.hgross.blaubot.core.IBlaubotDevice} instances.
-     * The config string has to be of the form
-     * @param fixedDevicesSet
-     * @param connector
-     * @return
+     * 
+     * @param fixedDevicesSet set of fixed device info to be created
+     * @return the created set of blaubot devices to create
+     * @throws UnknownHostException if any of the config strings contain an invalid or unknown hostname
      */
-    public static Set<BlaubotEthernetFixedDeviceSetBeacon.FixedDeviceSetBlaubotDevice> createFixedDeviceSetInstances(Set<String> fixedDevicesSet, IBlaubotConnector connector) throws UnknownHostException {
+    public static Set<BlaubotEthernetFixedDeviceSetBeacon.FixedDeviceSetBlaubotDevice> createFixedDeviceSetInstances(Set<String> fixedDevicesSet) throws UnknownHostException {
         HashSet<BlaubotEthernetFixedDeviceSetBeacon.FixedDeviceSetBlaubotDevice> deviceInstances = new HashSet<>();
         for(String configString : fixedDevicesSet){
             InetAddress inetAddr = getInetAddressFromConfigString(configString);

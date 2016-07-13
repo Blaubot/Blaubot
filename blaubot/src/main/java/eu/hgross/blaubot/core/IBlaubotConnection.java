@@ -68,6 +68,7 @@ public interface IBlaubotConnection {
      * @throws IOException if an I/O error occurs. In particular,
      *                     an <code>IOException</code> may be thrown if the
      *                     output stream has been closed.
+     * @throws SocketTimeoutException if the socket timed out
      */
     void write(int b) throws SocketTimeoutException, IOException;
 
@@ -79,6 +80,7 @@ public interface IBlaubotConnection {
      *
      * @param bytes the data.
      * @throws IOException if an I/O error occurs.
+     * @throws SocketTimeoutException if the socket timed out
      * @see java.io.OutputStream#write(byte[], int, int)
      */
     void write(byte[] bytes) throws SocketTimeoutException, IOException;
@@ -110,6 +112,7 @@ public interface IBlaubotConnection {
      * @throws IOException if an I/O error occurs. In particular,
      *                     an <code>IOException</code> is thrown if the output
      *                     stream is closed.
+     * @throws SocketTimeoutException if the socket timed out
      */
     void write(byte[] bytes, int byteOffset, int byteCount) throws SocketTimeoutException, IOException;
 
@@ -127,6 +130,7 @@ public interface IBlaubotConnection {
      * @return the next byte of data, or <code>-1</code> if the end of the
      * stream is reached.
      * @throws IOException if an I/O error occurs.
+     * @throws SocketTimeoutException if the socket timed out
      */
     int read() throws SocketTimeoutException, IOException;
 
@@ -168,6 +172,7 @@ public interface IBlaubotConnection {
      *                     error occurs.
      * @see java.io.FilterInputStream#in
      * @see java.io.InputStream#read(byte[], int, int)
+     * @throws SocketTimeoutException if the socket timed out
      */
     int read(byte[] buffer) throws SocketTimeoutException, IOException;
 
@@ -213,6 +218,7 @@ public interface IBlaubotConnection {
      *                                   other than end of file, the stream has been closed and the underlying
      *                                   input stream does not support reading after close, or another I/O
      *                                   error occurs.
+     * @throws SocketTimeoutException if the socket timed out
      * @see java.io.FilterInputStream#in
      * @see java.io.InputStream#read(byte[], int, int)
      */
@@ -232,6 +238,7 @@ public interface IBlaubotConnection {
      * @throws IOException  the stream has been closed and the contained
      *                      input stream does not support reading after close, or
      *                      another I/O error occurs.
+     * @throws SocketTimeoutException if the socket timed out
      * @see java.io.FilterInputStream#in
      */
     void readFully(byte[] buffer) throws SocketTimeoutException, IOException;
@@ -252,6 +259,7 @@ public interface IBlaubotConnection {
      * @throws IOException  the stream has been closed and the contained
      *                      input stream does not support reading after close, or
      *                      another I/O error occurs.
+     * @throws SocketTimeoutException if the socket timed out
      * @see java.io.FilterInputStream#in
      */
     void readFully(byte[] buffer, int offset, int byteCount) throws SocketTimeoutException, IOException;

@@ -46,7 +46,7 @@ public class BlaubotKingdomConnection extends AbstractBlaubotConnection implemen
      * Creates this connection upon another connection and ensures to send the handshake before first write.
      * @param connection the outbound connection to be wrapped
      * @param kingUniqueDeviceId the current kingdom's king unique device id
-     * @return
+     * @return the kingdom connection created from the outbound connection
      */
     public static BlaubotKingdomConnection createFromOutboundConnection(IBlaubotConnection connection, String kingUniqueDeviceId) {
         if (Log.logDebugMessages()) {
@@ -63,7 +63,8 @@ public class BlaubotKingdomConnection extends AbstractBlaubotConnection implemen
      * Should be used in a separate thread.
      *
      * @param connection the inbound connection
-     * @return
+     * @return the kingdom connection
+     * @throws IOException if the initial handshake or something connection related failed
      */
     public static BlaubotKingdomConnection createFromInboundConnection(IBlaubotConnection connection) throws IOException {
         if (Log.logDebugMessages()) {
@@ -252,7 +253,8 @@ public class BlaubotKingdomConnection extends AbstractBlaubotConnection implemen
 
     /**
      * Get the uniqueDeviceId of the king
-     * @return
+     * 
+     * @return the king's unique device id
      */
     public String getKingUniqueDeviceId() {
         return kingUniqueDeviceId;

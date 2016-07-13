@@ -90,7 +90,8 @@ public class AddSubscriptionAdminMessage extends AbstractAdminMessage {
 
     /**
      * The channel id to which the device wants to subscribe
-     * @return
+     * 
+     * @return the channel id 
      */
     public short getChannelId() {
         return channelId;

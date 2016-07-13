@@ -33,7 +33,8 @@ public class ConnectionStateMachineConfig {
 	 * prince, if the king connection gets lost.
 	 * 
 	 * Only relevant in {@link PeasantState} and {@link PrinceState}.
-	 * @param crowningPreparationTimeout
+     * 
+	 * @param crowningPreparationTimeout the preparation time
 	 */
 	public void setCrowningPreparationTimeout(int crowningPreparationTimeout) {
 		this.crowningPreparationTimeout = crowningPreparationTimeout;
@@ -48,7 +49,8 @@ public class ConnectionStateMachineConfig {
 	 * if no peasants are connected.
 	 * 
 	 * Only relevant in {@link KingState}
-	 * @param kingWithoutPeasantsTimeout
+     * 
+	 * @param kingWithoutPeasantsTimeout the timeout
 	 */
 	public void setKingWithoutPeasantsTimeout(int kingWithoutPeasantsTimeout) {
 		this.kingWithoutPeasantsTimeout = kingWithoutPeasantsTimeout;
@@ -89,7 +91,8 @@ public class ConnectionStateMachineConfig {
 	 * After the prince gets pronounced via a {@link PronouncePrinceAdminMessage}, the pronounced device has to
 	 * respond within this timeouts time interval with an {@link ACKPronouncePrinceAdminMessage} to accept
 	 * his new position. If he does not respond fast enough, the pronouncing process is retriggered.
-	 * @param princeAckTimeout
+	 * 
+	 * @param princeAckTimeout the timeout to set
 	 */
 	public void setPrinceAckTimeout(int princeAckTimeout) {
 		this.princeAckTimeout = princeAckTimeout;

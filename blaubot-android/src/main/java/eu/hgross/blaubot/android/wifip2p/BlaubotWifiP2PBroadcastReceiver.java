@@ -201,7 +201,7 @@ public class BlaubotWifiP2PBroadcastReceiver extends BroadcastReceiver {
 
 	/**
 	 * Adds an event listener to this receiver.
-	 * @param listener
+	 * @param listener the listener to be attached
 	 */
 	public void addEventListener(IBlaubotWifiDirectEventListener listener) {
 		this.eventListeners.add(listener);
@@ -209,7 +209,7 @@ public class BlaubotWifiP2PBroadcastReceiver extends BroadcastReceiver {
 	
 	/**
 	 * Removes an event listener from this receiver, if registered.
-	 * @param listener
+	 * @param listener the listener to be attached
 	 */
 	public void removeEventListener(IBlaubotWifiDirectEventListener listener) {
 		this.eventListeners.remove(listener);

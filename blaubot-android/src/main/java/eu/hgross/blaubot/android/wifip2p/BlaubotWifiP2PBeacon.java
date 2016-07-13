@@ -233,6 +233,9 @@ public class BlaubotWifiP2PBeacon implements IBlaubotBeacon, IBlaubotBroadcastRe
     /**
      * The string that we exploit to pre-filter upnp devices before we probe them if they are really a
      * blaubot beacon.
+     * @param wifiP2pManager android's wifi p2p manager service 
+     * @param beaconChannel the wifi p2p channel to be used for this beacon
+     * @param beaconPort the tcp port for this beacon to listen on
      */
 
     public BlaubotWifiP2PBeacon(WifiP2pManager wifiP2pManager, Channel beaconChannel, int beaconPort) {

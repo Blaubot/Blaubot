@@ -27,7 +27,7 @@ public abstract class AbstractBlaubotStateMachineEvent {
 	/**
 	 * Set the {@link IBlaubotState} the {@link ConnectionStateMachine} was in when the
 	 * {@link AbstractBlaubotStateMachineEvent} occured.
-	 * @param currentState
+	 * @param currentState the current state 
 	 */
 	public void setConnectionStateMachineState(IBlaubotState currentState) {
 		this.state = currentState;
