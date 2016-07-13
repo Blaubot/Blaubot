@@ -17,7 +17,7 @@ import eu.hgross.blaubot.util.Log;
  * A message receiver handles incoming data streams from an IBlaubotConnection.
  * It converts the byte stream into BlaubotMessage instances and notifies it's
  * listeners when a message was completely read.
- * <p/>
+ * 
  * Message listeners can be activated and deactivated.
  */
 public class BlaubotMessageReceiver {
