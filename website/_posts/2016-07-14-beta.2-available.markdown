@@ -1,0 +1,25 @@
+---
+layout: post
+title:  "Blaubot 2.0.0.beta.2"
+date:   2016-07-14
+categories: release
+---
+
+The second beta is now available from jCenter and MavenCentral.
+We fixed some bugs and made sure that we can build on JDK8, which is used to build the latest Android API levels.
+
+The most important bugs fixed in this version were 
+
+  * a problem with receiving and sending messages when `transmitReflexiveMessages` as well as `transmitIfNoSubscribers` were set to false on a channel.
+  * a performance hit when a channel had no subscribers and a very low message rate.
+
+
+# What comes next?
+Android 6 currently breaks some Blaubot configurations, because they decided to restrict access to hardware identifiers such as the WiFi- or Bluetooth-Adapter's MAC-address, which are essential informations for some BlaubotAdapters (such as the BluetoothAdapter and Beacon).
+There is ongoing work to make blaubot compatible with this breaking changes before removing the beta status.
+Blaubot users who just use the Ethernet/WiFi-based adapters will be mostly save.
+For more informations on that matter, check the [Android 6 changelog](https://developer.android.com/about/versions/marshmallow/android-6.0-changes.html).
+
+
+Check out the official [gitter-channel](/chat.html) for Blaubot to get help or keep in touch with other Blaubot users.
+
