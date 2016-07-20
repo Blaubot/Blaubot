@@ -27,7 +27,7 @@ dependencies {
 
 
 # Add permissions to AndroidManifest.xml
-Add the neded permissions to the the root element of your `AndroidManifest.xml`.
+Add the needed permissions to the the root element of your `AndroidManifest.xml`.
 Which of the below permissions you actually require depends on the Blaubot-Instance you intend to use.
 For now we use Bluetooth:
 
