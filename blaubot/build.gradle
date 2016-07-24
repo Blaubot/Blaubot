@@ -23,6 +23,8 @@ dependencies {
     // Apache 2.0
     compile 'javax.jmdns:jmdns:3.4.1'
     // Apache 2.0
+    compile 'net.jodah:expiringmap:0.5.6'
+    // Apache 2.0
 }
 
 // we make bluecove optional

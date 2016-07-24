@@ -1,90 +1,82 @@
 package eu.hgross.blaubot.core.acceptor.discovery;
 
+import net.jodah.expiringmap.ExpirationPolicy;
+import net.jodah.expiringmap.ExpiringMap;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 import eu.hgross.blaubot.util.Log;
 
 /**
- * Helper to determine if an object is alive or dead. Can be used for keepAlive purposes as well as a seen cache for SDP lookups or similar use cases.
+ * Helper to determine if an object is alive or dead. Can be used for keepAlive purposes as well as 
+ * a seen cache for SDP lookups or similar use cases.
  *
  * @author Henning Gross {@literal (mail.to@henning-gross.de)}
  */
 public class TimeoutList<T> {
     private static final String LOG_TAG = "TimeoutList";
     private static final boolean DO_LOG = false;
-    private HashMap<T, Long> devicesMap;
-    private Object monitor = new Object();
-    private long timeout;
+    private ExpiringMap<T, Long> devicesMap;
 
     /**
      * @param timeout the timeout after which a device is assumed to be dead
      */
     public TimeoutList(long timeout) {
-        this.timeout = timeout;
-        this.devicesMap = new HashMap<T, Long>();
+        this.devicesMap = ExpiringMap.builder()
+                .expiration(timeout, TimeUnit.MILLISECONDS)
+                .expirationPolicy(ExpirationPolicy.CREATED)
+                .build();
     }
 
-    public void report(T device) {
+    /**
+     * Reports an item as alive.
+     * 
+     * @param item the item to be reported as alive
+     */
+    public void report(T item) {
         long seenAliveTimestamp = System.currentTimeMillis();
         if (DO_LOG && Log.logDebugMessages()) {
-            Log.d(LOG_TAG, device + " reported");
+            Log.d(LOG_TAG, item + " reported");
         }
-        synchronized (monitor) {
-            devicesMap.put(device, seenAliveTimestamp);
+        Long prev = devicesMap.put(item, seenAliveTimestamp);
+        if (prev != null && prev.equals(item)) {
+            devicesMap.resetExpiration(item);
         }
     }
 
-    public void report(T device, long seenAliveTimestamp) {
+    /**
+     * Removes an item from the alive list.
+     * 
+     * @param item the item that is no longer alive.
+     */
+    public void remove(T item) {
         if (DO_LOG && Log.logDebugMessages()) {
-            Log.d(LOG_TAG, device + " reported");
+            Log.d(LOG_TAG, item + " removed");
         }
-        synchronized (monitor) {
-            devicesMap.put(device, seenAliveTimestamp);
-        }
+        devicesMap.remove(item);
     }
 
-    public void remove(T device) {
-        if (DO_LOG && Log.logDebugMessages()) {
-            Log.d(LOG_TAG, device + " removed");
-        }
-        synchronized (monitor) {
-            devicesMap.remove(device);
-        }
+    /**
+     * Checks whether an item is considered alive
+     * 
+     * @param item the item to check for
+     * @return true, if item is alive
+     */
+    public boolean contains(T item) {
+        return devicesMap.containsKey(item);
     }
 
-    public boolean contains(T device) {
-        purgeDead();
-        return devicesMap.containsKey(device);
-    }
-
+    /**
+     * Returns a list (copy) of alive items.
+     * 
+     * @return the list of alive items
+     */
     public Set<T> getItems() {
-        purgeDead();
-        synchronized (monitor) {
-            return new HashSet<T>(devicesMap.keySet());
-        }
-    }
-
-    private void purgeDead() {
-        ArrayList<T> toRemove = new ArrayList<T>();
-        long now = System.currentTimeMillis();
-        synchronized (monitor) {
-            for (T d : devicesMap.keySet()) {
-                long lastSeen = devicesMap.get(d);
-                if (now - lastSeen >= this.timeout) {
-                    toRemove.add(d);
-                }
-            }
-        }
-        synchronized (monitor) {
-            for (T d : toRemove) {
-                if (DO_LOG && Log.logDebugMessages()) {
-                    Log.d(LOG_TAG, "Purged " + d + " - not in timeout list anymore");
-                }
-                devicesMap.remove(d);
-            }
-        }
+        return new HashSet<>(devicesMap.keySet());
     }
 }
