@@ -54,7 +54,10 @@ import eu.hgross.blaubot.util.Log;
  * 
  */
 public class BlaubotEthernetMulticastBeacon implements IBlaubotBeacon, IEthernetBeacon {
-	private static final String LOG_TAG = "BlaubotEthernetMulticastBeacon";
+	private static final String LOG_TAG = BlaubotEthernetMulticastBeacon.class.getSimpleName();
+    /**
+     * The broadcasting interval for the beacon broadcaster thread
+     */
 	private static final int BROADCASTER_INTERVAL = 6500;
 	/**
 	 * Probe interval if in FreeState
@@ -64,11 +67,32 @@ public class BlaubotEthernetMulticastBeacon implements IBlaubotBeacon, IEthernet
 	 * PROBE-INTERVAL if not in FreeState
 	 */
 	private static final long BEACON_PROBE_INTERVAL_DECENT = 5000;
-	private static final int ALIVE_TIMEOUT = BROADCASTER_INTERVAL * 5;
-	private final int beaconPort;
-	private final int beaconBroadcastPort;
-	private UUID beaconUUID;
+
+    /**
+     * The alive interval for the TimeoutList of known active devices.
+     */
+    private static final int ALIVE_TIMEOUT = BROADCASTER_INTERVAL * 5;
+
+    /**
+     * The TCP-port on which this beacon will accept connections for the beacon message exchange.
+     */
+    private final int beaconPort;
+
+    /**
+     * The UDP-port on which the udp broadcast message will be sent by the broadcaster thread.
+     */
+    private final int beaconBroadcastPort;
+
+    /**
+     * This beacon's uuid.
+     */
+    private UUID beaconUUID;
+
+    /**
+     * The own device for which this beacon announces it's presence.
+     */
     private IBlaubotDevice ownDevice;
+
 
     private volatile IBlaubotState currentState;
 	private volatile IBlaubotDiscoveryEventListener discoveryEventListener;
@@ -288,6 +312,9 @@ public class BlaubotEthernetMulticastBeacon implements IBlaubotBeacon, IEthernet
         }
     }
 
+	/**
+	 * A thread that periodically broadcasts a beacon message over udp.
+	 */
 	class BroadcasterThread extends Thread {
 		private static final String LOG_TAG = "MulticastBroadcaster";
 		private static final int SEND_INTERVAL = BROADCASTER_INTERVAL;
@@ -528,29 +555,6 @@ public class BlaubotEthernetMulticastBeacon implements IBlaubotBeacon, IEthernet
 		}
 	}
 	
-
-	/**
-	 * 
-	 * @param inetAddress
-	 * @return true, if the given inetAddress belongs to on of our network interfaces - false otherwise
-	 */
-	private boolean isOwnInetAddr(InetAddress inetAddress) {
-		try {
-			for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements();) {
-				NetworkInterface intf = en.nextElement();
-				for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements();) {
-					InetAddress curAddr = enumIpAddr.nextElement();
-					if (curAddr.equals(inetAddress)) {
-						return true;
-					}
-				}
-			}
-		} catch (SocketException ex) {
-			Log.e(LOG_TAG, ex.toString());
-		}
-
-		return false;
-	}
 
     @Override
     public void setBlaubot(Blaubot blaubot) {
