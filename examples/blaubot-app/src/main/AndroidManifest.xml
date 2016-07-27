@@ -16,6 +16,9 @@
     <!--  ethernet  -->
     <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE" />
 
+    <!-- To access mac addresses (wifi, bluetooth) -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    
     <!-- WIFI Direct -->
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
