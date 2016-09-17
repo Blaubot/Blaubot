@@ -9,11 +9,11 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.1.2'
+        classpath 'com.android.tools.build:gradle:2.1.3'
 
         // next two are for the bintray publish https://github.com/danielemaddaluno/gradle-jcenter-publish
-        classpath 'com.github.dcendents:android-maven-gradle-plugin:1.3'
-        classpath "com.jfrog.bintray.gradle:gradle-bintray-plugin:1.2"
+        classpath 'com.github.dcendents:android-maven-gradle-plugin:1.4.1'
+        classpath "com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7"
     }
 }
 
