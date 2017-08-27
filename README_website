@@ -7,7 +7,10 @@ To build and view the website locally:
 - jekyll serve
 - # open http://localhost:4000/ in the browser
 
-There is a gradle buildfile inside the website module to copy javadocs to the webiste.
+Requirements for the build:
+    - python 2.3.x with pygments is installed in path (pip install Pygments)
+
+There is a gradle buildfile inside the website module to copy javadocs to the website.
 This command builds and copies the javadoc of all middleware modules to the "javadoc" dir of the website.
 - ./gradlew --daemon copyDocsToWebsite
 

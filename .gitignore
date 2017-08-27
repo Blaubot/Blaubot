@@ -2,6 +2,7 @@
 local.properties
 .idea/workspace.xml
 .idea/libraries
+.idea/markdown*
 .DS_Store
 build
 gradle-app.setting
